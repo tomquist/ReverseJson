@@ -13,6 +13,7 @@
 		A7921A991C67BA44009AADAC /* ModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A951C67BA44009AADAC /* ModelTranslator.swift */; };
 		A7921A9A1C67BA44009AADAC /* SwiftModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A961C67BA44009AADAC /* SwiftModelTranslator.swift */; };
 		A7921A9B1C67BA44009AADAC /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A971C67BA44009AADAC /* Utils.swift */; };
+		A7921A9D1C691DB8009AADAC /* ObjcModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A9C1C691DB8009AADAC /* ObjcModelTranslator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,7 @@
 		A7921A951C67BA44009AADAC /* ModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTranslator.swift; sourceTree = "<group>"; };
 		A7921A961C67BA44009AADAC /* SwiftModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftModelTranslator.swift; sourceTree = "<group>"; };
 		A7921A971C67BA44009AADAC /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		A7921A9C1C691DB8009AADAC /* ObjcModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				A7921A971C67BA44009AADAC /* Utils.swift */,
 				A7921A8D1C67BA27009AADAC /* main.swift */,
 				42F916021C68F19D004A640E /* testModel.json */,
+				A7921A9C1C691DB8009AADAC /* ObjcModelTranslator.swift */,
 			);
 			path = ReverseJson;
 			sourceTree = "<group>";
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7921A9B1C67BA44009AADAC /* Utils.swift in Sources */,
+				A7921A9D1C691DB8009AADAC /* ObjcModelTranslator.swift in Sources */,
 				A7921A991C67BA44009AADAC /* ModelTranslator.swift in Sources */,
 				A7921A9A1C67BA44009AADAC /* SwiftModelTranslator.swift in Sources */,
 				A7921A981C67BA44009AADAC /* ModelParser.swift in Sources */,

@@ -13,6 +13,8 @@ let testModel = try! NSJSONSerialization.JSONObjectWithData(NSData(contentsOfFil
 if let rootType = try? ModelParser().decode(testModel) {
     print(SwiftModelCreator().translate(rootType, name: "User"))
     print(SwiftJsonParsingTranslator().translate(rootType, name: "User"))
+    print(ObjcModelCreator().translate(rootType, name: "User"))
+
 }
 
 

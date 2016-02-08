@@ -27,7 +27,9 @@ extension String {
     }
     
     public func indent(level: Int, spaces: Int = 4) -> String {
-        return " ".times(level * spaces) + self
+        let suffix = self.hasSuffix("\n") ? "\n" : ""
+        let indented = self.characters.split("\n").lazy.map { " ".times(level * spaces) + String($0) }.joinWithSeparator("\n")
+        return indented + suffix
     }
     public var firstCapitalizedString: String {
         if isEmpty { return "" }
