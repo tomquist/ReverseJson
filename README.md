@@ -6,20 +6,10 @@ Turns this
 	{
 	  "name": "Tom",
 	  "is_private": false,
-	  "mixed": [
-	    10,
-	    "Some text"
-	  ],
-	  "numbers": [
-	    10,
-	    11,
-	    12
-	  ],
+	  "mixed": [10, "Some text"],
+	  "numbers": [10, 11, 12],
 	  "locations": [
-	    {
-	      "lat": 10.5,
-	      "lon": 49
-	    },
+	    {"lat": 10.5, "lon": 49 },
 	    {
 	      "lat": -74.1184284,
 	      "lon": 40.7055647,
