@@ -44,7 +44,7 @@ extension ModelParser.FieldType {
             declaration = subDeclaration
             fieldType = "\(subTypeName)?"
         case .Unknown:
-            fieldType = "UnknownType"
+            fieldType = subName.camelCasedString
             declaration = "typealias \(fieldType) = Void".indent(level)
         }
         return (fieldType, declaration)
@@ -58,7 +58,7 @@ extension ModelParser.FieldType {
             fieldDeclaration += ("let \(f.name.pascalCasedString.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
-        ret += Set(fieldsAndTypes.lazy.flatMap { $0.type }).joinWithSeparator("\n") + "\n"
+        ret += Set(fieldsAndTypes.lazy.flatMap { $0.type.map({"\($0)\n"})}).sort(<).joinWithSeparator("")
         ret += fieldsAndTypes.lazy.map { $0.field.indent(level + 1) }.sort { $0.0.localizedStandardCompare($0.1) == .OrderedAscending }.joinWithSeparator("\n") + "\n"
         return ret + "}".indent(level)
     }
