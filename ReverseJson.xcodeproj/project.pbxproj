@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42A166D61C690B7C000F19A4 /* testModel.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F916021C68F19D004A640E /* testModel.json */; };
 		A7921A8E1C67BA27009AADAC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A8D1C67BA27009AADAC /* main.swift */; };
 		A7921A981C67BA44009AADAC /* ModelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A941C67BA44009AADAC /* ModelParser.swift */; };
 		A7921A991C67BA44009AADAC /* ModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A951C67BA44009AADAC /* ModelTranslator.swift */; };
@@ -17,16 +18,18 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		A7921A881C67BA27009AADAC /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				42A166D61C690B7C000F19A4 /* testModel.json in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		42F916021C68F19D004A640E /* testModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testModel.json; sourceTree = "<group>"; };
 		A7921A8A1C67BA27009AADAC /* ReverseJson */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ReverseJson; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7921A8D1C67BA27009AADAC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		A7921A941C67BA44009AADAC /* ModelParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParser.swift; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 				A7921A961C67BA44009AADAC /* SwiftModelTranslator.swift */,
 				A7921A971C67BA44009AADAC /* Utils.swift */,
 				A7921A8D1C67BA27009AADAC /* main.swift */,
+				42F916021C68F19D004A640E /* testModel.json */,
 			);
 			path = ReverseJson;
 			sourceTree = "<group>";
@@ -255,6 +259,7 @@
 				A7921A931C67BA27009AADAC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

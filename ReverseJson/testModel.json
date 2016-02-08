@@ -1,0 +1,75 @@
+{
+  "height" : 10,
+  "private" : false,
+  "mixed" : [
+    10,
+    true,
+    "hallo",
+    {
+      "field" : "value"
+    },
+    {
+      "otherField" : 10
+    },
+    1.2
+  ],
+  "numbers" : [
+    10,
+    11,
+    12
+  ],
+  "let" : false,
+  "locations" : [
+    {
+      "lat" : 10.5,
+      "lon" : null,
+      "enum test" : "bla"
+    },
+    {
+      "lon" : "abc",
+      "enum test" : {
+
+      },
+      "lat" : 10.5,
+      "bla" : [
+        [
+          [
+            [
+              {
+                "test" : "a"
+              }
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "lon" : 49.1,
+      "enum test" : "bla",
+      "lat" : 10,
+      "bla" : [
+        [
+          [
+            [
+              {
+                "test" : 123
+              }
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "is_true" : true,
+  "internal" : false,
+  "public" : false,
+  "name" : null,
+  "blup" : [
+    {
+      "obj1" : 10
+    },
+    {
+      "obj1" : "test"
+    }
+  ]
+}
