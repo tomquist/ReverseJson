@@ -3,7 +3,17 @@
 ## Introduction
 Generate data model code and JSON-parser code from JSON-files. Currently you can generate Swift and Objective-C code.
 
-##Usage
+## Features
+- Scans the whole JSON-file to get most information out of it
+- Detects variadic types within arrays, even in sub structures
+- Detects nullability attributes, e.g. when a single occurrence of a property is null or a property is missing, the property is declared as Optional/Nullable
+- Generates parsing instructions for Swift and Objective-C 
+
+## Usage
+Build
+
+	xcrun swiftc ReverseJson/*.swift -o ReverseJson
+
 To create a Swift data model:
 
 	./ReverseJson swift User testModel.json
