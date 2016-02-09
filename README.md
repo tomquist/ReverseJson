@@ -1,7 +1,19 @@
 # ReverseJson
-Generate data models from json data
 
-Turns this
+## Introduction
+Generate data model code and JSON-parser code from JSON-files. Currently you can generate Swift and Objective-C code.
+
+##Usage
+To create a Swift data model:
+
+	./ReverseJson swift User testModel.json
+
+To create an Objective-C data model:
+
+    ./ReverseJson objc User testModel.json
+
+## Demo
+Turns this:
 
 	{
 	  "name": "Tom",
@@ -22,7 +34,7 @@ Turns this
 	  "internal": false
 	}
 
-into this
+...into this:
 
 	struct User {
 	    enum MixedItem {
@@ -45,6 +57,7 @@ into this
 	    let name: String
 	    let numbers: [Int]
 	}
+
 	enum JsonParsingError: ErrorType {
 	    case UnsupportedTypeError
 	}

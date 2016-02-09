@@ -1,17 +1,45 @@
-import Foundation
 
-public class SwiftModelCreator: ModelTranslator {
+
+public class SwiftTranslator: ModelTranslator {
     
-    public init() {}
-    public func translate(type: ModelParser.FieldType, name: String) -> String {
-        return type.toModel(name)
+    let translators: [ModelTranslator]
+    
+    public required init(args: [String] = []) {
+        translators = [
+            SwiftModelCreator(args: args),
+            SwiftJsonParsingTranslator(args: args)
+        ]
     }
-    
+    public func translate(type: ModelParser.FieldType, name: String) -> String {
+        return translators.lazy.map { $0.translate(type, name: name) }.joinWithSeparator("\n\n")
+    }
 }
 
-extension ModelParser.FieldType {
-    private func toModel(name: String) -> String {
-        let (typeName, decl) = self.makeSubtype("", subName: name, level: 0)
+private enum ObjectType: String {
+    case Struct = "struct"
+    case Class = "class"
+}
+extension ObjectType {
+    var name: String {
+        return self.rawValue
+    }
+}
+private enum ListType: String {
+    case Array
+    case ContiguousArray
+}
+
+private class SwiftModelCreator: ModelTranslator {
+    
+    private let objectType: ObjectType = .Struct
+    private let listType: ListType = .Array
+    
+    private required init(args: [String] = []) {
+        
+    }
+    
+    private func translate(type: ModelParser.FieldType, name: String) -> String {
+        let (typeName, decl) = makeSubtype(type, name: "", subName: name, level: 0)
         if let decl = decl {
             return decl
         } else {
@@ -19,12 +47,12 @@ extension ModelParser.FieldType {
         }
     }
     
-    private func makeSubtype(name: String, subName: String, level: Int) -> (name: String, declaration: String?) {
+    private func makeSubtype(type: ModelParser.FieldType, name: String, subName: String, level: Int) -> (name: String, declaration: String?) {
         let fieldType: String
         let declaration: String?
-        switch self {
+        switch type {
         case let .Object(fields):
-            fieldType = "\(subName.camelCasedString)"
+            fieldType = subName.camelCasedString
             declaration = createStructDeclaration(fieldType, fields: fields, level: level)
         case let .Number(numberType):
             fieldType = numberType.rawValue
@@ -33,14 +61,23 @@ extension ModelParser.FieldType {
             fieldType = "String"
             declaration = nil
         case let .List(listItemType):
-            let (subTypeName, subDeclaration) = listItemType.makeSubtype("\(name)\(subName.camelCasedString)", subName: "\(subName)Item", level: level)
+            let newSubName: String
+            if case .List = listItemType {
+                newSubName = subName
+            } else {
+                newSubName = "\(subName)Item"
+            }
+            let (subTypeName, subDeclaration) = makeSubtype(listItemType, name: "\(name)\(subName.camelCasedString)", subName: newSubName, level: level)
             declaration = subDeclaration
-            fieldType = "[\(subTypeName)]"
+            switch listType {
+            case .Array: fieldType = "[\(subTypeName)]"
+            case .ContiguousArray: fieldType = "\(listType.className)<\(subTypeName)>"
+            }
         case let .Enum(enumTypes):
-            fieldType = "\(subName.camelCasedString)"
+            fieldType = subName.camelCasedString
             declaration = createEnumDeclaration(fieldType, cases: enumTypes, level: level)
         case let .Optional(type):
-            let (subTypeName, subDeclaration) = type.makeSubtype(name, subName: subName, level: level)
+            let (subTypeName, subDeclaration) = makeSubtype(type, name: name, subName: subName, level: level)
             declaration = subDeclaration
             fieldType = "\(subTypeName)?"
         case .Unknown:
@@ -51,10 +88,10 @@ extension ModelParser.FieldType {
     }
     
     private func createStructDeclaration(name: String, fields: [ModelParser.ObjectField], level: Int = 0) -> String {
-        var ret = "struct \(name) {\n".indent(level)
+        var ret = "\(objectType.name) \(name) {\n".indent(level)
         let fieldsAndTypes = fields.map { f -> (field: String, type: String?) in
             var fieldDeclaration = ""
-            let (typeName, subTypeDeclaration) = f.type.makeSubtype(name, subName: f.name, level: level + 1)
+            let (typeName, subTypeDeclaration) = makeSubtype(f.type, name: name, subName: f.name, level: level + 1)
             fieldDeclaration += ("let \(f.name.pascalCasedString.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
@@ -67,19 +104,17 @@ extension ModelParser.FieldType {
         var ret = "enum \(name) {\n".indent(level)
         ret += cases.map { c -> String in
             var fieldDeclaration = ""
-            let (typeName, subTypeDeclaration) = c.makeSubtype(name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
+            let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
             if let subTypeDeclaration = subTypeDeclaration {
                 fieldDeclaration += "\n" + subTypeDeclaration + "\n"
             }
             fieldDeclaration += "case \(c.enumCaseName)(\(typeName))".indent(level + 1)
             return fieldDeclaration
-        }.joinWithSeparator("\n")
+            }.joinWithSeparator("\n")
         return ret + "\n" + "}".indent(level)
     }
-    
-    
-}
 
+}
 
 private struct Declaration: Hashable {
     let text: String
@@ -107,33 +142,14 @@ extension Declaration : StringLiteralConvertible {
     }
 }
 
-public class SwiftJsonParsingTranslator: ModelTranslator {
-    public func translate(type: ModelParser.FieldType, name: String) -> String {
-        let (parsers, instructions, typeName) = type.createParsers([name], valueExpression: "jsonValue")
-        
-        let declarations = parsers.sort { $0.0.priority > $0.1.priority }.lazy.map { $0.text }.joinWithSeparator("\n\n")
-        let parseFunction = [
-            "",
-            "",
-            "func parse\(name.camelCasedString)(jsonValue: AnyObject?) throws -> \(typeName) {",
-            "    return \(instructions)",
-            "}",
-        ].joinWithSeparator("\n")
-        return declarations + parseFunction
-    }
-    
-    
-
-}
-extension ModelParser.FieldType {
-    
-    private static let errorTypeDeclaration = Declaration(text: [
+private extension Declaration {
+    private static let errorType = Declaration(text: [
         "enum JsonParsingError: ErrorType {",
         "    case UnsupportedTypeError",
         "}"
     ].joinWithSeparator("\n"), priority: 1000)
     
-    private static let arrayParserDeclaration = Declaration(text: [
+    private static let arrayParser = Declaration(text: [
         "extension Array {",
         "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
         "        if let items = jsonValue as? [AnyObject] {",
@@ -144,8 +160,20 @@ extension ModelParser.FieldType {
         "    }",
         "}",
     ].joinWithSeparator("\n"), priority: 500)
-    
-    private static let stringParserDeclaration = Declaration(text: [
+
+    private static let contiguousArrayParser = Declaration(text: [
+        "extension ContiguousArray {",
+        "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
+        "        if let items = jsonValue as? [AnyObject] {",
+        "            self = ContiguousArray(try items.lazy.map(map))",
+        "        } else {",
+        "            throw JsonParsingError.UnsupportedTypeError",
+        "        }",
+        "    }",
+        "}",
+        ].joinWithSeparator("\n"), priority: 500)
+
+    private static let stringParser = Declaration(text: [
         "extension String {",
         "    init(jsonValue: AnyObject?) throws {",
         "        if let string = jsonValue as? String {",
@@ -157,7 +185,7 @@ extension ModelParser.FieldType {
         "}"
     ].joinWithSeparator("\n"), priority: 500)
     
-    private static let boolParserDeclaration = Declaration(text: [
+    private static let boolParser = Declaration(text: [
         "extension Bool {",
         "    init(jsonValue: AnyObject?) throws {",
         "        if let number = jsonValue as? NSNumber {",
@@ -177,7 +205,7 @@ extension ModelParser.FieldType {
         "}"
     ].joinWithSeparator("\n"), priority: 500)
     
-    private static let intParserDeclaration = Declaration(text: [
+    private static let intParser = Declaration(text: [
         "extension Int {",
         "    init(jsonValue: AnyObject?) throws {",
         "        if let number = jsonValue as? NSNumber {",
@@ -195,7 +223,7 @@ extension ModelParser.FieldType {
         "}"
     ].joinWithSeparator("\n"), priority: 500)
     
-    private static let floatParserDeclaration = Declaration(text: [
+    private static let floatParser = Declaration(text: [
         "extension Float {",
         "    init(jsonValue: AnyObject?) throws {",
         "        if let number = jsonValue as? NSNumber {",
@@ -213,7 +241,7 @@ extension ModelParser.FieldType {
         "}"
     ].joinWithSeparator("\n"), priority: 500)
     
-    private static let doubleParserDeclaration = Declaration(text: [
+    private static let doubleParser = Declaration(text: [
         "extension Double {",
         "    init(jsonValue: AnyObject?) throws {",
         "        if let number = jsonValue as? NSNumber {",
@@ -231,7 +259,7 @@ extension ModelParser.FieldType {
         "}"
     ].joinWithSeparator("\n"), priority: 500)
     
-    private static let optionalParserDeclaration = Declaration(text: [
+    private static let optionalParser = Declaration(text: [
         "extension Optional {",
         "    init(jsonValue: AnyObject?, map: AnyObject throws -> Wrapped) throws {",
         "        if let jsonValue = jsonValue where !(jsonValue is NSNull) {",
@@ -242,6 +270,41 @@ extension ModelParser.FieldType {
         "    }",
         "}"
     ].joinWithSeparator("\n"), priority:  500)
+}
+
+extension ListType {
+    var parser: Declaration {
+        switch self {
+        case .Array: return .arrayParser
+        case .ContiguousArray: return .contiguousArrayParser
+        }
+    }
+    var className: String {
+        return self.rawValue
+    }
+}
+
+private class SwiftJsonParsingTranslator: ModelTranslator {
+    
+    private let listType: ListType = .Array
+    
+    private required init(args: [String] = []) {}
+    
+    private func translate(type: ModelParser.FieldType, name: String) -> String {
+        let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")
+        
+        let declarations = parsers.sort { $0.0.priority > $0.1.priority }.lazy.map { $0.text }.joinWithSeparator("\n\n")
+        let parseFunction = [
+            "",
+            "",
+            "func parse\(name.camelCasedString)(jsonValue: AnyObject?) throws -> \(typeName) {",
+            "    return \(instructions)",
+            "}",
+        ].joinWithSeparator("\n")
+        return declarations + parseFunction
+    }
+    
+    
     
     private func createParser(numberType: ModelParser.NumberType, valueExpression: String, tryOptional: Bool) -> (parserDeclarations: Set<Declaration>, parsingInstruction: String, typeName: String) {
         let parser: Declaration
@@ -250,48 +313,54 @@ extension ModelParser.FieldType {
         let tryOptionalModifier = tryOptional ? "?" : ""
         switch numberType {
         case .Bool:
-            parser = ModelParser.FieldType.boolParserDeclaration
+            parser = .boolParser
             instruction = "try\(tryOptionalModifier) Bool(jsonValue: \(valueExpression))"
             typeName = "Bool"
         case .Int:
-            parser = ModelParser.FieldType.intParserDeclaration
+            parser = .intParser
             instruction = "try\(tryOptionalModifier) Int(jsonValue: \(valueExpression))"
             typeName = "Int"
         case .Float:
-            parser = ModelParser.FieldType.floatParserDeclaration
+            parser = .floatParser
             instruction = "try\(tryOptionalModifier) Float(jsonValue: \(valueExpression))"
             typeName = "Float"
         case .Double:
-            parser = ModelParser.FieldType.doubleParserDeclaration
+            parser = .doubleParser
             instruction = "try\(tryOptionalModifier) Double(jsonValue: \(valueExpression))"
             typeName = "Double"
         }
-        return ([ModelParser.FieldType.errorTypeDeclaration, parser], instruction, typeName)
+        return ([.errorType, parser], instruction, typeName)
     }
     
     
     
-    private func createParsers(parentTypeNames: [String], valueExpression: String, tryOptional: Bool = false) -> (parserDeclarations: Set<Declaration>, parsingInstruction: String, typeName: String) {
+    private func createParsers(type: ModelParser.FieldType, parentTypeNames: [String], valueExpression: String, tryOptional: Bool = false) -> (parserDeclarations: Set<Declaration>, parsingInstruction: String, typeName: String) {
         let tryOptionalModifier = tryOptional ? "?" : ""
-        switch self {
+        switch type {
         case let .Number(numberType):
             return createParser(numberType, valueExpression: valueExpression, tryOptional: tryOptional)
         case .Text:
-            return ([ModelParser.FieldType.stringParserDeclaration], "try\(tryOptionalModifier) String(jsonValue: \(valueExpression))", "String")
+            return ([.stringParser], "try\(tryOptionalModifier) String(jsonValue: \(valueExpression))", "String")
         case let .List(listType):
-            var childTypeNames = parentTypeNames
-            if let last = childTypeNames.last {
-                childTypeNames.removeLast()
-                childTypeNames.append("\(last)Item")
+            let childTypeNames: [String]
+            if case .List = listType {
+                childTypeNames = parentTypeNames
+            } else {
+                var names = parentTypeNames
+                if let last = names.last {
+                    names.removeLast()
+                    names.append("\(last)Item")
+                }
+                childTypeNames = names
             }
-            let (subDeclarations, instruction, typeName) = listType.createParsers(childTypeNames, valueExpression: "$0")
-            let declarations = subDeclarations.union([ModelParser.FieldType.errorTypeDeclaration, ModelParser.FieldType.arrayParserDeclaration])
-            return (declarations, "try\(tryOptionalModifier) Array(jsonValue: \(valueExpression)) { \(instruction) }", "[\(typeName)]")
+            let (subDeclarations, instruction, typeName) = createParsers(listType, parentTypeNames: childTypeNames, valueExpression: "$0")
+            let declarations = subDeclarations.union([.errorType, self.listType.parser])
+            return (declarations, "try\(tryOptionalModifier) \(self.listType.className)(jsonValue: \(valueExpression)) { \(instruction) }", "[\(typeName)]")
         case .Optional(.Unknown):
             return ([], "nil", parentTypeNames.joinWithSeparator("."))
         case let .Optional(optionalType):
-            let (subDeclarations, instruction, typeName) = optionalType.createParsers(parentTypeNames, valueExpression: "$0")
-            return (subDeclarations.union([ModelParser.FieldType.errorTypeDeclaration, ModelParser.FieldType.optionalParserDeclaration]), "try\(tryOptionalModifier) Optional(jsonValue: \(valueExpression)) { \(instruction) }", "\(typeName)?")
+            let (subDeclarations, instruction, typeName) = createParsers(optionalType, parentTypeNames: parentTypeNames, valueExpression: "$0")
+            return (subDeclarations.union([.errorType, .optionalParser]), "try\(tryOptionalModifier) Optional(jsonValue: \(valueExpression)) { \(instruction) }", "\(typeName)?")
         case let .Object(fields):
             var declarations = Set<Declaration>()
             let typeName = parentTypeNames.joinWithSeparator(".")
@@ -299,9 +368,9 @@ extension ModelParser.FieldType {
                 "extension \(typeName) {",
                 "    init(jsonValue: AnyObject?) throws {",
                 "        if let dict = jsonValue as? [NSObject: AnyObject] {\n"
-            ].joinWithSeparator("\n")
+                ].joinWithSeparator("\n")
             parser += fields.map { field in
-                let (subDeclarations, instruction, _) = field.type.createParsers(parentTypeNames + [field.name.camelCasedString], valueExpression: "dict[\"\(field.name)\"]")
+                let (subDeclarations, instruction, _) = createParsers(field.type, parentTypeNames: parentTypeNames + [field.name.camelCasedString], valueExpression: "dict[\"\(field.name)\"]")
                 declarations.unionInPlace(subDeclarations)
                 return "self.\(field.name.pascalCasedString.swiftKeywordEscaped) = \(instruction)".indent(3)
                 }.joinWithSeparator("\n") + "\n"
@@ -311,8 +380,8 @@ extension ModelParser.FieldType {
                 "        }",
                 "    }",
                 "}"
-            ].joinWithSeparator("\n")
-            declarations.insert(Declaration(text: parser))
+                ].joinWithSeparator("\n")
+            declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
         case let .Enum(types):
             var declarations = Set<Declaration>()
@@ -321,28 +390,28 @@ extension ModelParser.FieldType {
                 "extension \(typeName) {",
                 "    init(jsonValue: AnyObject?) throws {",
                 "        ",
-            ].joinWithSeparator("\n")
+                ].joinWithSeparator("\n")
             parser += types.map { (type: ModelParser.FieldType) -> String in
-                let (subDeclarations, instruction, _) = type.createParsers(parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName)"], valueExpression: "jsonValue", tryOptional: true)
+                let (subDeclarations, instruction, _) = createParsers(type, parentTypeNames: parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName)"], valueExpression: "jsonValue", tryOptional: true)
                 declarations.unionInPlace(subDeclarations)
                 return [
                     "if let value = \(instruction) {",
                     "            self = \(type.enumCaseName)(value)",
                     "        }",
-                ].joinWithSeparator("\n")
-            }.joinWithSeparator(" else ")
+                    ].joinWithSeparator("\n")
+                }.joinWithSeparator(" else ")
             parser += [" else {",
                 "            throw JsonParsingError.UnsupportedTypeError",
                 "        }",
                 "    }",
                 "}",
-            ].joinWithSeparator("\n")
-            declarations.insert(Declaration(text: parser))
+                ].joinWithSeparator("\n")
+            declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
         case .Unknown:
             return ([], "nil", parentTypeNames.joinWithSeparator("."))
         }
         
     }
-    
+
 }
