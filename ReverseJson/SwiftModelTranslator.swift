@@ -82,7 +82,7 @@ private class SwiftModelCreator: ModelTranslator {
             fieldType = "\(subTypeName)?"
         case .Unknown:
             fieldType = subName.camelCasedString
-            declaration = "typealias \(fieldType) = Void".indent(level)
+            declaration = "typealias \(fieldType) = Void // TODO Specify type here. We couldn't infer it from json".indent(level)
         }
         return (fieldType, declaration)
     }
@@ -92,7 +92,7 @@ private class SwiftModelCreator: ModelTranslator {
         let fieldsAndTypes = fields.map { f -> (field: String, type: String?) in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(f.type, name: name, subName: f.name, level: level + 1)
-            fieldDeclaration += ("let \(f.name.pascalCasedString.swiftKeywordEscaped): \(typeName)")
+            fieldDeclaration += ("let \(f.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
         ret += Set(fieldsAndTypes.lazy.flatMap { $0.type.map({"\($0)\n"})}).sort(<).joinWithSeparator("")
@@ -341,6 +341,8 @@ private class SwiftJsonParsingTranslator: ModelTranslator {
             return createParser(numberType, valueExpression: valueExpression, tryOptional: tryOptional)
         case .Text:
             return ([.stringParser], "try\(tryOptionalModifier) String(jsonValue: \(valueExpression))", "String")
+        case .List(.Unknown):
+            return ([], "[]", parentTypeNames.joinWithSeparator("."))
         case let .List(listType):
             let childTypeNames: [String]
             if case .List = listType {
@@ -372,7 +374,7 @@ private class SwiftJsonParsingTranslator: ModelTranslator {
             parser += fields.map { field in
                 let (subDeclarations, instruction, _) = createParsers(field.type, parentTypeNames: parentTypeNames + [field.name.camelCasedString], valueExpression: "dict[\"\(field.name)\"]")
                 declarations.unionInPlace(subDeclarations)
-                return "self.\(field.name.pascalCasedString.swiftKeywordEscaped) = \(instruction)".indent(3)
+                return "self.\(field.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped) = \(instruction)".indent(3)
                 }.joinWithSeparator("\n") + "\n"
             parser += [
                 "        } else {",
