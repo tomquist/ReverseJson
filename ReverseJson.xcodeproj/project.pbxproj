@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		42A166D61C690B7C000F19A4 /* testModel.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 42F916021C68F19D004A640E /* testModel.json */; };
+		A70AEB4B1C83104100307E50 /* ModelParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70AEB4A1C83104100307E50 /* ModelParserTests.swift */; };
+		A70AEB521C83112300307E50 /* SwiftModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A961C67BA44009AADAC /* SwiftModelTranslator.swift */; };
+		A70AEB531C83114D00307E50 /* ModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A951C67BA44009AADAC /* ModelTranslator.swift */; };
+		A70AEB541C83115200307E50 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A971C67BA44009AADAC /* Utils.swift */; };
+		A70AEB551C83115700307E50 /* ModelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A941C67BA44009AADAC /* ModelParser.swift */; };
 		A7921A8E1C67BA27009AADAC /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A8D1C67BA27009AADAC /* main.swift */; };
 		A7921A981C67BA44009AADAC /* ModelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A941C67BA44009AADAC /* ModelParser.swift */; };
 		A7921A991C67BA44009AADAC /* ModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A951C67BA44009AADAC /* ModelTranslator.swift */; };
@@ -31,6 +36,9 @@
 
 /* Begin PBXFileReference section */
 		42F916021C68F19D004A640E /* testModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testModel.json; sourceTree = "<group>"; };
+		A70AEB481C83104100307E50 /* ReverseJsonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReverseJsonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A70AEB4A1C83104100307E50 /* ModelParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelParserTests.swift; sourceTree = "<group>"; };
+		A70AEB4C1C83104100307E50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7921A8A1C67BA27009AADAC /* ReverseJson */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ReverseJson; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7921A8D1C67BA27009AADAC /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		A7921A941C67BA44009AADAC /* ModelParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParser.swift; sourceTree = "<group>"; };
@@ -41,6 +49,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A70AEB451C83104100307E50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A7921A871C67BA27009AADAC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,10 +66,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A70AEB491C83104100307E50 /* ReverseJsonTests */ = {
+			isa = PBXGroup;
+			children = (
+				A70AEB4A1C83104100307E50 /* ModelParserTests.swift */,
+				A70AEB4C1C83104100307E50 /* Info.plist */,
+			);
+			path = ReverseJsonTests;
+			sourceTree = "<group>";
+		};
 		A7921A811C67BA27009AADAC = {
 			isa = PBXGroup;
 			children = (
 				A7921A8C1C67BA27009AADAC /* ReverseJson */,
+				A70AEB491C83104100307E50 /* ReverseJsonTests */,
 				A7921A8B1C67BA27009AADAC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				A7921A8A1C67BA27009AADAC /* ReverseJson */,
+				A70AEB481C83104100307E50 /* ReverseJsonTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -84,6 +110,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A70AEB471C83104100307E50 /* ReverseJsonTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70AEB4F1C83104100307E50 /* Build configuration list for PBXNativeTarget "ReverseJsonTests" */;
+			buildPhases = (
+				A70AEB441C83104100307E50 /* Sources */,
+				A70AEB451C83104100307E50 /* Frameworks */,
+				A70AEB461C83104100307E50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ReverseJsonTests;
+			productName = ReverseJsonTests;
+			productReference = A70AEB481C83104100307E50 /* ReverseJsonTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		A7921A891C67BA27009AADAC /* ReverseJson */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A7921A911C67BA27009AADAC /* Build configuration list for PBXNativeTarget "ReverseJson" */;
@@ -111,6 +154,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Tom Quist";
 				TargetAttributes = {
+					A70AEB471C83104100307E50 = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
 					A7921A891C67BA27009AADAC = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
@@ -129,11 +175,34 @@
 			projectRoot = "";
 			targets = (
 				A7921A891C67BA27009AADAC /* ReverseJson */,
+				A70AEB471C83104100307E50 /* ReverseJsonTests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		A70AEB461C83104100307E50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		A70AEB441C83104100307E50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A70AEB551C83115700307E50 /* ModelParser.swift in Sources */,
+				A70AEB541C83115200307E50 /* Utils.swift in Sources */,
+				A70AEB521C83112300307E50 /* SwiftModelTranslator.swift in Sources */,
+				A70AEB4B1C83104100307E50 /* ModelParserTests.swift in Sources */,
+				A70AEB531C83114D00307E50 /* ModelTranslator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A7921A861C67BA27009AADAC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -150,6 +219,28 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		A70AEB4D1C83104100307E50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = ReverseJsonTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = de.quist.ReverseJsonTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A70AEB4E1C83104100307E50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = ReverseJsonTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = de.quist.ReverseJsonTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		A7921A8F1C67BA27009AADAC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -247,6 +338,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A70AEB4F1C83104100307E50 /* Build configuration list for PBXNativeTarget "ReverseJsonTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A70AEB4D1C83104100307E50 /* Debug */,
+				A70AEB4E1C83104100307E50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		A7921A851C67BA27009AADAC /* Build configuration list for PBXProject "ReverseJson" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

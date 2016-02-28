@@ -52,7 +52,7 @@ public class ObjcModelCreator: ModelTranslator {
         switch type {
         case let .Enum(enumTypes):
             let className = "\(typePrefix)\(name.camelCasedString)"
-            let fieldValues = enumTypes.map { type -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
+            let fieldValues = enumTypes.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { type -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
                 let nullable = isNullable(type)
                 
                 let (subInterfaces, subImplementations, parseExpression, fieldRequiredTypeNames, fieldFullTypeName) = declarationsFor(type, name: "\(name.camelCasedString)\(type.enumCaseName.camelCasedString)", valueToParse: "jsonValue")
@@ -114,7 +114,7 @@ public class ObjcModelCreator: ModelTranslator {
             
         case let .Object(fields):
             let className = "\(typePrefix)\(name.camelCasedString)"
-            let fieldValues = fields.map { field -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
+            let fieldValues = fields.sort{$0.0.name < $0.1.name}.map { field -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
                 let nullable = isNullable(field.type)
                 
                 let valueToParse = "dict[@\"\(field.name)\"]"

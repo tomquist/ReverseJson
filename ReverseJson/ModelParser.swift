@@ -50,11 +50,11 @@ public class ModelParser {
     }
     
     public indirect enum FieldType {
-        case Object([ObjectField])
+        case Object(Set<ObjectField>)
         case List(FieldType)
         case Text
         case Number(NumberType)
-        case Enum([FieldType])
+        case Enum(Set<FieldType>)
         case Unknown
         case Optional(FieldType)
     }
@@ -92,7 +92,7 @@ public class ModelParser {
         let fields = try dict.flatMap{ (name: String, value: AnyObject) -> ObjectField? in
             return ObjectField(name: name, type: try decode(value))
         }
-        return .Object(fields)
+        return .Object(Set(fields))
     }
     
     private func decode(list: [AnyObject]) throws -> FieldType? {
@@ -108,12 +108,35 @@ public class ModelParser {
     
 }
 
-extension ModelParser.ObjectField: Equatable {
+extension ModelParser.ObjectField: Hashable {
+    public var hashValue: Int {
+        return (31 &* name.hashValue) &+ type.hashValue
+    }
 }
 public func ==(lhs: ModelParser.ObjectField, rhs: ModelParser.ObjectField) -> Bool {
     return lhs.name == rhs.name && lhs.type == rhs.type
 }
 
+extension ModelParser.FieldType: Hashable {
+    public var hashValue: Int {
+        switch self {
+        case .Unknown:
+            return 0
+        case .Text:
+            return 31
+        case let .Optional(type):
+            return 31 &+ type.hashValue
+        case let .Object(fields):
+            return 31 &* 2 &+ fields.hashValue
+        case let .List(type):
+            return 31 &* 3 &+ type.hashValue
+        case let .Enum(types):
+            return 31 &* 4 &+ types.hashValue
+        case let .Number(numberType):
+            return 31 &* 5 &+ numberType.hashValue
+        }
+    }
+}
 public func ==(lhs: ModelParser.FieldType, rhs: ModelParser.FieldType) -> Bool {
     switch (lhs, rhs) {
     case let (.Object(fields1), .Object(fields2)):
@@ -128,8 +151,10 @@ public func ==(lhs: ModelParser.FieldType, rhs: ModelParser.FieldType) -> Bool {
         return true
     case let (.Optional(type1), .Optional(type2)):
         return type1 == type2
+    case let (.Enum(types1), .Enum(types2)):
+        return types1 == types2
     default:
-        return false;
+        return false
     }
 }
 
@@ -147,8 +172,8 @@ extension ModelParser.NumberType {
 
 extension ModelParser.FieldType {
     private func mergeWith(type: ModelParser.FieldType) -> ModelParser.FieldType {
-        func mergeEnumTypes(enumTypes: [ModelParser.FieldType], otherType: ModelParser.FieldType) -> [ModelParser.FieldType] {
-            if !enumTypes.lazy.filter({ $0 == otherType }).isEmpty {
+        func mergeEnumTypes(enumTypes: Set<ModelParser.FieldType>, otherType: ModelParser.FieldType) -> Set<ModelParser.FieldType> {
+            if enumTypes.contains(otherType) {
                 return enumTypes
             }
             var merged = false
@@ -188,7 +213,7 @@ extension ModelParser.FieldType {
                     return enumType
                 }
             }
-            return newEnumTypes + (merged ? [] : [otherType])
+            return Set(newEnumTypes + (merged ? [] : [otherType]))
         }
         
         switch (self, type) {
@@ -214,29 +239,29 @@ extension ModelParser.FieldType {
             let mergedNumberType = numberType1.mergeWith(numberType2)!
             return .Number(mergedNumberType)
         case let (.Object(fields1), .Object(fields2)):
-            var resultFields: [ModelParser.ObjectField] = []
+            var resultFields: Set<ModelParser.ObjectField> = []
             var remainingFields = fields2
             for f1 in fields1 {
-                let foundItem = remainingFields.enumerate().lazy.filter({ (i, f) -> Bool in
+                let foundItemIndex = remainingFields.indexOf { f -> Bool in
                     return f1.name == f.name
-                }).first
+                }
                 let field: ModelParser.ObjectField
-                if let foundItem = foundItem {
-                    remainingFields.removeAtIndex(foundItem.index)
-                    let mergedType = f1.type.mergeWith(foundItem.element.type)
+                if let foundItemIndex = foundItemIndex {
+                    let foundItem = remainingFields.removeAtIndex(foundItemIndex)
+                    let mergedType = f1.type.mergeWith(foundItem.type)
                     field = ModelParser.ObjectField(name: f1.name, type: mergedType)
                 } else if case .Optional = f1.type {
                     field = f1
                 } else {
                     field = ModelParser.ObjectField(name: f1.name, type: .Optional(f1.type))
                 }
-                resultFields.append(field)
+                resultFields.insert(field)
             }
             for field in remainingFields {
                 if case .Optional = field.type {
-                    resultFields.append(field)
+                    resultFields.insert(field)
                 } else {
-                    resultFields.append(ModelParser.ObjectField(name: field.name, type: .Optional(field.type)))
+                    resultFields.insert(ModelParser.ObjectField(name: field.name, type: .Optional(field.type)))
                 }
             }
             return .Object(resultFields)

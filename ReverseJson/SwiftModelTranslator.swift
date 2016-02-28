@@ -29,10 +29,18 @@ private enum ListType: String {
     case ContiguousArray
 }
 
+private enum FieldVisibility: String {
+    case Internal = "internal"
+    case Public = "public"
+    case Private = "private"
+}
+
 private class SwiftModelCreator: ModelTranslator {
     
     private let objectType: ObjectType = .Struct
     private let listType: ListType = .Array
+    private let fieldVisibility: FieldVisibility = .Internal
+    private let mutableFields: Bool = false
     
     private required init(args: [String] = []) {
         
@@ -87,12 +95,14 @@ private class SwiftModelCreator: ModelTranslator {
         return (fieldType, declaration)
     }
     
-    private func createStructDeclaration(name: String, fields: [ModelParser.ObjectField], level: Int = 0) -> String {
+    private func createStructDeclaration(name: String, fields: Set<ModelParser.ObjectField>, level: Int = 0) -> String {
         var ret = "\(objectType.name) \(name) {\n".indent(level)
-        let fieldsAndTypes = fields.map { f -> (field: String, type: String?) in
+        let fieldsAndTypes = fields.sort{$0.0.name < $0.1.name}.map { f -> (field: String, type: String?) in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(f.type, name: name, subName: f.name, level: level + 1)
-            fieldDeclaration += ("let \(f.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
+            let varModifier = mutableFields ? "var" : "let"
+            let visibility = fieldVisibility == .Internal ? "" : "\(fieldVisibility) "
+            fieldDeclaration += ("\(visibility)\(varModifier) \(f.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
         ret += Set(fieldsAndTypes.lazy.flatMap { $0.type.map({"\($0)\n"})}).sort(<).joinWithSeparator("")
@@ -100,9 +110,9 @@ private class SwiftModelCreator: ModelTranslator {
         return ret + "}".indent(level)
     }
     
-    private func createEnumDeclaration(name: String, cases: [ModelParser.FieldType], level: Int = 0) -> String {
+    private func createEnumDeclaration(name: String, cases: Set<ModelParser.FieldType>, level: Int = 0) -> String {
         var ret = "enum \(name) {\n".indent(level)
-        ret += cases.map { c -> String in
+        ret += cases.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
             if let subTypeDeclaration = subTypeDeclaration {
