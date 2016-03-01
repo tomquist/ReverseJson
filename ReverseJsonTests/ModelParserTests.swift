@@ -22,6 +22,105 @@ class ReverseJsonTests: XCTestCase {
         super.tearDown()
     }
     
+    func XCTAsserEqualFieldType(fieldType1: ModelParser.FieldType, _ fieldType2: ModelParser.FieldType) {
+        XCTAssertEqual(fieldType1, fieldType2)
+    }
+    func XCTAsserNotEqualFieldType(fieldType1: ModelParser.FieldType, _ fieldType2: ModelParser.FieldType) {
+        XCTAssertNotEqual(fieldType1, fieldType2)
+    }
+    
+    func testEqualTypeUnknown() {
+        XCTAsserEqualFieldType(.Unknown, .Unknown)
+        XCTAsserNotEqualFieldType(.Unknown, .Number(.Int))
+    }
+    
+    func testEqualTypeText() {
+        XCTAsserEqualFieldType(ModelParser.FieldType.Text, .Text)
+        XCTAsserNotEqualFieldType(.Text, .Number(.Int))
+    }
+    
+    func testEqualNumberTypes() {
+        XCTAssertEqual(ModelParser.NumberType.Int, ModelParser.NumberType.Int)
+        XCTAssertEqual(ModelParser.NumberType.Float, ModelParser.NumberType.Float)
+        XCTAssertEqual(ModelParser.NumberType.Bool, ModelParser.NumberType.Bool)
+        XCTAssertEqual(ModelParser.NumberType.Double, ModelParser.NumberType.Double)
+        XCTAssertNotEqual(ModelParser.NumberType.Int, ModelParser.NumberType.Double)
+        XCTAssertNotEqual(ModelParser.NumberType.Float, ModelParser.NumberType.Double)
+    }
+
+    func testEqualTypeNumber() {
+        XCTAsserEqualFieldType(.Number(.Int), .Number(.Int))
+        XCTAsserNotEqualFieldType(.Number(.Int), .Text)
+        XCTAsserNotEqualFieldType(.Number(.Int), .Number(.Double))
+    }
+    
+    func testEqualTypeList() {
+        XCTAsserEqualFieldType(.List(.Text), .List(.Text))
+        XCTAsserNotEqualFieldType(.List(.Text), .Text)
+        XCTAsserNotEqualFieldType(.List(.Text), .List(.Number(.Int)))
+    }
+    
+    func testEqualTypeOptional() {
+        XCTAsserEqualFieldType(.Optional(.Text), .Optional(.Text))
+        XCTAsserNotEqualFieldType(.Optional(.Text), .Text)
+        XCTAsserNotEqualFieldType(.Optional(.Text), .List(.Text))
+        XCTAsserNotEqualFieldType(.Optional(.Text), .Optional(.Number(.Int)))
+    }
+    
+    func testEqualTypeObject() {
+        XCTAsserEqualFieldType(.Object([]), .Object([]))
+        XCTAsserEqualFieldType(.Object([.init(name: "object", type: .Text)]), .Object([.init(name: "object", type: .Text)]))
+        XCTAsserEqualFieldType(.Object([
+            .init(name: "object", type: .Text),
+            .init(name: "int", type: .Number(.Int)),
+        ]), .Object([
+            .init(name: "int", type: .Number(.Int)),
+            .init(name: "object", type: .Text),
+        ]))
+        XCTAsserNotEqualFieldType(.Object([
+            .init(name: "object", type: .Text),
+            .init(name: "int", type: .Number(.Int)),
+        ]), .Object([
+            .init(name: "int", type: .Text),
+            .init(name: "object", type: .Text),
+        ]))
+        XCTAsserNotEqualFieldType(.Object([
+            .init(name: "object", type: .Text),
+            .init(name: "integer", type: .Number(.Int)),
+        ]), .Object([
+            .init(name: "int", type: .Number(.Int)),
+            .init(name: "object", type: .Text),
+        ]))
+        XCTAsserNotEqualFieldType(.Object([
+            .init(name: "object", type: .Text),
+        ]), .Object([
+            .init(name: "int", type: .Number(.Int)),
+            .init(name: "object", type: .Text),
+        ]))
+        XCTAsserNotEqualFieldType(.Object([.init(name: "object", type: .Text)]), .Object([.init(name: "text", type: .Text)]))
+        XCTAsserNotEqualFieldType(.Object([.init(name: "object", type: .Text)]), .Text)
+    }
+    
+    func testEqualTypeEnum() {
+        XCTAsserEqualFieldType(.Enum([]), .Enum([]))
+        XCTAsserEqualFieldType(.Enum([.Text]), .Enum([.Text]))
+        XCTAsserEqualFieldType(.Enum([
+            .Text,
+            .Number(.Int),
+        ]), .Enum([
+            .Number(.Int),
+            .Text,
+        ]))
+        XCTAsserNotEqualFieldType(.Enum([
+            .Text,
+            .Number(.Int),
+        ]), .Enum([
+            .Text
+        ]))
+        XCTAsserNotEqualFieldType(.Enum([.Text]), .Enum([.Number(.Int)]))
+        XCTAsserNotEqualFieldType(.Enum([.Text]), .Text)
+    }
+    
     func testString() {
         let type = try! parser.decode("Simple string")
         XCTAssertEqual(type, ModelParser.FieldType.Text)
@@ -47,7 +146,7 @@ class ReverseJsonTests: XCTestCase {
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Bool))
     }
     
-    func testEmptyStruct() {
+    func testEmptyObject() {
         let type = try! parser.decode([:])
         XCTAssertEqual(type, ModelParser.FieldType.Object([]))
     }
@@ -88,22 +187,28 @@ class ReverseJsonTests: XCTestCase {
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Unknown)))
     }
 
-    func testSingleFieldStruct() {
+    func testSingleFieldObject() {
         let type = try! parser.decode([
             "string":"Test"
         ])
         XCTAssertEqual(type, ModelParser.FieldType.Object([ModelParser.ObjectField(name: "string", type: .Text)]))
     }
     
-    func testTwoFieldsStruct() {
+    func testThreeFieldsObject() {
         let type = try! parser.decode([
             "string":"Test",
-            "integer": 123
+            "integer": 123,
+            "object": [:]
         ])
-        XCTAssertEqual(type, ModelParser.FieldType.Object([.init(name: "string", type: .Text), .init(name: "integer", type: .Number(.Int))]))
+        let expectedType: ModelParser.FieldType = .Object([
+            .init(name: "string", type: .Text),
+            .init(name: "integer", type: .Number(.Int)),
+            .init(name: "object", type: .Object([]))
+        ])
+        XCTAssertEqual(type, expectedType)
     }
 
-    func testArrayOfEmptyStruct() {
+    func testArrayOfEmptyObject() {
         let type = try! parser.decode([
             [:],
             [:]
@@ -111,7 +216,7 @@ class ReverseJsonTests: XCTestCase {
         XCTAssertEqual(type, ModelParser.FieldType.List(.Object([])))
     }
     
-    func testArrayOfEmptyOptionalStruct() {
+    func testArrayOfEmptyOptionalObject() {
         let type = try! parser.decode([
             [:],
             NSNull()
@@ -168,7 +273,7 @@ class ReverseJsonTests: XCTestCase {
         XCTAssertEqual(type, expectedResult, "Mixed number types with Bool, Int and Double should be merged to enum containing Bool and Double numbers")
     }
     
-    func testArrayOfStructsWithMissingField() {
+    func testArrayOfObjectsWithMissingField() {
         let type1 = try! parser.decode([
             [:],
             ["string":"Test"]
@@ -178,16 +283,16 @@ class ReverseJsonTests: XCTestCase {
                 .init(name: "string", type: .Optional(.Text))
             ])
         )
-        XCTAssertEqual(type1, expectedResult, "List of structs where in one struct a field is missing, should result in a struct with an optional field type")
+        XCTAssertEqual(type1, expectedResult, "List of objects where in one object a field is missing, should result in a object with an optional field type")
         
         let type2 = try! parser.decode([
             ["string":"Test"],
             [:]
         ])
-        XCTAssertEqual(type2, expectedResult, "List of structs where in one struct a field is missing, should result in a struct with an optional field type")
+        XCTAssertEqual(type2, expectedResult, "List of objects where in one object a field is missing, should result in a object with an optional field type")
     }
     
-    func testArrayOfStructsWithMixedTypesAndOptional() {
+    func testArrayOfObjectsWithMixedTypesAndOptional() {
         let type = try! parser.decode([
             ["mixed":NSNull()       ],
             ["mixed":"string"       ],
@@ -206,7 +311,7 @@ class ReverseJsonTests: XCTestCase {
         XCTAssertEqual(type, expectedResult)
     }
 
-    func testArrayStructWithArrayFieldOfUnknownTypeAndStrings() {
+    func testArrayObjectWithArrayFieldOfUnknownTypeAndStrings() {
         let type = try! parser.decode([
             ["mixed":[]             ],
             ["mixed":["String"]     ],
@@ -219,7 +324,7 @@ class ReverseJsonTests: XCTestCase {
         XCTAssertEqual(type, expectedResult)
     }
     
-    func testArrayStructWithArrayFieldOfIntsStringsAndDoubles() {
+    func testArrayObjectWithArrayFieldOfIntsStringsAndDoubles() {
         let type = try! parser.decode([
             ["mixed":[Int(10)]      ],
             ["mixed":["String"]     ],
@@ -238,7 +343,7 @@ class ReverseJsonTests: XCTestCase {
         XCTAssertEqual(type, expectedResult)
     }
 
-    func testArrayStructWithMixedFieldOfMixedArraysAndInt() {
+    func testArrayObjectWithMixedFieldOfMixedArraysAndInt() {
         let type = try! parser.decode([
             ["mixed":["String"]     ],
             ["mixed":Int(10)        ],
@@ -261,5 +366,16 @@ class ReverseJsonTests: XCTestCase {
             ])
         )
         XCTAssertEqual(type, expectedResult)
+    }
+    
+    
+    func testUnsupported() {
+        var error: ErrorType? = nil
+        do {
+            try parser.decode(NSObject())
+        } catch let e {
+            error = e
+        }
+        XCTAssertNotNil(error)
     }
 }

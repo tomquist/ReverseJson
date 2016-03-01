@@ -14,20 +14,18 @@ extension NSNumber {
             if (self.compare(Constants.trueNumber) == NSComparisonResult.OrderedSame && objCType == Constants.trueObjCType)
                 || (self.compare(Constants.falseNumber) == NSComparisonResult.OrderedSame && objCType == Constants.falseObjCType){
                     return true
-            } else {
-                return false
             }
+            return false
         }
     }
     
     var numberType: ModelParser.NumberType {
         if self.isBool {
             return .Bool
-        } else {
-            let mappings: [String: ModelParser.NumberType] = ["c": .Int, "i": .Int, "l": .Int, "q": .Int, "f": .Float, "d": .Double]
-            let objcType = String.fromCString(self.objCType)?.lowercaseString
-            return objcType.flatMap { mappings[$0] } ?? .Double
         }
+        let mappings: [String: ModelParser.NumberType] = ["c": .Int, "i": .Int, "l": .Int, "q": .Int, "f": .Float, "d": .Double]
+        let objcType = String.fromCString(self.objCType)?.lowercaseString
+        return objcType.flatMap { mappings[$0] } ?? .Double
     }
 }
 
@@ -100,9 +98,8 @@ public class ModelParser {
         return types.reduce(nil) { (type1, type2) -> FieldType? in
             if let type1 = type1 {
                 return type1.mergeWith(type2)
-            } else {
-                return type2
             }
+            return type2
         }
     }
     
