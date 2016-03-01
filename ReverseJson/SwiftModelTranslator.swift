@@ -35,24 +35,23 @@ private enum FieldVisibility: String {
     case Private = "private"
 }
 
-private class SwiftModelCreator: ModelTranslator {
+class SwiftModelCreator: ModelTranslator {
     
     private let objectType: ObjectType = .Struct
     private let listType: ListType = .Array
     private let fieldVisibility: FieldVisibility = .Internal
     private let mutableFields: Bool = false
     
-    private required init(args: [String] = []) {
+    required init(args: [String] = []) {
         
     }
     
-    private func translate(type: ModelParser.FieldType, name: String) -> String {
+    func translate(type: ModelParser.FieldType, name: String) -> String {
         let (typeName, decl) = makeSubtype(type, name: "", subName: name, level: 0)
         if let decl = decl {
             return decl
-        } else {
-            return "typealias \(name) = \(typeName)\n"
         }
+        return "typealias \(name) = \(typeName)"
     }
     
     private func makeSubtype(type: ModelParser.FieldType, name: String, subName: String, level: Int) -> (name: String, declaration: String?) {
@@ -96,7 +95,7 @@ private class SwiftModelCreator: ModelTranslator {
     }
     
     private func createStructDeclaration(name: String, fields: Set<ModelParser.ObjectField>, level: Int = 0) -> String {
-        var ret = "\(objectType.name) \(name) {\n".indent(level)
+        var ret = "\(objectType.name) \(name) {".indent(level)
         let fieldsAndTypes = fields.sort{$0.0.name < $0.1.name}.map { f -> (field: String, type: String?) in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(f.type, name: name, subName: f.name, level: level + 1)
@@ -105,22 +104,24 @@ private class SwiftModelCreator: ModelTranslator {
             fieldDeclaration += ("\(visibility)\(varModifier) \(f.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
-        ret += Set(fieldsAndTypes.lazy.flatMap { $0.type.map({"\($0)\n"})}).sort(<).joinWithSeparator("")
-        ret += fieldsAndTypes.lazy.map { $0.field.indent(level + 1) }.sort { $0.0.localizedStandardCompare($0.1) == .OrderedAscending }.joinWithSeparator("\n") + "\n"
-        return ret + "}".indent(level)
+        let typeDeclarations = fieldsAndTypes.lazy.flatMap {$0.type}
+        ret += Set(typeDeclarations.map({ "\n\($0)"})).sort(<).joinWithSeparator("")
+        let fields = fieldsAndTypes.lazy.map { $0.field }.map { $0.indent(level + 1) }.map { "\n\($0)" }
+        ret += fields.sort(<).joinWithSeparator("")
+        return ret + "\n" + "}".indent(level)
     }
     
     private func createEnumDeclaration(name: String, cases: Set<ModelParser.FieldType>, level: Int = 0) -> String {
-        var ret = "enum \(name) {\n".indent(level)
+        var ret = "enum \(name) {".indent(level)
         ret += cases.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
             if let subTypeDeclaration = subTypeDeclaration {
-                fieldDeclaration += "\n" + subTypeDeclaration + "\n"
+                fieldDeclaration += subTypeDeclaration + "\n"
             }
             fieldDeclaration += "case \(c.enumCaseName)(\(typeName))".indent(level + 1)
             return fieldDeclaration
-            }.joinWithSeparator("\n")
+        }.map {"\n\($0)"} .joinWithSeparator("")
         return ret + "\n" + "}".indent(level)
     }
 
@@ -140,146 +141,145 @@ private struct Declaration: Hashable {
 private func ==(lhs: Declaration, rhs: Declaration) -> Bool {
     return lhs.text == rhs.text
 }
-extension Declaration : StringLiteralConvertible {
-    init(stringLiteral value: String) {
-        self = Declaration(text: value)
-    }
-    init(extendedGraphemeClusterLiteral value: String) {
-        self = Declaration(text: value)
-    }
-    init(unicodeScalarLiteral value: String) {
-        self = Declaration(text: value)
-    }
-}
+
+let swiftErrorType = [
+    "enum JsonParsingError: ErrorType {",
+    "    case UnsupportedTypeError",
+    "}"
+].joinWithSeparator("\n")
+
+let swiftStringParser = [
+    "extension String {",
+    "    init(jsonValue: AnyObject?) throws {",
+    "        if let string = jsonValue as? String {",
+    "            self = string",
+    "        } else {",
+    "            throw JsonParsingError.UnsupportedTypeError",
+    "        }",
+    "    }",
+    "}"
+].joinWithSeparator("\n")
+
+let swiftIntParser = [
+    "extension Int {",
+    "    init(jsonValue: AnyObject?) throws {",
+    "        if let number = jsonValue as? NSNumber {",
+    "            self = number.integerValue",
+    "        } else if let number = jsonValue as? Int {",
+    "            self = number",
+    "        } else if let number = jsonValue as? Double {",
+    "            self = Int(number)",
+    "        } else if let number = jsonValue as? Float {",
+    "            self = Int(number)",
+    "        } else {",
+    "            throw JsonParsingError.UnsupportedTypeError",
+    "        }",
+    "    }",
+    "}"
+].joinWithSeparator("\n")
+
+let swiftFloatParser = [
+    "extension Float {",
+    "    init(jsonValue: AnyObject?) throws {",
+    "        if let number = jsonValue as? NSNumber {",
+    "            self = number.floatValue",
+    "        } else if let number = jsonValue as? Int {",
+    "            self = Float(number)",
+    "        } else if let number = jsonValue as? Double {",
+    "            self = Float(number)",
+    "        } else if let number = jsonValue as? Float {",
+    "            self = number",
+    "        } else {",
+    "            throw JsonParsingError.UnsupportedTypeError",
+    "        }",
+    "    }",
+    "}"
+].joinWithSeparator("\n")
+
+let swiftDoubleParser = [
+    "extension Double {",
+    "    init(jsonValue: AnyObject?) throws {",
+    "        if let number = jsonValue as? NSNumber {",
+    "            self = number.doubleValue",
+    "        } else if let number = jsonValue as? Int {",
+    "            self = Double(number)",
+    "        } else if let number = jsonValue as? Double {",
+    "            self = number",
+    "        } else if let number = jsonValue as? Float {",
+    "            self = Double(number)",
+    "        } else {",
+    "            throw JsonParsingError.UnsupportedTypeError",
+    "        }",
+    "    }",
+    "}"
+].joinWithSeparator("\n")
+
+let swiftBoolParser = [
+    "extension Bool {",
+    "    init(jsonValue: AnyObject?) throws {",
+    "        if let number = jsonValue as? NSNumber {",
+    "            self = number.boolValue",
+    "        } else if let number = jsonValue as? Bool {",
+    "            self = number",
+    "        } else if let number = jsonValue as? Double {",
+    "            self = Bool(number)",
+    "        } else if let number = jsonValue as? Float {",
+    "            self = Bool(number)",
+    "        } else if let number = jsonValue as? Int {",
+    "            self = Bool(number)",
+    "        } else {",
+    "            throw JsonParsingError.UnsupportedTypeError",
+    "        }",
+    "    }",
+    "}"
+].joinWithSeparator("\n")
+
+let swiftOptionalParser = [
+    "extension Optional {",
+    "    init(jsonValue: AnyObject?, map: AnyObject throws -> Wrapped) throws {",
+    "        if let jsonValue = jsonValue where !(jsonValue is NSNull) {",
+    "            self = try map(jsonValue)",
+    "        } else {",
+    "            self = nil",
+    "        }",
+    "    }",
+    "}"
+].joinWithSeparator("\n")
+
+let swiftArrayParser = [
+    "extension Array {",
+    "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
+    "        if let items = jsonValue as? [AnyObject] {",
+    "            self = try items.map(map)",
+    "        } else {",
+    "            throw JsonParsingError.UnsupportedTypeError",
+    "        }",
+    "    }",
+    "}",
+].joinWithSeparator("\n")
+
+let swiftContiguousArrayParser = [
+    "extension ContiguousArray {",
+    "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
+    "        if let items = jsonValue as? [AnyObject] {",
+    "            self = ContiguousArray(try items.lazy.map(map))",
+    "        } else {",
+    "            throw JsonParsingError.UnsupportedTypeError",
+    "        }",
+    "    }",
+    "}"
+].joinWithSeparator("\n")
 
 private extension Declaration {
-    private static let errorType = Declaration(text: [
-        "enum JsonParsingError: ErrorType {",
-        "    case UnsupportedTypeError",
-        "}"
-    ].joinWithSeparator("\n"), priority: 1000)
-    
-    private static let arrayParser = Declaration(text: [
-        "extension Array {",
-        "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
-        "        if let items = jsonValue as? [AnyObject] {",
-        "            self = try items.map(map)",
-        "        } else {",
-        "            throw JsonParsingError.UnsupportedTypeError",
-        "        }",
-        "    }",
-        "}",
-    ].joinWithSeparator("\n"), priority: 500)
-
-    private static let contiguousArrayParser = Declaration(text: [
-        "extension ContiguousArray {",
-        "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
-        "        if let items = jsonValue as? [AnyObject] {",
-        "            self = ContiguousArray(try items.lazy.map(map))",
-        "        } else {",
-        "            throw JsonParsingError.UnsupportedTypeError",
-        "        }",
-        "    }",
-        "}",
-        ].joinWithSeparator("\n"), priority: 500)
-
-    private static let stringParser = Declaration(text: [
-        "extension String {",
-        "    init(jsonValue: AnyObject?) throws {",
-        "        if let string = jsonValue as? String {",
-        "            self = string",
-        "        } else {",
-        "            throw JsonParsingError.UnsupportedTypeError",
-        "        }",
-        "    }",
-        "}"
-    ].joinWithSeparator("\n"), priority: 500)
-    
-    private static let boolParser = Declaration(text: [
-        "extension Bool {",
-        "    init(jsonValue: AnyObject?) throws {",
-        "        if let number = jsonValue as? NSNumber {",
-        "            self = number.boolValue",
-        "        } else if let number = jsonValue as? Bool {",
-        "            self = number",
-        "        } else if let number = jsonValue as? Double {",
-        "            self = Bool(number)",
-        "        } else if let number = jsonValue as? Float {",
-        "            self = Bool(number)",
-        "        } else if let number = jsonValue as? Int {",
-        "            self = Bool(number)",
-        "        } else {",
-        "            throw JsonParsingError.UnsupportedTypeError",
-        "        }",
-        "    }",
-        "}"
-    ].joinWithSeparator("\n"), priority: 500)
-    
-    private static let intParser = Declaration(text: [
-        "extension Int {",
-        "    init(jsonValue: AnyObject?) throws {",
-        "        if let number = jsonValue as? NSNumber {",
-        "            self = number.integerValue",
-        "        } else if let number = jsonValue as? Int {",
-        "            self = number",
-        "        } else if let number = jsonValue as? Double {",
-        "            self = Int(number)",
-        "        } else if let number = jsonValue as? Float {",
-        "            self = Int(number)",
-        "        } else {",
-        "            throw JsonParsingError.UnsupportedTypeError",
-        "        }",
-        "    }",
-        "}"
-    ].joinWithSeparator("\n"), priority: 500)
-    
-    private static let floatParser = Declaration(text: [
-        "extension Float {",
-        "    init(jsonValue: AnyObject?) throws {",
-        "        if let number = jsonValue as? NSNumber {",
-        "            self = number.floatValue",
-        "        } else if let number = jsonValue as? Int {",
-        "            self = Float(number)",
-        "        } else if let number = jsonValue as? Double {",
-        "            self = Float(number)",
-        "        } else if let number = jsonValue as? Float {",
-        "            self = number",
-        "        } else {",
-        "            throw JsonParsingError.UnsupportedTypeError",
-        "        }",
-        "    }",
-        "}"
-    ].joinWithSeparator("\n"), priority: 500)
-    
-    private static let doubleParser = Declaration(text: [
-        "extension Double {",
-        "    init(jsonValue: AnyObject?) throws {",
-        "        if let number = jsonValue as? NSNumber {",
-        "            self = number.doubleValue",
-        "        } else if let number = jsonValue as? Int {",
-        "            self = Double(number)",
-        "        } else if let number = jsonValue as? Double {",
-        "            self = number",
-        "        } else if let number = jsonValue as? Float {",
-        "            self = Double(number)",
-        "        } else {",
-        "            throw JsonParsingError.UnsupportedTypeError",
-        "        }",
-        "    }",
-        "}"
-    ].joinWithSeparator("\n"), priority: 500)
-    
-    private static let optionalParser = Declaration(text: [
-        "extension Optional {",
-        "    init(jsonValue: AnyObject?, map: AnyObject throws -> Wrapped) throws {",
-        "        if let jsonValue = jsonValue where !(jsonValue is NSNull) {",
-        "            self = try map(jsonValue)",
-        "        } else {",
-        "            self = nil",
-        "        }",
-        "    }",
-        "}"
-    ].joinWithSeparator("\n"), priority:  500)
+    private static let errorType = Declaration(text: swiftErrorType, priority: 1000)
+    private static let arrayParser = Declaration(text: swiftArrayParser, priority: 500)
+    private static let contiguousArrayParser = Declaration(text: swiftContiguousArrayParser, priority: 500)
+    private static let stringParser = Declaration(text: swiftStringParser, priority: 500)
+    private static let boolParser = Declaration(text: swiftBoolParser, priority: 500)
+    private static let intParser = Declaration(text: swiftIntParser, priority: 500)
+    private static let floatParser = Declaration(text: swiftFloatParser, priority: 500)
+    private static let doubleParser = Declaration(text: swiftDoubleParser, priority: 500)
+    private static let optionalParser = Declaration(text: swiftOptionalParser, priority:  500)
 }
 
 extension ListType {
@@ -294,13 +294,13 @@ extension ListType {
     }
 }
 
-private class SwiftJsonParsingTranslator: ModelTranslator {
+class SwiftJsonParsingTranslator: ModelTranslator {
     
     private let listType: ListType = .Array
     
-    private required init(args: [String] = []) {}
+    required init(args: [String] = []) {}
     
-    private func translate(type: ModelParser.FieldType, name: String) -> String {
+    func translate(type: ModelParser.FieldType, name: String) -> String {
         let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")
         
         let declarations = parsers.sort { $0.0.priority > $0.1.priority }.lazy.map { $0.text }.joinWithSeparator("\n\n")
@@ -350,7 +350,7 @@ private class SwiftJsonParsingTranslator: ModelTranslator {
         case let .Number(numberType):
             return createParser(numberType, valueExpression: valueExpression, tryOptional: tryOptional)
         case .Text:
-            return ([.stringParser], "try\(tryOptionalModifier) String(jsonValue: \(valueExpression))", "String")
+            return ([.errorType, .stringParser], "try\(tryOptionalModifier) String(jsonValue: \(valueExpression))", "String")
         case .List(.Unknown):
             return ([], "[]", parentTypeNames.joinWithSeparator("."))
         case let .List(listType):
@@ -393,6 +393,7 @@ private class SwiftJsonParsingTranslator: ModelTranslator {
                 "    }",
                 "}"
                 ].joinWithSeparator("\n")
+            declarations.insert(.errorType)
             declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
         case let .Enum(types):
@@ -418,6 +419,7 @@ private class SwiftJsonParsingTranslator: ModelTranslator {
                 "    }",
                 "}",
                 ].joinWithSeparator("\n")
+            declarations.insert(.errorType)
             declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
         case .Unknown:
