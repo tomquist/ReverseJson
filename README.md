@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/tomquist/ReverseJson.svg)](https://travis-ci.org/tomquist/ReverseJson)
+[![codecov.io](https://codecov.io/github/tomquist/ReverseJson/coverage.svg)](https://codecov.io/github/tomquist/ReverseJson)
+
 # ReverseJson
 
 ## Introduction
