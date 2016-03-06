@@ -29,21 +29,32 @@ private enum ListType: String {
     case ContiguousArray
 }
 
-private enum FieldVisibility: String {
+private enum Visibility: String {
     case Internal = "internal"
     case Public = "public"
     case Private = "private"
 }
 
+extension Visibility {
+    var visibilityPrefix: String {
+        return self == .Internal ? "" : "\(self.rawValue) "
+    }
+}
+
 class SwiftModelCreator: ModelTranslator {
     
-    private let objectType: ObjectType = .Struct
-    private let listType: ListType = .Array
-    private let fieldVisibility: FieldVisibility = .Internal
-    private let mutableFields: Bool = false
+    private let objectType: ObjectType
+    private let listType: ListType
+    private let fieldVisibility: Visibility
+    private let typeVisibility: Visibility
+    private let mutableFields: Bool
     
     required init(args: [String] = []) {
-        
+        self.objectType = args.contains("-c") || args.contains("--class") ? .Class : .Struct
+        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
+        self.mutableFields = args.contains("-m") || args.contains("--mutable") ? true : false
+        self.fieldVisibility = args.contains("-pf") || args.contains("--publicfields") ? .Public : .Internal
+        self.typeVisibility = args.contains("-pt") || args.contains("--publictypes") ? .Public : .Internal
     }
     
     func translate(type: ModelParser.FieldType, name: String) -> String {
@@ -51,7 +62,7 @@ class SwiftModelCreator: ModelTranslator {
         if let decl = decl {
             return decl
         }
-        return "typealias \(name) = \(typeName)"
+        return "\(typeVisibility.visibilityPrefix)typealias \(name) = \(typeName)"
     }
     
     private func makeSubtype(type: ModelParser.FieldType, name: String, subName: String, level: Int) -> (name: String, declaration: String?) {
@@ -89,19 +100,18 @@ class SwiftModelCreator: ModelTranslator {
             fieldType = "\(subTypeName)?"
         case .Unknown:
             fieldType = subName.camelCasedString
-            declaration = "typealias \(fieldType) = Void // TODO Specify type here. We couldn't infer it from json".indent(level)
+            declaration = "\(typeVisibility.visibilityPrefix)typealias \(fieldType) = Void // TODO Specify type here. We couldn't infer it from json".indent(level)
         }
         return (fieldType, declaration)
     }
     
     private func createStructDeclaration(name: String, fields: Set<ModelParser.ObjectField>, level: Int = 0) -> String {
-        var ret = "\(objectType.name) \(name) {".indent(level)
+        var ret = "\(typeVisibility.visibilityPrefix)\(objectType.name) \(name) {".indent(level)
         let fieldsAndTypes = fields.sort{$0.0.name < $0.1.name}.map { f -> (field: String, type: String?) in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(f.type, name: name, subName: f.name, level: level + 1)
             let varModifier = mutableFields ? "var" : "let"
-            let visibility = fieldVisibility == .Internal ? "" : "\(fieldVisibility) "
-            fieldDeclaration += ("\(visibility)\(varModifier) \(f.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
+            fieldDeclaration += ("\(fieldVisibility.visibilityPrefix)\(varModifier) \(f.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
         let typeDeclarations = fieldsAndTypes.lazy.flatMap {$0.type}
@@ -112,7 +122,7 @@ class SwiftModelCreator: ModelTranslator {
     }
     
     private func createEnumDeclaration(name: String, cases: Set<ModelParser.FieldType>, level: Int = 0) -> String {
-        var ret = "enum \(name) {".indent(level)
+        var ret = "\(typeVisibility.visibilityPrefix)enum \(name) {".indent(level)
         ret += cases.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
@@ -300,7 +310,14 @@ class SwiftJsonParsingTranslator: ModelTranslator {
     func translate(type: ModelParser.FieldType, name: String) -> String {
         let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")
         
-        let declarations = parsers.sort { $0.0.priority > $0.1.priority }.lazy.map { $0.text }.joinWithSeparator("\n\n")
+        let declarations = parsers.sort {
+            if $0.0.priority > $0.1.priority {
+                return true
+            } else if $0.0.priority == $0.1.priority {
+                return $0.0.text < $0.1.text
+            }
+            return false
+        }.lazy.map { $0.text }.joinWithSeparator("\n\n")
         let parseFunction = [
             "",
             "",
