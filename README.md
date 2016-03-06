@@ -10,15 +10,28 @@ Generate data model code and JSON-parser code from JSON-files. Currently you can
 - Generates parsing instructions for Swift and Objective-C 
 
 ## Usage
-Build
+### Build
 
 	xcrun swiftc ReverseJson/*.swift -o ReverseJson
 
-To create a Swift data model:
+### General usage:
+
+```
+Usage: ReverseJson (swift|objc) NAME FILE <options>
+e.g. ReverseJson swift User testModel.json <options>
+Options:
+   -c,  --class            Swift: Use classes instead of structs for objects
+   -ca, --contiguousarray  Swift: Use ContiguousArray for lists
+   -m,  --mutable          Swift: All object fields are mutable (var instead of let)
+   -pt, --publictypes      Swift: Make type declarations public instead of internal
+   -pf, --publicfields     Swift: Make field declarations public instead of internal
+```
+
+### To create a Swift data model:
 
 	./ReverseJson swift User testModel.json
 
-To create an Objective-C data model:
+### To create an Objective-C data model:
 
     ./ReverseJson objc User testModel.json
 
