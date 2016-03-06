@@ -48,6 +48,7 @@
 		A7921A961C67BA44009AADAC /* SwiftModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftModelTranslator.swift; sourceTree = "<group>"; };
 		A7921A971C67BA44009AADAC /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		A7921A9C1C691DB8009AADAC /* ObjcModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslator.swift; sourceTree = "<group>"; };
+		A79421FB1C8C839800700E66 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 		A7921A811C67BA27009AADAC = {
 			isa = PBXGroup;
 			children = (
+				A79421FB1C8C839800700E66 /* README.md */,
 				A7921A8C1C67BA27009AADAC /* ReverseJson */,
 				A70AEB491C83104100307E50 /* ReverseJsonTests */,
 				A7921A8B1C67BA27009AADAC /* Products */,

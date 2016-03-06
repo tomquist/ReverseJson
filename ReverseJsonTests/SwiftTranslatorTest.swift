@@ -19,7 +19,15 @@ class SwiftTranslatorTest: XCTestCase {
         
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "SimpleText")
-        XCTAssertEqual("\(swiftErrorType)\n\n\(swiftStringParser)\n\nfunc parseSimpleText(jsonValue: AnyObject?) throws -> String {\n    return try String(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftStringParser,
+            "",
+            "func parseSimpleText(jsonValue: AnyObject?) throws -> String {",
+            "    return try String(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testSimpleInt() {
@@ -31,7 +39,15 @@ class SwiftTranslatorTest: XCTestCase {
         
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("\(swiftErrorType)\n\n\(swiftIntParser)\n\nfunc parseSimpleNumber(jsonValue: AnyObject?) throws -> Int {\n    return try Int(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftIntParser,
+            "",
+            "func parseSimpleNumber(jsonValue: AnyObject?) throws -> Int {",
+            "    return try Int(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testSimpleFloat() {
@@ -43,7 +59,15 @@ class SwiftTranslatorTest: XCTestCase {
         
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("\(swiftErrorType)\n\n\(swiftFloatParser)\n\nfunc parseSimpleNumber(jsonValue: AnyObject?) throws -> Float {\n    return try Float(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftFloatParser,
+            "",
+            "func parseSimpleNumber(jsonValue: AnyObject?) throws -> Float {",
+            "    return try Float(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testSimpleDouble() {
@@ -55,7 +79,15 @@ class SwiftTranslatorTest: XCTestCase {
         
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("\(swiftErrorType)\n\n\(swiftDoubleParser)\n\nfunc parseSimpleNumber(jsonValue: AnyObject?) throws -> Double {\n    return try Double(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftDoubleParser,
+            "",
+            "func parseSimpleNumber(jsonValue: AnyObject?) throws -> Double {",
+            "    return try Double(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testBoolDouble() {
@@ -67,7 +99,15 @@ class SwiftTranslatorTest: XCTestCase {
         
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("\(swiftErrorType)\n\n\(swiftBoolParser)\n\nfunc parseSimpleNumber(jsonValue: AnyObject?) throws -> Bool {\n    return try Bool(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftBoolParser,
+            "",
+            "func parseSimpleNumber(jsonValue: AnyObject?) throws -> Bool {",
+            "    return try Bool(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testEmptyObject() {
@@ -79,7 +119,21 @@ class SwiftTranslatorTest: XCTestCase {
 
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "TestObject")
-        XCTAssertEqual("\(swiftErrorType)\n\nextension TestObject {\n    init(jsonValue: AnyObject?) throws {\n        if let dict = jsonValue as? [NSObject: AnyObject] {\n\n        } else {\n            throw JsonParsingError.UnsupportedTypeError\n        }\n    }\n}\n\nfunc parseTestObject(jsonValue: AnyObject?) throws -> TestObject {\n    return try TestObject(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            "extension TestObject {",
+            "    init(jsonValue: AnyObject?) throws {",
+            "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
+            "            throw JsonParsingError.UnsupportedTypeError",
+            "        }",
+            "",
+            "    }",
+            "}",
+            "",
+            "func parseTestObject(jsonValue: AnyObject?) throws -> TestObject {",
+            "    return try TestObject(jsonValue: jsonValue)",
+            "}"].joinWithSeparator("\n"), parserResult)
     }
     
     func testEmptyEnum() {
@@ -125,11 +179,32 @@ class SwiftTranslatorTest: XCTestCase {
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual("struct TestObject {\n    let text: String\n}", modelResult)
+        XCTAssertEqual([
+            "struct TestObject {",
+            "    let text: String",
+            "}"
+        ].joinWithSeparator("\n"), modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "TestObject")
-        XCTAssertEqual("\(swiftErrorType)\n\n\(swiftStringParser)\n\nextension TestObject {\n    init(jsonValue: AnyObject?) throws {\n        if let dict = jsonValue as? [NSObject: AnyObject] {\n            self.text = try String(jsonValue: dict[\"text\"])\n        } else {\n            throw JsonParsingError.UnsupportedTypeError\n        }\n    }\n}\n\nfunc parseTestObject(jsonValue: AnyObject?) throws -> TestObject {\n    return try TestObject(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftStringParser,
+            "",
+            "extension TestObject {",
+            "    init(jsonValue: AnyObject?) throws {",
+            "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
+            "            throw JsonParsingError.UnsupportedTypeError",
+            "        }",
+            "        self.text = try String(jsonValue: dict[\"text\"])",
+            "    }",
+            "}",
+            "",
+            "func parseTestObject(jsonValue: AnyObject?) throws -> TestObject {",
+            "    return try TestObject(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testObjectWithFieldContainingListOfText() {
@@ -137,11 +212,34 @@ class SwiftTranslatorTest: XCTestCase {
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual("struct TestObject {\n    let texts: [String]\n}", modelResult)
+        XCTAssertEqual([
+            "struct TestObject {",
+            "    let texts: [String]",
+            "}"
+        ].joinWithSeparator("\n"), modelResult)
 
         let parserCreator = SwiftJsonParsingTranslator()
         let parserResult = parserCreator.translate(type, name: "TestObject")
-        XCTAssertEqual("\(swiftErrorType)\n\n\(swiftArrayParser)\n\n\(swiftStringParser)\n\nextension TestObject {\n    init(jsonValue: AnyObject?) throws {\n        if let dict = jsonValue as? [NSObject: AnyObject] {\n            self.texts = try Array(jsonValue: dict[\"texts\"]) { try String(jsonValue: $0) }\n        } else {\n            throw JsonParsingError.UnsupportedTypeError\n        }\n    }\n}\n\nfunc parseTestObject(jsonValue: AnyObject?) throws -> TestObject {\n    return try TestObject(jsonValue: jsonValue)\n}", parserResult)
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftArrayParser,
+            "",
+            swiftStringParser,
+            "",
+            "extension TestObject {",
+            "    init(jsonValue: AnyObject?) throws {",
+            "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
+            "            throw JsonParsingError.UnsupportedTypeError",
+            "        }",
+            "        self.texts = try Array(jsonValue: dict[\"texts\"]) { try String(jsonValue: $0) }",
+            "    }",
+            "}",
+            "",
+            "func parseTestObject(jsonValue: AnyObject?) throws -> TestObject {",
+            "    return try TestObject(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testObjectWithTwoSimpleFields() {
@@ -150,7 +248,12 @@ class SwiftTranslatorTest: XCTestCase {
             .init(name: "number", type: .Number(.Double)),
             .init(name: "texts", type: .List(.Text))
         ]), name: "TestObject")
-        XCTAssertEqual("struct TestObject {\n    let number: Double\n    let texts: [String]\n}", modelResult)
+        XCTAssertEqual([
+            "struct TestObject {",
+            "    let number: Double",
+            "    let texts: [String]",
+            "}"
+        ].joinWithSeparator("\n"), modelResult)
     }
 
     func testObjectWithOneFieldWithSubDeclaration() {
@@ -158,25 +261,46 @@ class SwiftTranslatorTest: XCTestCase {
         let modelResult = modelCreator.translate(.Object([
             .init(name: "subObject", type: .Object([]))
             ]), name: "TestObject")
-        XCTAssertEqual("struct TestObject {\n    struct SubObject {\n    }\n    let subObject: SubObject\n}", modelResult)
+        XCTAssertEqual([
+            "struct TestObject {",
+            "    struct SubObject {",
+            "    }",
+            "    let subObject: SubObject",
+            "}"
+        ].joinWithSeparator("\n"), modelResult)
     }
 
     func testEnumWithOneCase() {
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(.Enum([.Text]), name: "TestObject")
-        XCTAssertEqual("enum TestObject {\n    case Text(String)\n}", modelResult)
+        XCTAssertEqual([
+            "enum TestObject {",
+            "    case Text(String)",
+            "}"
+        ].joinWithSeparator("\n"), modelResult)
     }
     
     func testEnumWithTwoCases() {
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(.Enum([.Text, .Number(.Int)]), name: "TestObject")
-        XCTAssertEqual("enum TestObject {\n    case Number(Int)\n    case Text(String)\n}", modelResult)
+        XCTAssertEqual([
+            "enum TestObject {",
+            "    case Number(Int)",
+            "    case Text(String)",
+            "}"
+        ].joinWithSeparator("\n"), modelResult)
     }
 
     func testEnumWithOneSubDeclarationCase() {
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(.Enum([.Object([])]), name: "TestObject")
-        XCTAssertEqual("enum TestObject {\n    struct TestObjectObject {\n    }\n    case Object(TestObjectObject)\n}", modelResult)
+        XCTAssertEqual([
+            "enum TestObject {",
+            "    struct TestObjectObject {",
+            "    }",
+            "    case Object(TestObjectObject)",
+            "}"
+        ].joinWithSeparator("\n"), modelResult)
     }
     
 }

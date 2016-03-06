@@ -151,11 +151,10 @@ let swiftErrorType = [
 let swiftStringParser = [
     "extension String {",
     "    init(jsonValue: AnyObject?) throws {",
-    "        if let string = jsonValue as? String {",
-    "            self = string",
-    "        } else {",
+    "        guard let string = jsonValue as? String else {",
     "            throw JsonParsingError.UnsupportedTypeError",
     "        }",
+    "        self = string",
     "    }",
     "}"
 ].joinWithSeparator("\n")
@@ -249,11 +248,10 @@ let swiftOptionalParser = [
 let swiftArrayParser = [
     "extension Array {",
     "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
-    "        if let items = jsonValue as? [AnyObject] {",
-    "            self = try items.map(map)",
-    "        } else {",
+    "        guard let items = jsonValue as? [AnyObject] else {",
     "            throw JsonParsingError.UnsupportedTypeError",
     "        }",
+    "        self = try items.map(map)",
     "    }",
     "}",
 ].joinWithSeparator("\n")
@@ -261,11 +259,10 @@ let swiftArrayParser = [
 let swiftContiguousArrayParser = [
     "extension ContiguousArray {",
     "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
-    "        if let items = jsonValue as? [AnyObject] {",
-    "            self = ContiguousArray(try items.lazy.map(map))",
-    "        } else {",
+    "        guard let items = jsonValue as? [AnyObject] else {",
     "            throw JsonParsingError.UnsupportedTypeError",
     "        }",
+    "        self = ContiguousArray(try items.lazy.map(map))",
     "    }",
     "}"
 ].joinWithSeparator("\n")
@@ -379,20 +376,19 @@ class SwiftJsonParsingTranslator: ModelTranslator {
             var parser = [
                 "extension \(typeName) {",
                 "    init(jsonValue: AnyObject?) throws {",
-                "        if let dict = jsonValue as? [NSObject: AnyObject] {\n"
-                ].joinWithSeparator("\n")
+                "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
+                "            throw JsonParsingError.UnsupportedTypeError",
+                "        }\n"
+            ].joinWithSeparator("\n")
             parser += fields.map { field in
                 let (subDeclarations, instruction, _) = createParsers(field.type, parentTypeNames: parentTypeNames + [field.name.camelCasedString], valueExpression: "dict[\"\(field.name)\"]")
                 declarations.unionInPlace(subDeclarations)
-                return "self.\(field.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped) = \(instruction)".indent(3)
+                return "self.\(field.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped) = \(instruction)".indent(2)
                 }.joinWithSeparator("\n") + "\n"
             parser += [
-                "        } else {",
-                "            throw JsonParsingError.UnsupportedTypeError",
-                "        }",
                 "    }",
                 "}"
-                ].joinWithSeparator("\n")
+            ].joinWithSeparator("\n")
             declarations.insert(.errorType)
             declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
