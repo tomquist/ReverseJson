@@ -217,3 +217,160 @@ func parseUser(jsonValue: AnyObject?) throws -> User {
     return try User(jsonValue: jsonValue)
 }
 ```
+
+...or into this...
+
+```objective-c
+#import <Foundation/Foundation.h>
+
+@class UserLocationsItemAddress;
+NS_ASSUME_NONNULL_BEGIN
+@interface UserLocationsItem : NSObject
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
+- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+@property (nonatomic, strong, readonly, nullable) UserLocationsItemAddress *address;
+@property (nonatomic, assign, readonly) double lat;
+@property (nonatomic, assign, readonly) double lon;
+@end
+NS_ASSUME_NONNULL_END
+
+NS_ASSUME_NONNULL_BEGIN
+@interface UserLocationsItemAddress : NSObject
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
+- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+@property (nonatomic, copy, readonly) NSString *city;
+@property (nonatomic, copy, readonly) NSString *street;
+@end
+NS_ASSUME_NONNULL_END
+
+NS_ASSUME_NONNULL_BEGIN
+@interface UserMixedItem : NSObject
+- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+@property (nonatomic, assign, readonly) NSInteger number;
+@property (nonatomic, copy, readonly) NSString *text;
+@end
+NS_ASSUME_NONNULL_END
+
+@class UserLocationsItem, UserMixedItem;
+NS_ASSUME_NONNULL_BEGIN
+@interface User : NSObject
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
+- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+@property (nonatomic, assign, readonly) BOOL internal;
+@property (nonatomic, assign, readonly) BOOL isPrivate;
+@property (nonatomic, strong, readonly) NSArray<NSNumber/*NSInteger*/ *> *numbers;
+@property (nonatomic, strong, readonly) NSArray<UserLocationsItem *> *locations;
+@property (nonatomic, strong, readonly) NSArray<UserMixedItem *> *mixed;
+@property (nonatomic, copy, readonly) NSString *name;
+@end
+NS_ASSUME_NONNULL_END
+
+@implementation UserLocationsItemAddress
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {
+    self = [super init];
+    if (self) {
+        _city = [dict[@"city"] isKindOfClass:[NSString class]] ? dict[@"city"] : nil;
+        _street = [dict[@"street"] isKindOfClass:[NSString class]] ? dict[@"street"] : nil;
+    }
+    return self;
+}
+- (instancetype)initWithJsonValue:(id)jsonValue {
+    if ([jsonValue isKindOfClass:[NSDictionary class]]) {
+        self = [self initWithJsonDictionary:jsonValue];
+    } else {
+        self = nil;
+    }
+    return self;
+}
+@end
+
+@implementation UserMixedItem
+- (instancetype)initWithJsonValue:(id)jsonValue {
+    self = [super init];
+    if (self) {
+        _number = [jsonValue isKindOfClass:[NSNumber class]] ? [jsonValue integerValue] : 0;
+        _text = [jsonValue isKindOfClass:[NSString class]] ? jsonValue : nil;
+    }
+    return self;
+}
+@end
+
+@implementation User
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {
+    self = [super init];
+    if (self) {
+        _internal = [dict[@"internal"] isKindOfClass:[NSNumber class]] ? [dict[@"internal"] boolValue] : 0;
+        _isPrivate = [dict[@"is_private"] isKindOfClass:[NSNumber class]] ? [dict[@"is_private"] boolValue] : 0;
+        _numbers = ({
+            id value = dict[@"numbers"];
+            NSMutableArray<NSNumber/*NSInteger*/ *> *values = nil;
+            if ([value isKindOfClass:[NSArray class]]) {
+                NSArray *array = value;
+                values = [NSMutableArray arrayWithCapacity:array.count];
+                for (id item in array) {
+                    NSNumber/*NSInteger*/ *parsedItem = [item isKindOfClass:[NSNumber class]] ? item : nil;
+                    [values addObject:parsedItem ?: (id)[NSNull null]];
+                }
+            }
+            [values copy];
+        });
+        _locations = ({
+            id value = dict[@"locations"];
+            NSMutableArray<UserLocationsItem *> *values = nil;
+            if ([value isKindOfClass:[NSArray class]]) {
+                NSArray *array = value;
+                values = [NSMutableArray arrayWithCapacity:array.count];
+                for (id item in array) {
+                    UserLocationsItem *parsedItem = [[UserLocationsItem alloc] initWithJsonValue:item];
+                    [values addObject:parsedItem ?: (id)[NSNull null]];
+                }
+            }
+            [values copy];
+        });
+        _mixed = ({
+            id value = dict[@"mixed"];
+            NSMutableArray<UserMixedItem *> *values = nil;
+            if ([value isKindOfClass:[NSArray class]]) {
+                NSArray *array = value;
+                values = [NSMutableArray arrayWithCapacity:array.count];
+                for (id item in array) {
+                    UserMixedItem *parsedItem = [[UserMixedItem alloc] initWithJsonValue:item];
+                    [values addObject:parsedItem ?: (id)[NSNull null]];
+                }
+            }
+            [values copy];
+        });
+        _name = [dict[@"name"] isKindOfClass:[NSString class]] ? dict[@"name"] : nil;
+    }
+    return self;
+}
+- (instancetype)initWithJsonValue:(id)jsonValue {
+    if ([jsonValue isKindOfClass:[NSDictionary class]]) {
+        self = [self initWithJsonDictionary:jsonValue];
+    } else {
+        self = nil;
+    }
+    return self;
+}
+@end
+
+@implementation UserLocationsItem
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {
+    self = [super init];
+    if (self) {
+        _address = [[UserLocationsItemAddress alloc] initWithJsonValue:dict[@"address"]];
+        _lat = [dict[@"lat"] isKindOfClass:[NSNumber class]] ? [dict[@"lat"] doubleValue] : 0;
+        _lon = [dict[@"lon"] isKindOfClass:[NSNumber class]] ? [dict[@"lon"] doubleValue] : 0;
+    }
+    return self;
+}
+- (instancetype)initWithJsonValue:(id)jsonValue {
+    if ([jsonValue isKindOfClass:[NSDictionary class]]) {
+        self = [self initWithJsonDictionary:jsonValue];
+    } else {
+        self = nil;
+    }
+    return self;
+}
+@end
+```
