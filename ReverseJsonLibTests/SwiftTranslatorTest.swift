@@ -205,10 +205,58 @@ class SwiftTranslatorTest: XCTestCase {
         ].joinWithSeparator("\n"), parserResult)
     }
     
-    func testOptionalText() {
+    func testOptionalUnknown() {
+        let type: ModelParser.FieldType = .Optional(.Unknown)
+        
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.Optional(.Text), name: "MyTypeName")
-        XCTAssertEqual("typealias MyTypeName = String?", modelResult)        
+        let modelResult = modelCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual("typealias MyTypeName = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
+        
+        let parserCreator = SwiftJsonParsingTranslator()
+        let parserResult = parserCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual([
+            "func parseMyTypeName(jsonValue: AnyObject?) throws -> MyTypeName {",
+            "    return nil",
+            "}"
+            ].joinWithSeparator("\n"), parserResult)
+    }
+    
+    func testListOfUnknown() {
+        let type: ModelParser.FieldType = .List(.Unknown)
+        
+        let modelCreator = SwiftModelCreator()
+        let modelResult = modelCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual("typealias MyTypeNameItem = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
+        
+        let parserCreator = SwiftJsonParsingTranslator()
+        let parserResult = parserCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual([
+            "func parseMyTypeName(jsonValue: AnyObject?) throws -> MyTypeName {",
+            "    return []",
+            "}"
+            ].joinWithSeparator("\n"), parserResult)
+    }
+    
+    func testOptionalText() {
+        let type: ModelParser.FieldType = .Optional(.Text)
+        
+        let modelCreator = SwiftModelCreator()
+        let modelResult = modelCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual("typealias MyTypeName = String?", modelResult)
+        
+        let parserCreator = SwiftJsonParsingTranslator()
+        let parserResult = parserCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual([
+            swiftErrorType,
+            "",
+            swiftOptionalParser,
+            "",
+            swiftStringParser,
+            "",
+            "func parseMyTypeName(jsonValue: AnyObject?) throws -> String? {",
+            "    return try Optional(jsonValue: jsonValue) { try String(jsonValue: $0) }",
+            "}"
+        ].joinWithSeparator("\n"), parserResult)
     }
     
     func testListOfEmptyObject() {
@@ -396,6 +444,139 @@ class SwiftTranslatorTest: XCTestCase {
             "    case Object(TestObjectObject)",
             "}"
         ].joinWithSeparator("\n"), modelResult)
+    }
+    
+    func testPublicTypeFlagWithObject() {
+        let type: ModelParser.FieldType = .Object([])
+        
+        let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "TestObject")
+        let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "TestObject")
+        let expected = "public struct TestObject {\n}"
+        XCTAssertEqual(expected, modelResult1)
+        XCTAssertEqual(expected, modelResult2)
+    }
+    
+    func testPublicTypeFlagWithTypealias() {
+        let type: ModelParser.FieldType = .Text
+        
+        let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "SimpleText")
+        let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "SimpleText")
+        let expected = "public typealias SimpleText = String"
+        XCTAssertEqual(expected, modelResult1)
+        XCTAssertEqual(expected, modelResult2)
+    }
+    
+    func testPublicTypeFlagWithEnum() {
+        let type: ModelParser.FieldType = .Enum([])
+        
+        let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "TestObject")
+        let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "TestObject")
+        let expected = "public enum TestObject {\n}"
+        XCTAssertEqual(expected, modelResult1)
+        XCTAssertEqual(expected, modelResult2)
+    }
+
+    func testClassFlag() {
+        let type: ModelParser.FieldType = .Object([])
+        
+        let modelResult1 = SwiftModelCreator(args: ["-c"]).translate(type, name: "TestObject")
+        let modelResult2 = SwiftModelCreator(args: ["--class"]).translate(type, name: "TestObject")
+        let expected = "class TestObject {\n}"
+        XCTAssertEqual(expected, modelResult1)
+        XCTAssertEqual(expected, modelResult2)
+    }
+    
+    func testPublicFieldsFlag() {
+        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        
+        let modelResult1 = SwiftModelCreator(args: ["-pf"]).translate(type, name: "TestObject")
+        let modelResult2 = SwiftModelCreator(args: ["--publicfields"]).translate(type, name: "TestObject")
+        let expected = [
+            "struct TestObject {",
+            "    public let text: String",
+            "}"
+        ].joinWithSeparator("\n")
+        XCTAssertEqual(expected, modelResult1)
+        XCTAssertEqual(expected, modelResult2)
+    }
+    
+    func testMutableFieldsFlag() {
+        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        
+        let modelResult1 = SwiftModelCreator(args: ["-m"]).translate(type, name: "TestObject")
+        let modelResult2 = SwiftModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
+        let expected = [
+            "struct TestObject {",
+            "    var text: String",
+            "}"
+        ].joinWithSeparator("\n")
+        XCTAssertEqual(expected, modelResult1)
+        XCTAssertEqual(expected, modelResult2)
+    }
+    
+    func testContiguousArrayFlag() {
+        let type: ModelParser.FieldType = .Object([.init(name: "texts", type: .List(.Text))])
+        
+        let modelResult1 = SwiftModelCreator(args: ["-ca"]).translate(type, name: "TestObject")
+        let modelResult2 = SwiftModelCreator(args: ["--contiguousarray"]).translate(type, name: "TestObject")
+        let expectedModel = [
+            "struct TestObject {",
+            "    let texts: ContiguousArray<String>",
+            "}"
+        ].joinWithSeparator("\n")
+        XCTAssertEqual(expectedModel, modelResult1)
+        XCTAssertEqual(expectedModel, modelResult2)
+        
+        let parserResult1 = SwiftJsonParsingTranslator(args: ["-ca"]).translate(type, name: "TestObject")
+        let parserResult2 = SwiftJsonParsingTranslator(args: ["--contiguousarray"]).translate(type, name: "TestObject")
+        let expectedParser = [
+            swiftErrorType,
+            "",
+            swiftContiguousArrayParser,
+            "",
+            swiftStringParser,
+            "",
+            "extension TestObject {",
+            "    init(jsonValue: AnyObject?) throws {",
+            "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
+            "            throw JsonParsingError.UnsupportedTypeError",
+            "        }",
+            "        self.texts = try ContiguousArray(jsonValue: dict[\"texts\"]) { try String(jsonValue: $0) }",
+            "    }",
+            "}",
+            "",
+            "func parseTestObject(jsonValue: AnyObject?) throws -> TestObject {",
+            "    return try TestObject(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n")
+        XCTAssertEqual(expectedParser, parserResult1)
+        XCTAssertEqual(expectedParser, parserResult2)
+    }
+    
+    func testTranslatorCombination() {
+        let type: ModelParser.FieldType = .Object([])
+        
+        let translator = SwiftTranslator()
+        let result = translator.translate(type, name: "TestObject")
+        XCTAssertEqual([
+            "struct TestObject {",
+            "}",
+            "",
+            swiftErrorType,
+            "",
+            "extension TestObject {",
+            "    init(jsonValue: AnyObject?) throws {",
+            "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
+            "            throw JsonParsingError.UnsupportedTypeError",
+            "        }",
+            "",
+            "    }",
+            "}",
+            "",
+            "func parseTestObject(jsonValue: AnyObject?) throws -> TestObject {",
+            "    return try TestObject(jsonValue: jsonValue)",
+            "}"
+        ].joinWithSeparator("\n"), result)
     }
     
 }

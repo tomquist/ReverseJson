@@ -303,9 +303,11 @@ extension ListType {
 
 class SwiftJsonParsingTranslator: ModelTranslator {
     
-    private let listType: ListType = .Array
+    private var listType: ListType = .Array
     
-    required init(args: [String] = []) {}
+    required init(args: [String] = []) {
+        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
+    }
     
     func translate(type: ModelParser.FieldType, name: String) -> String {
         let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")
