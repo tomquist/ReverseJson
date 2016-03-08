@@ -23,6 +23,7 @@
 		A79422901C8C9EA700700E66 /* SwiftModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A961C67BA44009AADAC /* SwiftModelTranslator.swift */; };
 		A79422911C8C9EA700700E66 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A971C67BA44009AADAC /* Utils.swift */; };
 		A79422921C8C9EA700700E66 /* ObjcModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7921A9C1C691DB8009AADAC /* ObjcModelTranslator.swift */; };
+		A79422941C8F6B7900700E66 /* ObjcModelTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79422931C8F6B7900700E66 /* ObjcModelTranslatorTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		A79422831C8C9D9300700E66 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A794228A1C8C9E8E00700E66 /* ModelParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParserTests.swift; sourceTree = "<group>"; };
 		A794228B1C8C9E8E00700E66 /* SwiftTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTranslatorTest.swift; sourceTree = "<group>"; };
+		A79422931C8F6B7900700E66 /* ObjcModelTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslatorTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				A794228A1C8C9E8E00700E66 /* ModelParserTests.swift */,
 				A794228B1C8C9E8E00700E66 /* SwiftTranslatorTest.swift */,
 				A79422831C8C9D9300700E66 /* Info.plist */,
+				A79422931C8F6B7900700E66 /* ObjcModelTranslatorTest.swift */,
 			);
 			path = ReverseJsonLibTests;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 			files = (
 				A794228C1C8C9E8E00700E66 /* ModelParserTests.swift in Sources */,
 				A794228D1C8C9E8E00700E66 /* SwiftTranslatorTest.swift in Sources */,
+				A79422941C8F6B7900700E66 /* ObjcModelTranslatorTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +510,7 @@
 				A79422861C8C9D9300700E66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A79422871C8C9D9300700E66 /* Build configuration list for PBXNativeTarget "ReverseJsonLibTests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +519,7 @@
 				A79422891C8C9D9300700E66 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

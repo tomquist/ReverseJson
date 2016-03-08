@@ -12,11 +12,7 @@ public class ObjcModelCreator: ModelTranslator {
     
     public func translate(type: ModelParser.FieldType, name: String) -> String {
         let a = declarationsFor(type, name: name, valueToParse: "jsonValue")
-        var ret = "#import <Foundation/Foundation.h>\n\n"
-        ret += a.interfaces.joinWithSeparator("\n\n")
-        ret += "\n\n"
-        ret += a.implementations.joinWithSeparator("\n\n")
-        return ret
+        return (["#import <Foundation/Foundation.h>"] + a.interfaces + a.implementations).joinWithSeparator("\n\n")
     }
     
     public func isNullable(type: ModelParser.FieldType) -> Bool {
@@ -25,15 +21,6 @@ public class ObjcModelCreator: ModelTranslator {
             return true
         default:
             return false
-        }
-    }
-    
-    public func hasPointerStar(type: ModelParser.FieldType) -> Bool {
-        switch type {
-        case .Number, .Unknown, .Optional(.Unknown):
-            return false
-        default:
-            return true
         }
     }
     
