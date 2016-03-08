@@ -317,15 +317,13 @@ class SwiftJsonParsingTranslator: ModelTranslator {
                 return $0.0.text < $0.1.text
             }
             return false
-        }.lazy.map { $0.text }.joinWithSeparator("\n\n")
-        let parseFunction = [
-            "",
-            "",
+        }.lazy.map { $0.text }
+        let parseFunction = [[
             "func parse\(name.camelCasedString)(jsonValue: AnyObject?) throws -> \(typeName) {",
             "    return \(instructions)",
             "}",
-        ].joinWithSeparator("\n")
-        return declarations + parseFunction
+        ].joinWithSeparator("\n")]
+        return (declarations + parseFunction).joinWithSeparator("\n\n")
     }
     
     
