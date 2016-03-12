@@ -1,10 +1,13 @@
 
 public class ObjcModelCreator: ModelTranslator {
     
-    public required init(args: [String] = []) {}
+    public required init(args: [String] = []) {
+        self.atomic = args.contains("-a") || args.contains("--atomic")
+        self.readonly = !(args.contains("-m") || args.contains("--mutable"))
+    }
     
-    private let atomic = false
-    private let readonly = true
+    private var atomic = false
+    private var readonly = true
     private let typePrefix = ""
     private var atomicyModifier: String {
         return (atomic ? "atomic" : "nonatomic")

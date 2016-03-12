@@ -52,7 +52,7 @@ class SwiftModelCreator: ModelTranslator {
     required init(args: [String] = []) {
         self.objectType = args.contains("-c") || args.contains("--class") ? .Class : .Struct
         self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
-        self.mutableFields = args.contains("-m") || args.contains("--mutable") ? true : false
+        self.mutableFields = args.contains("-m") || args.contains("--mutable")
         self.fieldVisibility = args.contains("-pf") || args.contains("--publicfields") ? .Public : .Internal
         self.typeVisibility = args.contains("-pt") || args.contains("--publictypes") ? .Public : .Internal
     }

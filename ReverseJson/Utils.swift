@@ -12,7 +12,7 @@ extension ModelParser.FieldType {
         case .Number: return "Number"
         case .Enum: return "Enum"
         case .Unknown: return "UnknownType"
-        case let .Optional(type): return "Optional\(type.enumCaseName)"
+        case let .Optional(type): return type.enumCaseName
         }
     }
 }
