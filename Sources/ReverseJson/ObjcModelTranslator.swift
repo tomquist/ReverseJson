@@ -177,7 +177,8 @@ public class ObjcModelCreator: ModelTranslator {
             return ([], [], "[\(valueToParse) isKindOfClass:[NSString class]] ? \(valueToParse) : nil", [], "NSString *")
         case let .Number(numberType):
             return ([], [], "[\(valueToParse) isKindOfClass:[NSNumber class]] ? [\(valueToParse) \(numberType.objcNSNumberMethod)] : 0", [], numberType.objcNumberType)
-        case var .List(listType):
+        case let .List(origListType):
+            var listType = origListType
             if case let .Number(numberType) = listType {
                 listType = .Optional(.Number(numberType))
             }

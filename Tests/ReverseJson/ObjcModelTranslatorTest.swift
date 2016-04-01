@@ -7,9 +7,32 @@
 //
 
 import XCTest
-@testable import ReverseJsonLib
+@testable import ReverseJson
 
-class ObjcModelTranslatorTest: XCTestCase {
+class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
+    
+    var allTests: [(String, () throws -> Void)] {
+        return [
+            ("testAtomicFieldsFlag", testAtomicFieldsFlag),
+            ("testBoolDouble", testBoolDouble),
+            ("testEmptyEnum", testEmptyEnum),
+            ("testEmptyObject", testEmptyObject),
+            ("testEnumWithOneCase", testEnumWithOneCase),
+            ("testEnumWithTwoCases", testEnumWithTwoCases),
+            ("testListOfEmptyObject", testListOfEmptyObject),
+            ("testMutableFieldsFlag", testMutableFieldsFlag),
+            ("testObjectWithDifferentFields", testObjectWithDifferentFields),
+            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
+            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
+            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
+            ("testSimpleDouble", testSimpleDouble),
+            ("testSimpleFloat", testSimpleFloat),
+            ("testSimpleInt", testSimpleInt),
+            ("testSimpleString", testSimpleString),
+            ("testTextList", testTextList),
+            ("testUnknownType", testUnknownType),
+        ]
+    }
     
     func testSimpleString() {
         let type: ModelParser.FieldType = .Text

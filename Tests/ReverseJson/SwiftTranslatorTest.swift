@@ -7,9 +7,43 @@
 //
 
 import XCTest
-@testable import ReverseJsonLib
+@testable import ReverseJson
 
-class SwiftTranslatorTest: XCTestCase {
+class SwiftTranslatorTest: XCTestCase, XCTestCaseProvider {
+    
+    var allTests: [(String, () throws -> Void)] {
+        return [
+            ("testBoolDouble", testBoolDouble),
+            ("testClassFlag", testClassFlag),
+            ("testContiguousArrayFlag", testContiguousArrayFlag),
+            ("testEmptyEnum", testEmptyEnum),
+            ("testEmptyObject", testEmptyObject),
+            ("testEnumWithOneCase", testEnumWithOneCase),
+            ("testEnumWithOneSubDeclarationCase", testEnumWithOneSubDeclarationCase),
+            ("testEnumWithTwoCases", testEnumWithTwoCases),
+            ("testListOfEmptyObject", testListOfEmptyObject),
+            ("testListOfTextList", testListOfTextList),
+            ("testListOfUnknown", testListOfUnknown),
+            ("testMutableFieldsFlag", testMutableFieldsFlag),
+            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
+            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
+            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
+            ("testObjectWithTwoSimpleFields", testObjectWithTwoSimpleFields),
+            ("testOptionalText", testOptionalText),
+            ("testOptionalUnknown", testOptionalUnknown),
+            ("testPublicFieldsFlag", testPublicFieldsFlag),
+            ("testPublicTypeFlagWithEnum", testPublicTypeFlagWithEnum),
+            ("testPublicTypeFlagWithObject", testPublicTypeFlagWithObject),
+            ("testPublicTypeFlagWithTypealias", testPublicTypeFlagWithTypealias),
+            ("testSimpleDouble", testSimpleDouble),
+            ("testSimpleFloat", testSimpleFloat),
+            ("testSimpleInt", testSimpleInt),
+            ("testSimpleString", testSimpleString),
+            ("testTextList", testTextList),
+            ("testTranslatorCombination", testTranslatorCombination),
+            ("testUnknownType", testUnknownType),
+        ]
+    }
     
     func testSimpleString() {
         let type: ModelParser.FieldType = .Text

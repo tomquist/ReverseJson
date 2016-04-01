@@ -7,9 +7,47 @@
 //
 
 import XCTest
-@testable import ReverseJsonLib
+@testable import ReverseJson
 
-class ReverseJsonTests: XCTestCase {
+class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
+    
+    var allTests: [(String, () throws -> Void)] {
+        return [
+            ("testArrayObjectWithArrayFieldOfIntsStringsAndDoubles", testArrayObjectWithArrayFieldOfIntsStringsAndDoubles),
+            ("testArrayObjectWithArrayFieldOfUnknownTypeAndStrings", testArrayObjectWithArrayFieldOfUnknownTypeAndStrings),
+            ("testArrayObjectWithMixedFieldOfMixedArraysAndInt", testArrayObjectWithMixedFieldOfMixedArraysAndInt),
+            ("testArrayOfEmptyObject", testArrayOfEmptyObject),
+            ("testArrayOfEmptyOptionalObject", testArrayOfEmptyOptionalObject),
+            ("testArrayOfMixedBoolAndDouble", testArrayOfMixedBoolAndDouble),
+            ("testArrayOfMixedBoolIntAndDouble", testArrayOfMixedBoolIntAndDouble),
+            ("testArrayOfMixedIntAndFloat", testArrayOfMixedIntAndFloat),
+            ("testArrayOfMixedIntFloatAndDouble", testArrayOfMixedIntFloatAndDouble),
+            ("testArrayOfObjectsWithMissingField", testArrayOfObjectsWithMissingField),
+            ("testArrayOfObjectsWithMixedTypesAndOptional", testArrayOfObjectsWithMixedTypesAndOptional),
+            ("testBool", testBool),
+            ("testDouble", testDouble),
+            ("testEmptyArray", testEmptyArray),
+            ("testEmptyObject", testEmptyObject),
+            ("testEqualNumberTypes", testEqualNumberTypes),
+            ("testEqualTypeEnum", testEqualTypeEnum),
+            ("testEqualTypeList", testEqualTypeList),
+            ("testEqualTypeNumber", testEqualTypeNumber),
+            ("testEqualTypeObject", testEqualTypeObject),
+            ("testEqualTypeOptional", testEqualTypeOptional),
+            ("testEqualTypeText", testEqualTypeText),
+            ("testEqualTypeUnknown", testEqualTypeUnknown),
+            ("testFloat", testFloat),
+            ("testInt", testInt),
+            ("testIntArray", testIntArray),
+            ("testNullArray", testNullArray),
+            ("testOptionalStringArray", testOptionalStringArray),
+            ("testSingleFieldObject", testSingleFieldObject),
+            ("testString", testString),
+            ("testStringArray", testStringArray),
+            ("testThreeFieldsObject", testThreeFieldsObject),
+            ("testUnsupported", testUnsupported),
+        ]
+    }
     
     var parser: ModelParser!
     

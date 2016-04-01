@@ -74,7 +74,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "swift User testModel.json"
+            argument = "swift User ${SRCROOT}/Example/testModel.json"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
