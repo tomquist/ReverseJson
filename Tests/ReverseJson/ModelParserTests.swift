@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Foundation
 @testable import ReverseJson
 
 class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
@@ -49,17 +50,7 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
         ]
     }
     
-    var parser: ModelParser!
-    
-    override func setUp() {
-        super.setUp()
-        parser = ModelParser()
-    }
-    
-    override func tearDown() {
-        parser = nil
-        super.tearDown()
-    }
+    var parser: ModelParser = ModelParser()
     
     func XCTAsserEqualFieldType(fieldType1: ModelParser.FieldType, _ fieldType2: ModelParser.FieldType) {
         XCTAssertEqual(fieldType1, fieldType2)
@@ -186,12 +177,12 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
     
     func testEmptyObject() {
-        let type = try! parser.decode([:])
+        let type = try! parser.decode(NSDictionary())
         XCTAssertEqual(type, ModelParser.FieldType.Object([]))
     }
     
     func testEmptyArray() {
-        let type = try! parser.decode([])
+        let type = try! parser.decode(NSArray())
         XCTAssertEqual(type, ModelParser.FieldType.List(.Unknown))
     }
 
@@ -212,10 +203,10 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
 
     func testOptionalStringArray() {
-        let type = try! parser.decode([
-            "Test",
+        let type = try! parser.decode(NSArray(array: [
+            NSString(string: "Test"),
             NSNull()
-        ])
+        ]))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Text)))
     }
     
@@ -235,10 +226,10 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     
     func testThreeFieldsObject() {
         let type = try! parser.decode([
-            "string":"Test",
-            "integer": 123,
-            "object": [:]
-        ])
+            NSString(string: "string"):NSString(string: "Test"),
+            NSString(string: "integer"): NSNumber(integer: 123),
+            NSString(string: "object"): [:] as NSDictionary
+        ] as NSDictionary)
         let expectedType: ModelParser.FieldType = .Object([
             .init(name: "string", type: .Text),
             .init(name: "integer", type: .Number(.Int)),
@@ -248,35 +239,35 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
 
     func testArrayOfEmptyObject() {
-        let type = try! parser.decode([
-            [:],
-            [:]
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            [:] as NSDictionary,
+            [:] as NSDictionary,
+        ]))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Object([])))
     }
     
     func testArrayOfEmptyOptionalObject() {
-        let type = try! parser.decode([
-            [:],
+        let type = try! parser.decode(NSArray(array: [
+            [:] as NSDictionary,
             NSNull()
-        ])
+        ]))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Object([]))))
     }
     
     func testArrayOfMixedIntFloatAndDouble() {
-        let type = try! parser.decode([
-            Int(10),
-            Double(10),
-            Float(10)
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            NSNumber(integer: 10),
+            NSNumber(double: 10),
+            NSNumber(float: 10)
+        ]))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Number(.Double)), "Mixed number types with at least one Double should be merged to Double")
     }
     
     func testArrayOfMixedIntAndFloat() {
-        let type = try! parser.decode([
-            Int(10),
-            Float(10)
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            NSNumber(integer: 10),
+            NSNumber(float: 10),
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Number(.Float)
         )
@@ -284,10 +275,10 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
 
     func testArrayOfMixedBoolAndDouble() {
-        let type = try! parser.decode([
-            Double(10),
-            true
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            NSNumber(double: 10),
+            NSNumber(bool: true),
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Enum([
                 .Number(.Bool),
@@ -298,11 +289,11 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
 
     func testArrayOfMixedBoolIntAndDouble() {
-        let type = try! parser.decode([
-            Double(10),
-            true,
-            Int(10)
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            NSNumber(double: 10),
+            NSNumber(bool: true),
+            NSNumber(integer: 10)
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Enum([
                 .Number(.Bool),
@@ -313,10 +304,10 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
     
     func testArrayOfObjectsWithMissingField() {
-        let type1 = try! parser.decode([
-            [:],
-            ["string":"Test"]
-        ])
+        let type1 = try! parser.decode(NSArray(array: [
+            [:] as NSDictionary,
+            [NSString(string: "string"): NSString(string: "Test")] as NSDictionary,
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "string", type: .Optional(.Text))
@@ -324,19 +315,19 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
         )
         XCTAssertEqual(type1, expectedResult, "List of objects where in one object a field is missing, should result in a object with an optional field type")
         
-        let type2 = try! parser.decode([
-            ["string":"Test"],
-            [:]
-        ])
+        let type2 = try! parser.decode(NSArray(array: [
+            [NSString(string: "string"): NSString(string: "Test")] as NSDictionary,
+            [:] as NSDictionary
+        ]))
         XCTAssertEqual(type2, expectedResult, "List of objects where in one object a field is missing, should result in a object with an optional field type")
     }
     
     func testArrayOfObjectsWithMixedTypesAndOptional() {
-        let type = try! parser.decode([
-            ["mixed":NSNull()       ],
-            ["mixed":"string"       ],
-            ["mixed":Double(10)     ],
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            [NSString(string: "mixed"): NSNull()                     ] as NSDictionary,
+            [NSString(string: "mixed"): NSString(string: "string")   ] as NSDictionary,
+            [NSString(string: "mixed"): NSNumber(double: 10)         ] as NSDictionary,
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .Optional(
@@ -351,10 +342,10 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
 
     func testArrayObjectWithArrayFieldOfUnknownTypeAndStrings() {
-        let type = try! parser.decode([
-            ["mixed":[]             ],
-            ["mixed":["String"]     ],
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            [NSString(string: "mixed"): NSArray()                                       ] as NSDictionary,
+            [NSString(string: "mixed"): NSArray(array: [NSString(string: "String")])    ] as NSDictionary,
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .List(.Text))
@@ -364,11 +355,11 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
     
     func testArrayObjectWithArrayFieldOfIntsStringsAndDoubles() {
-        let type = try! parser.decode([
-            ["mixed":[Int(10)]      ],
-            ["mixed":["String"]     ],
-            ["mixed":[Double(10)]   ],
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            [NSString(string: "mixed"): NSArray(array: [NSNumber(integer: 10)])     ] as NSDictionary,
+            [NSString(string: "mixed"): NSArray(array: [NSString(string: "String")])] as NSDictionary,
+            [NSString(string: "mixed"): NSArray(array: [NSNumber(double: 10)])      ] as NSDictionary,
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .List(
@@ -383,12 +374,12 @@ class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
     }
 
     func testArrayObjectWithMixedFieldOfMixedArraysAndInt() {
-        let type = try! parser.decode([
-            ["mixed":["String"]     ],
-            ["mixed":Int(10)        ],
-            ["mixed":[Double(10)]   ],
-            ["mixed":[NSNull()]     ],
-        ])
+        let type = try! parser.decode(NSArray(array: [
+            [NSString(string: "mixed"): NSArray(array: [NSString(string: "String")])] as NSDictionary,
+            [NSString(string: "mixed"): NSNumber(integer: 10)                       ] as NSDictionary,
+            [NSString(string: "mixed"): NSArray(array: [NSNumber(double: 10)])      ] as NSDictionary,
+            [NSString(string: "mixed"): NSArray(array: [NSNull()])                  ] as NSDictionary,
+        ]))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .Enum([

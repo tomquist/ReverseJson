@@ -58,22 +58,22 @@ public class ModelParser {
     }
     
     public enum Error: ErrorType {
-        case UnsupportedValueType(AnyObject)
+        case UnsupportedValueType(Any)
     }
     
     public init() {
         
     }
     
-    public func decode(value: AnyObject) throws -> FieldType {
+    public func decode(value: Any) throws -> FieldType {
         switch value {
         case is String:
             return .Text
         case let number as NSNumber:
             return .Number(number.numberType)
-        case let subObj as [String: AnyObject]:
+        case let subObj as NSDictionary:
             return try decode(subObj)
-        case let subObj as [AnyObject]:
+        case let subObj as NSArray:
             if let subType = try decode(subObj) {
                 return .List(subType)
             } else {
@@ -86,14 +86,14 @@ public class ModelParser {
         }
     }
     
-    private func decode(dict: [String: AnyObject]) throws -> FieldType {
-        let fields = try dict.flatMap{ (name: String, value: AnyObject) -> ObjectField? in
-            return ObjectField(name: name, type: try decode(value))
+    private func decode(dict: NSDictionary) throws -> FieldType {
+        let fields = try dict.flatMap{ (name: AnyObject, value: AnyObject) throws -> ObjectField? in
+            return try (name as? String).map { ObjectField(name: $0, type: try decode(value)) }
         }
         return .Object(Set(fields))
     }
     
-    private func decode(list: [AnyObject]) throws -> FieldType? {
+    private func decode(list: NSArray) throws -> FieldType? {
         let types = try list.flatMap { try decode($0)}
         return types.reduce(nil) { (type1, type2) -> FieldType? in
             if let type1 = type1 {

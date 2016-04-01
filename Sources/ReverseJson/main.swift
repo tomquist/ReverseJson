@@ -14,7 +14,7 @@ enum ProgramResult {
 }
 
 func usage() -> String {
-    let command = (Process.arguments.first! as NSString).lastPathComponent ?? ""
+    let command = Process.arguments[0].characters.split("/").last.map(String.init) ?? ""
     return [
         "Usage: \(command) (swift|objc) NAME FILE <options>",
         "e.g. \(command) swift User testModel.json <options>",
@@ -48,17 +48,17 @@ func main(args: [String]) -> ProgramResult {
         return .Failure("Could not read file \(file)")
     }
     
-    let model: AnyObject
+    let model: Any
     do {
         model = try NSJSONSerialization.JSONObjectWithData(data, options: [])
     } catch {
-        return .Failure("Could not parse json: \((error as NSError).localizedDescription)")
+        return .Failure("Could not parse json: \(error)")
     }
     let rootType: ModelParser.FieldType
     do {
         rootType = try ModelParser().decode(model)
     } catch {
-        return .Failure("Could convert json to model: \((error as NSError).localizedDescription)")
+        return .Failure("Could convert json to model: \(error)")
     }
     let translators = translatorTypes.lazy.map { $0.init(args: remainingArgs) }
     return .Success(translators.map { $0.translate(rootType, name: name) }.joinWithSeparator("\n\n"))
