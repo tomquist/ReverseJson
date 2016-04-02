@@ -10,7 +10,7 @@ import XCTest
 import Foundation
 @testable import ReverseJson
 
-class ReverseJsonTests: XCTestCase, XCTestCaseProvider {
+class ModelParserTest: XCTestCase, XCTestCaseProvider {
     
     var allTests: [(String, () throws -> Void)] {
         return [

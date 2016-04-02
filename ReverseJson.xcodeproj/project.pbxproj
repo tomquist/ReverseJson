@@ -18,7 +18,7 @@
 		421658B11CAF2C2800321F84 /* SwiftModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A61CAF2C2800321F84 /* SwiftModelTranslator.swift */; };
 		421658B21CAF2C2800321F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A71CAF2C2800321F84 /* Utils.swift */; };
 		421658B31CAF2C2800321F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A71CAF2C2800321F84 /* Utils.swift */; };
-		421658C21CAF2DA200321F84 /* ModelParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B71CAF2D9900321F84 /* ModelParserTests.swift */; };
+		421658C21CAF2DA200321F84 /* ModelParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B71CAF2D9900321F84 /* ModelParserTest.swift */; };
 		421658C31CAF2DA200321F84 /* ObjcModelTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */; };
 		421658C41CAF2DA200321F84 /* SwiftTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */; };
 		421658C61CAF2DB300321F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658C51CAF2DB300321F84 /* Utils.swift */; };
@@ -58,7 +58,7 @@
 		421658A61CAF2C2800321F84 /* SwiftModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftModelTranslator.swift; sourceTree = "<group>"; };
 		421658A71CAF2C2800321F84 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		421658B51CAF2D9900321F84 /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
-		421658B71CAF2D9900321F84 /* ModelParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParserTests.swift; sourceTree = "<group>"; };
+		421658B71CAF2D9900321F84 /* ModelParserTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParserTest.swift; sourceTree = "<group>"; };
 		421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslatorTest.swift; sourceTree = "<group>"; };
 		421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTranslatorTest.swift; sourceTree = "<group>"; };
 		421658C51CAF2DB300321F84 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 		421658B61CAF2D9900321F84 /* ReverseJson */ = {
 			isa = PBXGroup;
 			children = (
-				421658B71CAF2D9900321F84 /* ModelParserTests.swift */,
+				421658B71CAF2D9900321F84 /* ModelParserTest.swift */,
 				421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */,
 				421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */,
 				421658C51CAF2DB300321F84 /* Utils.swift */,
@@ -341,7 +341,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				421658C21CAF2DA200321F84 /* ModelParserTests.swift in Sources */,
+				421658C21CAF2DA200321F84 /* ModelParserTest.swift in Sources */,
 				421658C31CAF2DA200321F84 /* ObjcModelTranslatorTest.swift in Sources */,
 				421658C41CAF2DA200321F84 /* SwiftTranslatorTest.swift in Sources */,
 				421658C61CAF2DB300321F84 /* Utils.swift in Sources */,
