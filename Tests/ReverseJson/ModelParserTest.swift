@@ -151,85 +151,85 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAsserNotEqualFieldType(.Enum([.Text]), .Text)
     }
     
-    func testString() {
-        let type = try! parser.decode("Simple string")
+    func testString() throws {
+        let type = try parser.decode("Simple string")
         XCTAssertEqual(type, ModelParser.FieldType.Text)
     }
     
-    func testInt() {
-        let type = try! parser.decode(10)
+    func testInt() throws {
+        let type = try parser.decode(10)
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Int))
     }
     
-    func testDouble() {
-        let type = try! parser.decode(10.0)
+    func testDouble() throws {
+        let type = try parser.decode(10.0)
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Double))
     }
     
-    func testFloat() {
-        let type = try! parser.decode(Float(10.0))
+    func testFloat() throws {
+        let type = try parser.decode(Float(10.0))
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Float))
     }
     
-    func testBool() {
-        let type = try! parser.decode(true)
+    func testBool() throws {
+        let type = try parser.decode(true)
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Bool))
     }
     
-    func testEmptyObject() {
-        let type = try! parser.decode(NSDictionary())
+    func testEmptyObject() throws {
+        let type = try parser.decode(Dictionary<String, Any>())
         XCTAssertEqual(type, ModelParser.FieldType.Object([]))
     }
     
-    func testEmptyArray() {
-        let type = try! parser.decode(NSArray())
+    func testEmptyArray() throws {
+        let type = try parser.decode(Array<Any>())
         XCTAssertEqual(type, ModelParser.FieldType.List(.Unknown))
     }
 
-    func testStringArray() {
-        let type = try! parser.decode([
+    func testStringArray() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
             "Test",
             "123"
-        ])
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Text))
     }
     
-    func testIntArray() {
-        let type = try! parser.decode([
+    func testIntArray() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
             Int(10),
             Int(20)
-        ])
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Number(.Int)))
     }
 
-    func testOptionalStringArray() {
-        let type = try! parser.decode(NSArray(array: [
-            NSString(string: "Test"),
+    func testOptionalStringArray() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            "Test",
             NSNull()
-        ]))
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Text)))
     }
     
-    func testNullArray() {
-        let type = try! parser.decode([
+    func testNullArray() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
             NSNull()
-        ])
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Unknown)))
     }
 
-    func testSingleFieldObject() {
-        let type = try! parser.decode([
-            "string":"Test"
-        ])
+    func testSingleFieldObject() throws {
+        let type = try parser.decode(Dictionary<String, Any>(dictionaryLiteral:
+            ("string", "Test")
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.Object([ModelParser.ObjectField(name: "string", type: .Text)]))
     }
     
-    func testThreeFieldsObject() {
-        let type = try! parser.decode([
-            NSString(string: "string"):NSString(string: "Test"),
-            NSString(string: "integer"): NSNumber(integer: 123),
-            NSString(string: "object"): [:] as NSDictionary
-        ] as NSDictionary)
+    func testThreeFieldsObject() throws {
+        let type = try parser.decode(Dictionary<String, Any>(dictionaryLiteral:
+            ("string", "Test"),
+            ("integer", 123),
+            ("object", Dictionary<String, Any>())
+        ))
         let expectedType: ModelParser.FieldType = .Object([
             .init(name: "string", type: .Text),
             .init(name: "integer", type: .Number(.Int)),
@@ -238,47 +238,47 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, expectedType)
     }
 
-    func testArrayOfEmptyObject() {
-        let type = try! parser.decode(NSArray(array: [
-            [:] as NSDictionary,
-            [:] as NSDictionary,
-        ]))
+    func testArrayOfEmptyObject() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(),
+            Dictionary<String, Any>()
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Object([])))
     }
     
-    func testArrayOfEmptyOptionalObject() {
-        let type = try! parser.decode(NSArray(array: [
-            [:] as NSDictionary,
+    func testArrayOfEmptyOptionalObject() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(),
             NSNull()
-        ]))
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Object([]))))
     }
     
-    func testArrayOfMixedIntFloatAndDouble() {
-        let type = try! parser.decode(NSArray(array: [
-            NSNumber(integer: 10),
-            NSNumber(double: 10),
-            NSNumber(float: 10)
-        ]))
+    func testArrayOfMixedIntFloatAndDouble() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Int(10),
+            Double(10),
+            Float(10)
+        ))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Number(.Double)), "Mixed number types with at least one Double should be merged to Double")
     }
     
-    func testArrayOfMixedIntAndFloat() {
-        let type = try! parser.decode(NSArray(array: [
-            NSNumber(integer: 10),
-            NSNumber(float: 10),
-        ]))
+    func testArrayOfMixedIntAndFloat() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Int(10),
+            Float(10)
+        ))
         let expectedResult: ModelParser.FieldType = .List(
             .Number(.Float)
         )
         XCTAssertEqual(type, expectedResult, "Mixed number types with Int and Float should be merged to Float")
     }
 
-    func testArrayOfMixedBoolAndDouble() {
-        let type = try! parser.decode(NSArray(array: [
-            NSNumber(double: 10),
-            NSNumber(bool: true),
-        ]))
+    func testArrayOfMixedBoolAndDouble() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Double(10),
+            true
+        ))
         let expectedResult: ModelParser.FieldType = .List(
             .Enum([
                 .Number(.Bool),
@@ -288,12 +288,12 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, expectedResult, "Mixed number types with Bool and Double should be merged to enum containing Bool and Double numbers")
     }
 
-    func testArrayOfMixedBoolIntAndDouble() {
-        let type = try! parser.decode(NSArray(array: [
-            NSNumber(double: 10),
-            NSNumber(bool: true),
-            NSNumber(integer: 10)
-        ]))
+    func testArrayOfMixedBoolIntAndDouble() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Double(10),
+            true,
+            Int(10)
+        ))
         let expectedResult: ModelParser.FieldType = .List(
             .Enum([
                 .Number(.Bool),
@@ -303,11 +303,11 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, expectedResult, "Mixed number types with Bool, Int and Double should be merged to enum containing Bool and Double numbers")
     }
     
-    func testArrayOfObjectsWithMissingField() {
-        let type1 = try! parser.decode(NSArray(array: [
-            [:] as NSDictionary,
-            [NSString(string: "string"): NSString(string: "Test")] as NSDictionary,
-        ]))
+    func testArrayOfObjectsWithMissingField() throws {
+        let type1 = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(),
+            Dictionary<String, Any>(dictionaryLiteral: ("string", "Test"))
+        ))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "string", type: .Optional(.Text))
@@ -315,19 +315,19 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         )
         XCTAssertEqual(type1, expectedResult, "List of objects where in one object a field is missing, should result in a object with an optional field type")
         
-        let type2 = try! parser.decode(NSArray(array: [
-            [NSString(string: "string"): NSString(string: "Test")] as NSDictionary,
-            [:] as NSDictionary
-        ]))
+        let type2 = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(dictionaryLiteral: ("string", "Test")),
+            Dictionary<String, Any>()
+        ))
         XCTAssertEqual(type2, expectedResult, "List of objects where in one object a field is missing, should result in a object with an optional field type")
     }
     
-    func testArrayOfObjectsWithMixedTypesAndOptional() {
-        let type = try! parser.decode(NSArray(array: [
-            [NSString(string: "mixed"): NSNull()                     ] as NSDictionary,
-            [NSString(string: "mixed"): NSString(string: "string")   ] as NSDictionary,
-            [NSString(string: "mixed"): NSNumber(double: 10)         ] as NSDictionary,
-        ]))
+    func testArrayOfObjectsWithMixedTypesAndOptional() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", NSNull())),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", "string")),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Double(10))
+        )))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .Optional(
@@ -341,11 +341,11 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, expectedResult)
     }
 
-    func testArrayObjectWithArrayFieldOfUnknownTypeAndStrings() {
-        let type = try! parser.decode(NSArray(array: [
-            [NSString(string: "mixed"): NSArray()                                       ] as NSDictionary,
-            [NSString(string: "mixed"): NSArray(array: [NSString(string: "String")])    ] as NSDictionary,
-        ]))
+    func testArrayObjectWithArrayFieldOfUnknownTypeAndStrings() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>())),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>(arrayLiteral: "String"))
+        )))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .List(.Text))
@@ -354,12 +354,12 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, expectedResult)
     }
     
-    func testArrayObjectWithArrayFieldOfIntsStringsAndDoubles() {
-        let type = try! parser.decode(NSArray(array: [
-            [NSString(string: "mixed"): NSArray(array: [NSNumber(integer: 10)])     ] as NSDictionary,
-            [NSString(string: "mixed"): NSArray(array: [NSString(string: "String")])] as NSDictionary,
-            [NSString(string: "mixed"): NSArray(array: [NSNumber(double: 10)])      ] as NSDictionary,
-        ]))
+    func testArrayObjectWithArrayFieldOfIntsStringsAndDoubles() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>(arrayLiteral: Int(10)))),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>(arrayLiteral: "String"))),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>(arrayLiteral: Double(10)))
+        )))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .List(
@@ -373,13 +373,13 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, expectedResult)
     }
 
-    func testArrayObjectWithMixedFieldOfMixedArraysAndInt() {
-        let type = try! parser.decode(NSArray(array: [
-            [NSString(string: "mixed"): NSArray(array: [NSString(string: "String")])] as NSDictionary,
-            [NSString(string: "mixed"): NSNumber(integer: 10)                       ] as NSDictionary,
-            [NSString(string: "mixed"): NSArray(array: [NSNumber(double: 10)])      ] as NSDictionary,
-            [NSString(string: "mixed"): NSArray(array: [NSNull()])                  ] as NSDictionary,
-        ]))
+    func testArrayObjectWithMixedFieldOfMixedArraysAndInt() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>(arrayLiteral: "String"))),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Int(10))),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>(arrayLiteral: Double(10)))),
+            Dictionary<String, Any>(dictionaryLiteral: ("mixed", Array<Any>(arrayLiteral: NSNull())))
+        ))
         let expectedResult: ModelParser.FieldType = .List(
             .Object([
                 .init(name: "mixed", type: .Enum([

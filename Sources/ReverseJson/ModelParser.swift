@@ -1,34 +1,5 @@
 import Foundation
 
-
-extension NSNumber {
-    private struct Constants {
-        private static let trueNumber = NSNumber(bool: true)
-        private static let falseNumber = NSNumber(bool: false)
-        private static let trueObjCType = String.fromCString(Constants.trueNumber.objCType)
-        private static let falseObjCType = String.fromCString(Constants.falseNumber.objCType)
-    }
-    var isBool:Bool {
-        get {
-            let objCType = String.fromCString(self.objCType)
-            if (self.compare(Constants.trueNumber) == NSComparisonResult.OrderedSame && objCType == Constants.trueObjCType)
-                || (self.compare(Constants.falseNumber) == NSComparisonResult.OrderedSame && objCType == Constants.falseObjCType){
-                    return true
-            }
-            return false
-        }
-    }
-    
-    var numberType: ModelParser.NumberType {
-        if self.isBool {
-            return .Bool
-        }
-        let mappings: [String: ModelParser.NumberType] = ["c": .Int, "i": .Int, "l": .Int, "q": .Int, "f": .Float, "d": .Double]
-        let objcType = String.fromCString(self.objCType)?.lowercaseString
-        return objcType.flatMap { mappings[$0] } ?? .Double
-    }
-}
-
 public class ModelParser {
     
     public struct ObjectField {
@@ -58,7 +29,7 @@ public class ModelParser {
     }
     
     public enum Error: ErrorType {
-        case UnsupportedValueType(Any)
+        case UnsupportedValueType(Any, Any.Type)
     }
     
     public init() {
@@ -69,12 +40,26 @@ public class ModelParser {
         switch value {
         case is String:
             return .Text
-        case let number as NSNumber:
-            return .Number(number.numberType)
-        case let subObj as NSDictionary:
-            return try decode(subObj)
-        case let subObj as NSArray:
-            if let subType = try decode(subObj) {
+        case is Double:
+            return .Number(.Double)
+        case is Float:
+            return .Number(.Float)
+        case is Int:
+            return .Number(.Int)
+        case is Bool:
+            return .Number(.Bool)
+        case let subObj as [String: AnyObject]:
+            return try decodeDict(subObj)
+        case let subObj as [String: Any]:
+            return try decodeDict(subObj)
+        case let subObj as [AnyObject]:
+            if let subType = try decodeList(subObj) {
+                return .List(subType)
+            } else {
+                return .List(.Unknown)
+            }
+        case let subObj as [Any]:
+            if let subType = try decodeList(subObj) {
                 return .List(subType)
             } else {
                 return .List(.Unknown)
@@ -82,18 +67,35 @@ public class ModelParser {
         case is NSNull:
             return .Optional(.Unknown)
         default:
-            throw Error.UnsupportedValueType(value)
+            throw Error.UnsupportedValueType(value, value.dynamicType)
         }
     }
     
-    private func decode(dict: NSDictionary) throws -> FieldType {
-        let fields = try dict.flatMap{ (name: AnyObject, value: AnyObject) throws -> ObjectField? in
-            return try (name as? String).map { ObjectField(name: $0, type: try decode(value)) }
+    private func decodeDict(dict: [String: AnyObject]) throws -> FieldType {
+        let fields = try dict.map { (name: String, value: AnyObject) in
+            return ObjectField(name: name, type: try decode(value))
         }
         return .Object(Set(fields))
     }
     
-    private func decode(list: NSArray) throws -> FieldType? {
+    private func decodeDict(dict: [String: Any]) throws -> FieldType {
+        let fields = try dict.map { (name: String, value: Any) in
+            return ObjectField(name: name, type: try decode(value))
+        }
+        return .Object(Set(fields))
+    }
+    
+    private func decodeList(list: [Any]) throws -> FieldType? {
+        let types = try list.flatMap { try decode($0)}
+        return types.reduce(nil) { (type1, type2) -> FieldType? in
+            if let type1 = type1 {
+                return type1.mergeWith(type2)
+            }
+            return type2
+        }
+    }
+    
+    private func decodeList(list: [AnyObject]) throws -> FieldType? {
         let types = try list.flatMap { try decode($0)}
         return types.reduce(nil) { (type1, type2) -> FieldType? in
             if let type1 = type1 {

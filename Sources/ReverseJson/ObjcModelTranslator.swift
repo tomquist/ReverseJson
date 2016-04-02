@@ -15,7 +15,7 @@ public class ObjcModelCreator: ModelTranslator {
     
     public func translate(type: ModelParser.FieldType, name: String) -> String {
         let a = declarationsFor(type, name: name, valueToParse: "jsonValue")
-        return (["#import <Foundation/Foundation.h>"] + a.interfaces + a.implementations).joinWithSeparator("\n\n")
+        return (["#import <Foundation/Foundation.h>"] + a.interfaces.sort() + a.implementations.sort()).joinWithSeparator("\n\n")
     }
     
     public func isNullable(type: ModelParser.FieldType) -> Bool {
