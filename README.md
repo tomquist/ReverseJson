@@ -28,6 +28,7 @@ Options:
    -m,  --mutable          Swift: All object fields are mutable (var instead of let)
    -pt, --publictypes      Swift: Make type declarations public instead of internal
    -pf, --publicfields     Swift: Make field declarations public instead of internal
+   -op, --optional         Swift: Make all field declarations optional
 ```
 
 ### To create a Swift data model:

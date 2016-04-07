@@ -47,6 +47,9 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
             ("testStringArray", testStringArray),
             ("testThreeFieldsObject", testThreeFieldsObject),
             ("testUnsupported", testUnsupported),
+            ("testTransformAllFieldsToOptional", testTransformAllFieldsToOptional),
+            ("testTransformAllFieldsToOptionalWithToplevelList", testTransformAllFieldsToOptionalWithToplevelList),
+            ("testTransformAllFieldsToOptionalWithToplevelEnum", testTransformAllFieldsToOptionalWithToplevelEnum)
         ]
     }
     
@@ -407,5 +410,79 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
             error = e
         }
         XCTAssertNotNil(error)
+    }
+    
+    func testTransformAllFieldsToOptional() {
+        let type: ModelParser.FieldType = .Object([
+            .init(name: "innerObject", type: .Object([
+                .init(name: "innerText", type: .Text),
+            ])),
+            .init(name: "list", type: .List(
+                    .Object([
+                        .init(name: "insideList", type: .Text)
+                    ])
+                )
+            ),
+            .init(name: "text", type: .Text),
+            .init(name: "number", type: .Number(.Int)),
+            .init(name: "enum", type: .Enum([
+                    .Object([
+                        .init(name: "textInEnum", type: .Text)
+                    ]),
+                    .Number(.Float)
+                ])
+            ),
+            .init(name: "unknown", type: .Unknown),
+            .init(name: "optionalText", type: .Optional(.Text)),
+            .init(name: "optionalObject", type: .Optional(.Object([
+                .init(name: "textInsideOptionalObject", type: .Text)
+            ])))
+        ])
+        
+        let expectedResult: ModelParser.FieldType = .Object([
+            .init(name: "innerObject", type: .Optional(.Object([
+                .init(name: "innerText", type: .Optional(.Text)),
+            ]))),
+            .init(name: "list", type: .Optional(.List(
+                    .Object([
+                        .init(name: "insideList", type: .Optional(.Text))
+                    ])
+                ))
+            ),
+            .init(name: "text", type: .Optional(.Text)),
+            .init(name: "number", type: .Optional(.Number(.Int))),
+            .init(name: "enum", type: .Optional(.
+                Enum([
+                    .Object([
+                        .init(name: "textInEnum", type: .Optional(.Text))
+                    ]),
+                    .Number(.Float)
+                ])
+            )),
+            .init(name: "unknown", type: .Optional(.Unknown)),
+            .init(name: "optionalText", type: .Optional(.Text)),
+            .init(name: "optionalObject", type: .Optional(.Object([
+                .init(name: "textInsideOptionalObject", type: .Optional(.Text))
+            ])))
+        ])
+        
+        let transformedResult = ModelParser.transformAllFieldsToOptional(type)
+        XCTAssertEqual(expectedResult, transformedResult)
+    }
+    
+    func testTransformAllFieldsToOptionalWithToplevelList() {
+        let type: ModelParser.FieldType = .List(.Text)
+        let expectedResult: ModelParser.FieldType = .List(.Text)
+        
+        let transformedResult = ModelParser.transformAllFieldsToOptional(type)
+        XCTAssertEqual(expectedResult, transformedResult)
+    }
+    
+    func testTransformAllFieldsToOptionalWithToplevelEnum() {
+        let type: ModelParser.FieldType = .Enum([.Text, .Number(.Int)])
+        let expectedResult: ModelParser.FieldType = .Enum([.Text, .Number(.Int)])
+        
+        let transformedResult = ModelParser.transformAllFieldsToOptional(type)
+        XCTAssertEqual(expectedResult, transformedResult)
     }
 }
