@@ -24,6 +24,7 @@ func usage() -> String {
         "   -m,  --mutable          Swift: All object fields are mutable (var instead of let)",
         "   -pt, --publictypes      Swift: Make type declarations public instead of internal",
         "   -pf, --publicfields     Swift: Make field declarations public instead of internal",
+        "   -op, --optional         Swift: Make all field declarations optional",
     ].joinWithSeparator("\n")
 }
 
@@ -56,7 +57,13 @@ func main(args: [String]) -> ProgramResult {
     }
     let rootType: ModelParser.FieldType
     do {
-        rootType = try ModelParser().decode(model)
+        let rootTypeTmp = try ModelParser().decode(model)
+        let makeAllFieldDeclarationsOptional = remainingArgs.contains("-op") || remainingArgs.contains("--optional")
+        if makeAllFieldDeclarationsOptional {
+            rootType = ModelParser.transformAllFieldsToOptional(rootTypeTmp)
+        } else {
+            rootType = rootTypeTmp
+        }
     } catch {
         return .Failure("Could convert json to model: \(error)")
     }

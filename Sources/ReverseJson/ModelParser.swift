@@ -105,6 +105,49 @@ public class ModelParser {
         }
     }
     
+    
+    private class func transformAllFieldsToOptionalImpl(rootField: ModelParser.FieldType) -> ModelParser.FieldType {
+        switch rootField {
+        case let .Object(fields):
+            let mappedFields = fields.map {
+                ModelParser.ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl($0.type))
+            }
+            return .Optional(.Object(Set(mappedFields)))
+        case let .List(fieldType):
+            return .Optional(.List(transformAllFieldsToOptional(fieldType)))
+        case .Text:
+            return .Optional(.Text)
+        case let .Number(numberType):
+            return .Optional(.Number(numberType))
+        case let .Enum(fields):
+            let mappedFields = fields.map {
+                transformAllFieldsToOptional($0)
+            }
+            return .Optional(.Enum(Set(mappedFields)))
+        case .Unknown:
+            return .Optional(.Unknown)
+        case let .Optional(fieldType):
+            return .Optional(transformAllFieldsToOptional(fieldType))
+        }
+    }
+    
+    public class func transformAllFieldsToOptional(rootField: ModelParser.FieldType) -> ModelParser.FieldType {
+        switch rootField {
+        case let .Object(fields):
+            let mappedFields = fields.map {
+                ModelParser.ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl($0.type))
+            }
+            return .Object(Set(mappedFields))
+        case let .List(fieldType):
+            return .List(transformAllFieldsToOptional(fieldType))
+        case let .Enum(fields):
+            let mappedFields = fields.map { transformAllFieldsToOptional($0) }
+            return .Enum(Set(mappedFields))
+        default:
+            return rootField
+        }
+    }
+    
 }
 
 extension ModelParser.ObjectField: Hashable {
