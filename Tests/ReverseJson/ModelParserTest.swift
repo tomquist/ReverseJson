@@ -25,6 +25,16 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
             ("testArrayOfMixedIntFloatAndDouble", testArrayOfMixedIntFloatAndDouble),
             ("testArrayOfObjectsWithMissingField", testArrayOfObjectsWithMissingField),
             ("testArrayOfObjectsWithMixedTypesAndOptional", testArrayOfObjectsWithMixedTypesAndOptional),
+            ("testJsonBool", testJsonBool),
+            ("testJsonInt", testJsonInt),
+            ("testJsonDouble", testJsonDouble),
+            ("testJsonString", testJsonString),
+            ("testJsonEmptyObject", testJsonEmptyObject),
+            ("testJsonEmptyArray", testJsonEmptyArray),
+            ("testJsonNullArray", testJsonNullArray),
+            ("testJsonStringArray", testJsonStringArray),
+            ("testJsonIntArray", testJsonIntArray),
+            ("testJsonOptionalStringArray", testJsonOptionalStringArray),
             ("testBool", testBool),
             ("testDouble", testDouble),
             ("testEmptyArray", testEmptyArray),
@@ -179,73 +189,75 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Bool))
     }
     
+    private func dataFromJsonValue(jsonValue: String) throws -> Any {
+        let data = "{\"value\":\(jsonValue)}".dataUsingEncoding(NSUTF8StringEncoding)!
+        #if os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
+            typealias JsonDict = [String: AnyObject]
+        #else
+            typealias JsonDict = [String: Any]
+        #endif
+        
+        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: []) as! JsonDict
+        return jsonObj["value"]!
+    }
+    
     func testJsonBool() throws {
-        let data = "{\"value\":true}".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj["value"])
+        let jsonValue = "true"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Bool))
     }
     
     func testJsonInt() throws {
-        let data = "{\"value\":1}".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj["value"])
+        let jsonValue = "1"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Int))
     }
     
     func testJsonDouble() throws {
-        let data = "{\"value\":1.2}".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj["value"])
+        let jsonValue = "1.2"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Double))
     }
 
     func testJsonString() throws {
-        let data = "{\"value\":\"simple string\"}".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj["value"])
+        let jsonValue = "\"Simple string\""
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Text)
     }
     
     func testJsonEmptyObject() throws {
-        let data = "{}".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj)
+        let jsonValue = "{}"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Object([]))
     }
     
     func testJsonEmptyArray() throws {
-        let data = "[]".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj)
+        let jsonValue = "[]"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Unknown))
     }
     
     func testJsonNullArray() throws {
-        let data = "[null, null]".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj)
+        let jsonValue = "[null, null]"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Unknown)))
     }
     
     func testJsonStringArray() throws {
-        let data = "[\"Test\", \"123\"]".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj)
+        let jsonValue = "[\"Test\", \"123\"]"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Text))
     }
     
     func testJsonIntArray() throws {
-        let data = "[1,2,3]".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj)
+        let jsonValue = "[1,2,3]"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Number(.Int)))
     }
     
     func testJsonOptionalStringArray() throws {
-        let data = "[\"Test\", \"123\", null]".dataUsingEncoding(NSUTF8StringEncoding)!
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: [])
-        let type = try parser.decode(jsonObj)
+        let jsonValue = "[\"Test\", \"123\", null]"
+        let type = try parser.decode(try dataFromJsonValue(jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Text)))
     }
     
