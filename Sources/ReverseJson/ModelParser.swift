@@ -1,5 +1,33 @@
 import Foundation
 
+extension NSNumber {
+    private struct Constants {
+        private static let trueNumber = NSNumber(bool: true)
+        private static let falseNumber = NSNumber(bool: false)
+        private static let trueObjCType = String.fromCString(Constants.trueNumber.objCType)
+        private static let falseObjCType = String.fromCString(Constants.falseNumber.objCType)
+    }
+    var isBool:Bool {
+        get {
+            let objCType = String.fromCString(self.objCType)
+            if (self.compare(Constants.trueNumber) == NSComparisonResult.OrderedSame && objCType == Constants.trueObjCType)
+                || (self.compare(Constants.falseNumber) == NSComparisonResult.OrderedSame && objCType == Constants.falseObjCType){
+                return true
+            }
+            return false
+        }
+    }
+    
+    var numberType: ModelParser.NumberType {
+        if self.isBool {
+            return .Bool
+        }
+        let mappings: [String: ModelParser.NumberType] = ["c": .Int, "i": .Int, "l": .Int, "q": .Int, "f": .Float, "d": .Double]
+        let objcType = String.fromCString(self.objCType)?.lowercaseString
+        return objcType.flatMap { mappings[$0] } ?? .Double
+    }
+}
+
 public class ModelParser {
     
     public struct ObjectField {
@@ -40,6 +68,8 @@ public class ModelParser {
         switch value {
         case is String:
             return .Text
+        case let number as NSNumber where value is Double: // Only on ios/osx we can bridge numbers to double and NSNumber
+            return .Number(number.numberType)
         case is Double:
             return .Number(.Double)
         case is Float:
