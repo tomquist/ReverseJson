@@ -11,7 +11,7 @@ public class SwiftTranslator: ModelTranslator {
         ]
     }
     public func translate(type: ModelParser.FieldType, name: String) -> String {
-        return translators.lazy.map { $0.translate(type, name: name) }.joinWithSeparator("\n\n")
+        return String(joined: translators.lazy.map { $0.translate(type, name: name) }, separator: "\n\n")
     }
 }
 
@@ -115,15 +115,15 @@ class SwiftModelCreator: ModelTranslator {
             return (fieldDeclaration, subTypeDeclaration)
         }
         let typeDeclarations = fieldsAndTypes.lazy.flatMap {$0.type}
-        ret += Set(typeDeclarations.map({ "\n\($0)"})).sort(<).joinWithSeparator("")
+        ret += String(joined: Set(typeDeclarations.map({ "\n\($0)"})).sort(<), separator: "")
         let fields = fieldsAndTypes.lazy.map { $0.field }.map { $0.indent(level + 1) }.map { "\n\($0)" }
-        ret += fields.sort(<).joinWithSeparator("")
+        ret += String(joined: fields.sort(<), separator: "")
         return ret + "\n" + "}".indent(level)
     }
     
     private func createEnumDeclaration(name: String, cases: Set<ModelParser.FieldType>, level: Int = 0) -> String {
         var ret = "\(typeVisibility.visibilityPrefix)enum \(name) {".indent(level)
-        ret += cases.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
+        ret += String(joined: cases.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
             if let subTypeDeclaration = subTypeDeclaration {
@@ -131,7 +131,7 @@ class SwiftModelCreator: ModelTranslator {
             }
             fieldDeclaration += "case \(c.enumCaseName)(\(typeName))".indent(level + 1)
             return fieldDeclaration
-        }.map {"\n\($0)"} .joinWithSeparator("")
+        }.map {"\n\($0)"}, separator: "")
         return ret + "\n" + "}".indent(level)
     }
 
@@ -152,13 +152,13 @@ private func ==(lhs: Declaration, rhs: Declaration) -> Bool {
     return lhs.text == rhs.text
 }
 
-let swiftErrorType = [
+let swiftErrorType = String(lines:
     "enum JsonParsingError: ErrorType {",
     "    case UnsupportedTypeError",
     "}"
-].joinWithSeparator("\n")
+)
 
-let swiftStringParser = [
+let swiftStringParser = String(lines:
     "extension String {",
     "    init(jsonValue: AnyObject?) throws {",
     "        guard let string = jsonValue as? String else {",
@@ -167,9 +167,9 @@ let swiftStringParser = [
     "        self = string",
     "    }",
     "}"
-].joinWithSeparator("\n")
+)
 
-let swiftIntParser = [
+let swiftIntParser = String(lines:
     "extension Int {",
     "    init(jsonValue: AnyObject?) throws {",
     "        if let number = jsonValue as? NSNumber {",
@@ -185,9 +185,9 @@ let swiftIntParser = [
     "        }",
     "    }",
     "}"
-].joinWithSeparator("\n")
+)
 
-let swiftFloatParser = [
+let swiftFloatParser = String(lines:
     "extension Float {",
     "    init(jsonValue: AnyObject?) throws {",
     "        if let number = jsonValue as? NSNumber {",
@@ -203,9 +203,9 @@ let swiftFloatParser = [
     "        }",
     "    }",
     "}"
-].joinWithSeparator("\n")
+)
 
-let swiftDoubleParser = [
+let swiftDoubleParser = String(lines:
     "extension Double {",
     "    init(jsonValue: AnyObject?) throws {",
     "        if let number = jsonValue as? NSNumber {",
@@ -221,9 +221,9 @@ let swiftDoubleParser = [
     "        }",
     "    }",
     "}"
-].joinWithSeparator("\n")
+)
 
-let swiftBoolParser = [
+let swiftBoolParser = String(lines:
     "extension Bool {",
     "    init(jsonValue: AnyObject?) throws {",
     "        if let number = jsonValue as? NSNumber {",
@@ -241,9 +241,9 @@ let swiftBoolParser = [
     "        }",
     "    }",
     "}"
-].joinWithSeparator("\n")
+)
 
-let swiftOptionalParser = [
+let swiftOptionalParser = String(lines:
     "extension Optional {",
     "    init(jsonValue: AnyObject?, map: AnyObject throws -> Wrapped) throws {",
     "        if let jsonValue = jsonValue where !(jsonValue is NSNull) {",
@@ -253,9 +253,9 @@ let swiftOptionalParser = [
     "        }",
     "    }",
     "}"
-].joinWithSeparator("\n")
+)
 
-let swiftArrayParser = [
+let swiftArrayParser = String(lines:
     "extension Array {",
     "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
     "        guard let items = jsonValue as? [AnyObject] else {",
@@ -263,10 +263,10 @@ let swiftArrayParser = [
     "        }",
     "        self = try items.map(map)",
     "    }",
-    "}",
-].joinWithSeparator("\n")
+    "}"
+)
 
-let swiftContiguousArrayParser = [
+let swiftContiguousArrayParser = String(lines:
     "extension ContiguousArray {",
     "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
     "        guard let items = jsonValue as? [AnyObject] else {",
@@ -275,7 +275,7 @@ let swiftContiguousArrayParser = [
     "        self = ContiguousArray(try items.lazy.map(map))",
     "    }",
     "}"
-].joinWithSeparator("\n")
+)
 
 private extension Declaration {
     private static let errorType = Declaration(text: swiftErrorType, priority: 1000)
@@ -320,12 +320,12 @@ class SwiftJsonParsingTranslator: ModelTranslator {
             }
             return false
         }.lazy.map { $0.text }
-        let parseFunction = [[
+        let parseFunction = [String(lines:
             "func parse\(name.camelCasedString)(jsonValue: AnyObject?) throws -> \(typeName) {",
             "    return \(instructions)",
-            "}",
-        ].joinWithSeparator("\n")]
-        return (declarations + parseFunction).joinWithSeparator("\n\n")
+            "}"
+        )]
+        return String(joined: declarations + parseFunction, separator: "\n\n")
     }
     
     
@@ -366,7 +366,7 @@ class SwiftJsonParsingTranslator: ModelTranslator {
         case .Text:
             return ([.errorType, .stringParser], "try\(tryOptionalModifier) String(jsonValue: \(valueExpression))", "String")
         case .List(.Unknown):
-            return ([], "[]", parentTypeNames.joinWithSeparator("."))
+            return ([], "[]", String(joined: parentTypeNames, separator: "."))
         case let .List(listType):
             let childTypeNames: [String]
             if case .List = listType {
@@ -383,60 +383,61 @@ class SwiftJsonParsingTranslator: ModelTranslator {
             let declarations = subDeclarations.union([.errorType, self.listType.parser])
             return (declarations, "try\(tryOptionalModifier) \(self.listType.className)(jsonValue: \(valueExpression)) { \(instruction) }", "[\(typeName)]")
         case .Optional(.Unknown):
-            return ([], "nil", parentTypeNames.joinWithSeparator("."))
+            return ([], "nil", String(joined: parentTypeNames, separator: "."))
         case let .Optional(optionalType):
             let (subDeclarations, instruction, typeName) = createParsers(optionalType, parentTypeNames: parentTypeNames, valueExpression: "$0")
             return (subDeclarations.union([.errorType, .optionalParser]), "try\(tryOptionalModifier) Optional(jsonValue: \(valueExpression)) { \(instruction) }", "\(typeName)?")
         case let .Object(fields):
             var declarations = Set<Declaration>()
-            let typeName = parentTypeNames.joinWithSeparator(".")
-            var parser = [
+            let typeName = String(joined: parentTypeNames, separator: ".")
+            var parser = String(lines:
                 "extension \(typeName) {",
                 "    init(jsonValue: AnyObject?) throws {",
                 "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
                 "            throw JsonParsingError.UnsupportedTypeError",
                 "        }\n"
-            ].joinWithSeparator("\n")
-            parser += fields.map { field in
+            )
+            parser += String(joined: fields.map { field in
                 let (subDeclarations, instruction, _) = createParsers(field.type, parentTypeNames: parentTypeNames + [field.name.camelCasedString], valueExpression: "dict[\"\(field.name)\"]")
                 declarations.unionInPlace(subDeclarations)
                 return "self.\(field.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped) = \(instruction)".indent(2)
-                }.joinWithSeparator("\n") + "\n"
-            parser += [
+                }) + "\n"
+            parser += String(lines:
                 "    }",
                 "}"
-            ].joinWithSeparator("\n")
+            )
             declarations.insert(.errorType)
             declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
         case let .Enum(types):
             var declarations = Set<Declaration>()
-            let typeName = parentTypeNames.joinWithSeparator(".")
-            var parser = [
+            let typeName = String(joined: parentTypeNames, separator: ".")
+            var parser = String(lines:
                 "extension \(typeName) {",
                 "    init(jsonValue: AnyObject?) throws {",
-                "        ",
-                ].joinWithSeparator("\n")
-            parser += types.map { (type: ModelParser.FieldType) -> String in
+                "        "
+            )
+            parser += String(joined: types.map { (type: ModelParser.FieldType) -> String in
                 let (subDeclarations, instruction, _) = createParsers(type, parentTypeNames: parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName)"], valueExpression: "jsonValue", tryOptional: true)
                 declarations.unionInPlace(subDeclarations)
-                return [
+                return String(lines:
                     "if let value = \(instruction) {",
                     "            self = \(type.enumCaseName)(value)",
-                    "        }",
-                    ].joinWithSeparator("\n")
-                }.joinWithSeparator(" else ")
-            parser += [" else {",
+                    "        }"
+                )
+            }, separator: " else ")
+            parser += String(lines:
+                          " else {",
                 "            throw JsonParsingError.UnsupportedTypeError",
                 "        }",
                 "    }",
-                "}",
-                ].joinWithSeparator("\n")
+                "}"
+            )
             declarations.insert(.errorType)
             declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
         case .Unknown:
-            return ([], "nil", parentTypeNames.joinWithSeparator("."))
+            return ([], "nil", String(joined: parentTypeNames, separator: "."))
         }
         
     }

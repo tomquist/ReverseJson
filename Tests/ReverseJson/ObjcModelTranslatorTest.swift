@@ -79,7 +79,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -105,7 +105,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n"), modelResult)
+        ), modelResult)
     }
     
     func testEmptyEnum() {
@@ -113,7 +113,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -130,7 +130,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n"), modelResult)
+        ), modelResult)
     }
     
     func testTextList() {
@@ -152,7 +152,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     func testListOfEmptyObject() {
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(.List(.Object([])), name: "TestObjectList")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -178,14 +178,14 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n"), modelResult)
+        ), modelResult)
     }
     func testObjectWithSingleTextField() {
         let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -213,7 +213,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n"), modelResult)
+        ), modelResult)
     }
     
     func testObjectWithFieldContainingListOfText() {
@@ -221,7 +221,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -261,7 +261,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n"), modelResult)
+        ), modelResult)
     }
 
     func testObjectWithDifferentFields() {
@@ -272,7 +272,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             .init(name: "int", type: .Number(.Int)),
             .init(name: "optionalText", type: .Optional(.Text))
         ]), name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -342,7 +342,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n"), modelResult)
+        ), modelResult)
     }
     
     func testObjectWithOneFieldWithSubDeclaration() {
@@ -350,7 +350,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         let modelResult = modelCreator.translate(.Object([
             .init(name: "subObject", type: .Object([]))
             ]), name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "@class TestObjectSubObject;",
@@ -402,8 +402,8 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    }",
             "    return self;",
             "}",
-            "@end",
-        ].joinWithSeparator("\n"), modelResult)
+            "@end"
+        ), modelResult)
     }
     
     func testEnumWithOneCase() {
@@ -411,7 +411,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -430,7 +430,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n"), modelResult)
+        ), modelResult)
     }
     
     func testEnumWithTwoCases() {
@@ -441,7 +441,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual([
+        XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "@class TestObjectObject;",
@@ -486,8 +486,8 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    }",
             "    return self;",
             "}",
-            "@end",
-        ].joinWithSeparator("\n"), modelResult)
+            "@end"
+        ), modelResult)
     }
     
     func testAtomicFieldsFlag() {
@@ -495,7 +495,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelResult1 = ObjcModelCreator(args: ["-a"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--atomic"]).translate(type, name: "TestObject")
-        let expected = [
+        let expected = String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -523,7 +523,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n")
+        )
         XCTAssertEqual(expected, modelResult1)
         XCTAssertEqual(expected, modelResult2)
     }
@@ -533,7 +533,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelResult1 = ObjcModelCreator(args: ["-m"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
-        let expected = [
+        let expected = String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -561,7 +561,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-        ].joinWithSeparator("\n")
+        )
         XCTAssertEqual(expected, modelResult1)
         XCTAssertEqual(expected, modelResult2)
     }

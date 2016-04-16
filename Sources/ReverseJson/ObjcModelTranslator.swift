@@ -15,7 +15,10 @@ public class ObjcModelCreator: ModelTranslator {
     
     public func translate(type: ModelParser.FieldType, name: String) -> String {
         let a = declarationsFor(type, name: name, valueToParse: "jsonValue")
-        return (["#import <Foundation/Foundation.h>"] + a.interfaces.sort() + a.implementations.sort()).joinWithSeparator("\n\n")
+        return String(joined:
+                ["#import <Foundation/Foundation.h>"]
+                + a.interfaces.sort()
+                + a.implementations.sort(), separator: "\n\n")
     }
     
     public func isNullable(type: ModelParser.FieldType) -> Bool {
@@ -54,7 +57,7 @@ public class ObjcModelCreator: ModelTranslator {
                 if nullable {
                     modifiers.append("nullable")
                 }
-                let modifierList = modifiers.joinWithSeparator(", ")
+                let modifierList = String(joined: modifiers, separator: ", ")
                 let variableName = type.enumCaseName.pascalCasedString
                 let propertyName: String
                 if fieldFullTypeName.hasSuffix("*") {
@@ -73,19 +76,19 @@ public class ObjcModelCreator: ModelTranslator {
             
             var interface = ""
             if !forwardDeclarations.isEmpty {
-                let forwardDeclarationList = forwardDeclarations.joinWithSeparator(", ")
+                let forwardDeclarationList = String(joined: forwardDeclarations, separator: ", ")
                 interface += "@class \(forwardDeclarationList);\n"
             }
-            interface += ([
+            interface += String(joined: [
                 "NS_ASSUME_NONNULL_BEGIN",
                 "@interface \(className) : NSObject",
                 "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
             ] + properties + [
                 "@end",
                 "NS_ASSUME_NONNULL_END",
-            ]).joinWithSeparator("\n")
+            ])
             
-            let implementation = ([
+            let implementation = String(joined: [
                 "@implementation \(className)",
                 "- (instancetype)initWithJsonValue:(id)jsonValue {",
                 "    self = [super init];",
@@ -95,7 +98,7 @@ public class ObjcModelCreator: ModelTranslator {
                 "    return self;",
                 "}",
                 "@end",
-            ]).joinWithSeparator("\n")
+            ])
             
             let interfaces = fieldValues.lazy.map {$0.interfaces}.reduce(Set([interface])) { $0.union($1) }
             let implementations = fieldValues.lazy.map{$0.implementations}.reduce(Set([implementation])) { $0.union($1) }
@@ -117,7 +120,7 @@ public class ObjcModelCreator: ModelTranslator {
                 if nullable {
                     modifiers.append("nullable")
                 }
-                let modifierList = modifiers.joinWithSeparator(", ")
+                let modifierList = String(joined: modifiers, separator: ", ")
                 let variableName = field.name.pascalCasedString
                 let propertyName: String
                 if fieldFullTypeName.hasSuffix("*") {
@@ -136,10 +139,10 @@ public class ObjcModelCreator: ModelTranslator {
             
             var interface = ""
             if !forwardDeclarations.isEmpty {
-                let forwardDeclarationList = forwardDeclarations.joinWithSeparator(", ")
+                let forwardDeclarationList = String(joined: forwardDeclarations, separator: ", ")
                 interface += "@class \(forwardDeclarationList);\n"
             }
-            interface += ([
+            interface += String(joined: [
                 "NS_ASSUME_NONNULL_BEGIN",
                 "@interface \(className) : NSObject",
                 "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
@@ -147,9 +150,9 @@ public class ObjcModelCreator: ModelTranslator {
             ] + properties + [
                 "@end",
                 "NS_ASSUME_NONNULL_END"
-            ]).joinWithSeparator("\n")
+            ])
             
-            let implementation = ([
+            let implementation = String(joined: [
                 "@implementation \(className)",
                 "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
                 "    self = [super init];",
@@ -167,7 +170,7 @@ public class ObjcModelCreator: ModelTranslator {
                 "    return self;",
                 "}",
                 "@end",
-            ]).joinWithSeparator("\n")
+            ])
             
             let interfaces = fieldValues.lazy.map {$0.interfaces}.reduce(Set([interface])) { $0.union($1) }
             let implementations = fieldValues.lazy.map{$0.implementations}.reduce(Set([implementation])) { $0.union($1) }
@@ -203,7 +206,7 @@ public class ObjcModelCreator: ModelTranslator {
             } else {
                 listTypeName = "\(listTypeValues.fullTypeName) "
             }
-            let parseExpression = [
+            let parseExpression = String(lines:
                 "({",
                 "    id value = \(valueToParse);",
                 "    NSMutableArray<\(listTypeValues.fullTypeName)> *values = nil;",
@@ -217,7 +220,7 @@ public class ObjcModelCreator: ModelTranslator {
                 "    }",
                 "    [values copy];",
                 "})"
-            ].joinWithSeparator("\n")
+            )
             return (listTypeValues.interfaces, listTypeValues.implementations, parseExpression, listTypeValues.fieldRequiredTypeNames, "NSArray<\(listTypeValues.fullTypeName)> *")
         case let .Optional(.Number(numberType)):
             return ([], [], "[\(valueToParse) isKindOfClass:[NSNumber class]] ? \(valueToParse) : nil", [], "NSNumber/*\(numberType.objcNumberType)*/ *")

@@ -15,7 +15,7 @@ enum ProgramResult {
 
 func usage() -> String {
     let command = Process.arguments[0].characters.split("/").last.map(String.init) ?? ""
-    return [
+    return String(lines:
         "Usage: \(command) (swift|objc) NAME FILE <options>",
         "e.g. \(command) swift User testModel.json <options>",
         "Options:",
@@ -24,8 +24,8 @@ func usage() -> String {
         "   -m,  --mutable          Swift: All object fields are mutable (var instead of let)",
         "   -pt, --publictypes      Swift: Make type declarations public instead of internal",
         "   -pf, --publicfields     Swift: Make field declarations public instead of internal",
-        "   -op, --optional         Swift: Make all field declarations optional",
-    ].joinWithSeparator("\n")
+        "   -op, --optional         Swift: Make all field declarations optional"
+    )
 }
 
 func main(args: [String]) -> ProgramResult {
@@ -68,7 +68,7 @@ func main(args: [String]) -> ProgramResult {
         return .Failure("Could convert json to model: \(error)")
     }
     let translators = translatorTypes.lazy.map { $0.init(args: remainingArgs) }
-    return .Success(translators.map { $0.translate(rootType, name: name) }.joinWithSeparator("\n\n"))
+    return .Success(String(joined: translators.map { $0.translate(rootType, name: name) }, separator: "\n\n"))
 }
 
 

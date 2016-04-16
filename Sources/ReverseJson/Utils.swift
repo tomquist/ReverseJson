@@ -20,15 +20,23 @@ extension ModelParser.FieldType {
 
 extension String {
     
+    init(lines: String...) {
+        self = lines.joinWithSeparator("\n")
+    }
+    
+    init(joined parts: [String], separator: String = "\n") {
+        self = parts.joinWithSeparator(separator)
+    }
+    
     public func times(times: Int) -> String {
-        return (0..<times).lazy.map { _ -> String in
+        return String(joined: (0..<times).lazy.map { _ -> String in
             return self
-            }.joinWithSeparator("")
+        }, separator: "")
     }
     
     public func indent(level: Int, spaces: Int = 4) -> String {
         let suffix = self.hasSuffix("\n") ? "\n" : ""
-        let indented = self.characters.split("\n").lazy.map { " ".times(level * spaces) + String($0) }.joinWithSeparator("\n")
+        let indented = String(joined: self.characters.split("\n").lazy.map { " ".times(level * spaces) + String($0) })
         return indented + suffix
     }
     public var firstCapitalizedString: String {
@@ -76,7 +84,7 @@ extension String {
         if let identifierHead = chars.first {
             let head: String
             let identifierTail = chars.suffixFrom(chars.startIndex.successor())
-            let tail = identifierTail.split(isSeparator: NSCharacterSet.swiftIdentifierValidTailChars.invertedSet.characterIsMember).map(String.init).joinWithSeparator("_").pascalCasedString
+            let tail = String(joined: identifierTail.split(isSeparator: NSCharacterSet.swiftIdentifierValidTailChars.invertedSet.characterIsMember).map(String.init), separator: "_").pascalCasedString
             if NSCharacterSet.swiftIdentifierValidHeadChars.characterIsMember(identifierHead) {
                 head = String(identifierHead)
             } else {
