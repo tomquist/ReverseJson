@@ -2,19 +2,19 @@ osx_image: xcode7.3
 language: generic
 matrix:
   include:
-    - os: osx
-      env: TYPE=xcode
-      language: objective-c
-      after_success: bash <(curl -s https://codecov.io/bash)
+#    - os: osx
+#      env: TYPE=xcode
+#      language: objective-c
+#      after_success: bash <(curl -s https://codecov.io/bash)
     - os: osx
       env:
         - TYPE=spm
-        - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2016-04-16-a
+        - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2016-04-12-a
     - os: linux
       dist: trusty
       sudo: required
       env:
         - TYPE=spm
-        - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2016-04-16-a
+        - SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2016-04-12-a
 install: if [[ "$TYPE" == "spm" ]]; then eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"; fi
 script: ./test $TYPE
