@@ -214,6 +214,18 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Int))
     }
     
+    func testJsonIntExponential() throws {
+        let jsonValue = "1E3"
+        let type = try parser.decode(try data(from: jsonValue))
+        XCTAssertEqual(type, ModelParser.FieldType.Number(.Double))
+    }
+    
+    func testJsonIntNegativeExponential() throws {
+        let jsonValue = "1E-3"
+        let type = try parser.decode(try data(from: jsonValue))
+        XCTAssertEqual(type, ModelParser.FieldType.Number(.Double))
+    }
+    
     func testJsonDouble() throws {
         let jsonValue = "1.2"
         let type = try parser.decode(try data(from: jsonValue))
