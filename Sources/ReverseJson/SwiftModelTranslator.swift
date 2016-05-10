@@ -406,7 +406,7 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
             )
             parser += String(joined: fields.map { field in
                 let (subDeclarations, instruction, _) = createParsers(for: field.type, parentTypeNames: parentTypeNames + [field.name.camelCased()], valueExpression: "dict[\"\(field.name)\"]")
-                declarations.unionInPlace(subDeclarations)
+                declarations.formUnion(subDeclarations)
                 return "self.\(field.name.pascalCased().asValidSwiftIdentifier.swiftKeywordEscaped) = \(instruction)".indent(level: 2)
                 }) + "\n"
             parser += String(lines:
@@ -426,7 +426,7 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
             )
             parser += String(joined: types.map { (type: ModelParser.FieldType) -> String in
                 let (subDeclarations, instruction, _) = createParsers(for: type, parentTypeNames: parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName)"], valueExpression: "jsonValue", tryOptional: true)
-                declarations.unionInPlace(subDeclarations)
+                declarations.formUnion(subDeclarations)
                 return String(lines:
                     "if let value = \(instruction) {",
                     "            self = \(type.enumCaseName)(value)",

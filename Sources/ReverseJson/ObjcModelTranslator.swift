@@ -203,8 +203,8 @@ public struct ObjcModelCreator: ModelTranslator {
             let listTypeValues = declarationsFor(type: listType, name: subName, valueToParse: "item")
             let subParseExpression: String
             if let lineBreakRange = listTypeValues.parseExpression.range(of: "\n") {
-                let firstLine = listTypeValues.parseExpression.substring(to: lineBreakRange.startIndex)
-                let remainingLines = listTypeValues.parseExpression.substring(from: lineBreakRange.startIndex).indent(level: 3)
+                let firstLine = listTypeValues.parseExpression.substring(to: lineBreakRange.lowerBound)
+                let remainingLines = listTypeValues.parseExpression.substring(from: lineBreakRange.lowerBound).indent(level: 3)
                 subParseExpression = "\(firstLine)\n\(remainingLines)"
             } else {
                 subParseExpression = listTypeValues.parseExpression;

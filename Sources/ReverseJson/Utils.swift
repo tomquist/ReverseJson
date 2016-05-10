@@ -59,7 +59,8 @@ extension String {
             return slices.dropFirst().reduce(String(first)) { (string, subSequence) in
                 let firstLetter = String(subSequence[subSequence.startIndex])
                 let firstUppercased = firstLetter.uppercased()
-                let remaining = String(subSequence.suffix(from: subSequence.startIndex.advanced(by: 1)))
+                let index = subSequence.index(after: subSequence.startIndex)
+                let remaining = String(subSequence.suffix(from: index))
                 return string + firstUppercased + remaining
             }.firstLowercased()
         }
@@ -88,9 +89,9 @@ extension String {
         if let identifierHead = chars.first {
             let head: String
             let validTailChars = NSCharacterSet.swiftIdentifierValidTailChars
-            let identifierTail = chars.suffix(from: chars.startIndex.successor())
+            let identifierTail = chars.suffix(from: chars.index(after: chars.startIndex))
             let invalidTailChars = validTailChars.inverted
-            let isSeparator: Character -> Bool = invalidTailChars.characterIsMember
+            let isSeparator: (Character) -> Bool = invalidTailChars.characterIsMember
             let tail = String(joined: identifierTail.split(isSeparator: isSeparator).map(String.init), separator: "_").pascalCased()
             if NSCharacterSet.swiftIdentifierValidHeadChars.characterIsMember(identifierHead) {
                 head = String(identifierHead)
