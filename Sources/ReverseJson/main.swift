@@ -14,7 +14,9 @@ enum ProgramResult {
 }
 
 func usage() -> String {
-    let command = Process.arguments[0].characters.split("/").last.map(String.init) ?? ""
+    let commandArgChars = Process.arguments[0].characters
+    let commandPathComponents = commandArgChars.split(separator: "/")
+    let command = commandPathComponents.last.map(String.init) ?? ""
     return String(lines:
         "Usage: \(command) (swift|objc) NAME FILE <options>",
         "e.g. \(command) swift User testModel.json <options>",
@@ -32,14 +34,14 @@ func usage() -> String {
     )
 }
 
-func main(args: [String]) -> ProgramResult {
+func main(with args: [String]) -> ProgramResult {
     guard args.count >= 4 else {
         return .Failure(usage())
     }
     let language = args[1]
     let name = args[2]
     let file = args[3]
-    let remainingArgs = args.suffixFrom(4).map {$0}
+    let remainingArgs = args.suffix(from: 4).map {$0}
     let translatorTypes: [ModelTranslator.Type]
     switch language {
     case "swift":
@@ -55,7 +57,7 @@ func main(args: [String]) -> ProgramResult {
     
     let model: Any
     do {
-        model = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+        model = try NSJSONSerialization.jsonObject(with: data, options: [])
     } catch {
         return .Failure("Could not parse json: \(error)")
     }
@@ -64,7 +66,7 @@ func main(args: [String]) -> ProgramResult {
         let rootTypeTmp = try ModelParser().decode(model)
         let makeAllFieldDeclarationsOptional = remainingArgs.contains("-n") || remainingArgs.contains("--nullable")
         if makeAllFieldDeclarationsOptional {
-            rootType = ModelParser.transformAllFieldsToOptional(rootTypeTmp)
+            rootType = ModelParser.transformAllFieldsToOptional(rootField: rootTypeTmp)
         } else {
             rootType = rootTypeTmp
         }
@@ -76,7 +78,7 @@ func main(args: [String]) -> ProgramResult {
 }
 
 
-switch main(Process.arguments) {
+switch main(with: Process.arguments) {
 case let .Success(output):
     print(output)
     exit(0)

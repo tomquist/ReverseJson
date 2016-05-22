@@ -573,7 +573,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         
         let modelResult1 = ObjcModelCreator(args: ["-p", "ABC"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--prefix", "ABC"]).translate(type, name: "TestObject")
-        let expected = [
+        let expected = String(lines:
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -601,7 +601,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-            ].joinWithSeparator("\n")
+        )
         XCTAssertEqual(expected, modelResult1)
         XCTAssertEqual(expected, modelResult2)
     }

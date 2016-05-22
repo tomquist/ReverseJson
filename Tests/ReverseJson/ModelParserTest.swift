@@ -65,10 +65,10 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
     
     var parser: ModelParser = ModelParser()
     
-    func XCTAsserEqualFieldType(fieldType1: ModelParser.FieldType, _ fieldType2: ModelParser.FieldType) {
+    func XCTAsserEqualFieldType(_ fieldType1: ModelParser.FieldType, _ fieldType2: ModelParser.FieldType) {
         XCTAssertEqual(fieldType1, fieldType2)
     }
-    func XCTAsserNotEqualFieldType(fieldType1: ModelParser.FieldType, _ fieldType2: ModelParser.FieldType) {
+    func XCTAsserNotEqualFieldType(_ fieldType1: ModelParser.FieldType, _ fieldType2: ModelParser.FieldType) {
         XCTAssertNotEqual(fieldType1, fieldType2)
     }
     
@@ -189,75 +189,76 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Bool))
     }
     
-    private func dataFromJsonValue(jsonValue: String) throws -> Any {
-        let data = "{\"value\":\(jsonValue)}".dataUsingEncoding(NSUTF8StringEncoding)!
-        #if os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
-            typealias JsonDict = [String: AnyObject]
-        #else
+    private func data(from jsonValue: String) throws -> Any {
+        let json = "{\"value\":\(jsonValue)}"
+        #if os(Linux)
             typealias JsonDict = [String: Any]
+        #else
+            typealias JsonDict = [String: AnyObject]
         #endif
         
-        let jsonObj = try NSJSONSerialization.JSONObjectWithData(data, options: []) as! JsonDict
+        let data = json.data(using: NSUTF8StringEncoding)!
+        let jsonObj = try NSJSONSerialization.jsonObject(with: data, options: []) as! JsonDict
         return jsonObj["value"]!
     }
     
     func testJsonBool() throws {
         let jsonValue = "true"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Bool))
     }
     
     func testJsonInt() throws {
         let jsonValue = "1"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Int))
     }
     
     func testJsonDouble() throws {
         let jsonValue = "1.2"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Number(.Double))
     }
 
     func testJsonString() throws {
         let jsonValue = "\"Simple string\""
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Text)
     }
     
     func testJsonEmptyObject() throws {
         let jsonValue = "{}"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.Object([]))
     }
     
     func testJsonEmptyArray() throws {
         let jsonValue = "[]"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Unknown))
     }
     
     func testJsonNullArray() throws {
         let jsonValue = "[null, null]"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Unknown)))
     }
     
     func testJsonStringArray() throws {
         let jsonValue = "[\"Test\", \"123\"]"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Text))
     }
     
     func testJsonIntArray() throws {
         let jsonValue = "[1,2,3]"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Number(.Int)))
     }
     
     func testJsonOptionalStringArray() throws {
         let jsonValue = "[\"Test\", \"123\", null]"
-        let type = try parser.decode(try dataFromJsonValue(jsonValue))
+        let type = try parser.decode(try data(from: jsonValue))
         XCTAssertEqual(type, ModelParser.FieldType.List(.Optional(.Text)))
     }
     
@@ -485,7 +486,7 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
     
     
     func testUnsupported() {
-        var error: ErrorType? = nil
+        var error: ErrorProtocol? = nil
         do {
             try parser.decode(NSObject())
         } catch let e {
@@ -548,7 +549,7 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
             ])))
         ])
         
-        let transformedResult = ModelParser.transformAllFieldsToOptional(type)
+        let transformedResult = ModelParser.transformAllFieldsToOptional(rootField: type)
         XCTAssertEqual(expectedResult, transformedResult)
     }
     
@@ -556,7 +557,7 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         let type: ModelParser.FieldType = .List(.Text)
         let expectedResult: ModelParser.FieldType = .List(.Text)
         
-        let transformedResult = ModelParser.transformAllFieldsToOptional(type)
+        let transformedResult = ModelParser.transformAllFieldsToOptional(rootField: type)
         XCTAssertEqual(expectedResult, transformedResult)
     }
     
@@ -564,7 +565,7 @@ class ModelParserTest: XCTestCase, XCTestCaseProvider {
         let type: ModelParser.FieldType = .Enum([.Text, .Number(.Int)])
         let expectedResult: ModelParser.FieldType = .Enum([.Text, .Number(.Int)])
         
-        let transformedResult = ModelParser.transformAllFieldsToOptional(type)
+        let transformedResult = ModelParser.transformAllFieldsToOptional(rootField: type)
         XCTAssertEqual(expectedResult, transformedResult)
     }
 }

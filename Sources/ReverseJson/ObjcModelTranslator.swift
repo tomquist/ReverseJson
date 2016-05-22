@@ -4,7 +4,7 @@ public struct ObjcModelCreator: ModelTranslator {
     public init(args: [String] = []) {
         self.atomic = args.contains("-a") || args.contains("--atomic")
         self.readonly = !(args.contains("-m") || args.contains("--mutable"))
-        if let index = args.indexOf({ $0 == "-p" || $0 == "--prefix" }) where args.count > index + 1 {
+        if let index = args.index (where: { $0 == "-p" || $0 == "--prefix" }) where args.count > index + 1 {
             self.typePrefix = args[index + 1]
         }
     }
@@ -16,12 +16,14 @@ public struct ObjcModelCreator: ModelTranslator {
         return (atomic ? "atomic" : "nonatomic")
     }
     
-    public func translate(type: ModelParser.FieldType, name: String) -> String {
-        let a = declarationsFor(type, name: name, valueToParse: "jsonValue")
+    public func translate(_ type: ModelParser.FieldType, name: String) -> String {
+        let a = declarationsFor(type: type, name: name, valueToParse: "jsonValue")
+        let sortedInterfaces = a.interfaces.sorted()
+        let sortedImplementations = a.implementations.sorted()
         return String(joined:
                 ["#import <Foundation/Foundation.h>"]
-                + a.interfaces.sort()
-                + a.implementations.sort(), separator: "\n\n")
+                + sortedInterfaces
+                + sortedImplementations, separator: "\n\n")
     }
     
     public func isNullable(type: ModelParser.FieldType) -> Bool {
@@ -47,13 +49,14 @@ public struct ObjcModelCreator: ModelTranslator {
     private func declarationsFor(type: ModelParser.FieldType, name: String, valueToParse: String) -> (interfaces: Set<String>, implementations: Set<String>, parseExpression: String, fieldRequiredTypeNames: Set<String>, fullTypeName: String) {
         switch type {
         case let .Enum(enumTypes):
-            let className = "\(typePrefix)\(name.camelCasedString)"
-            let fieldValues = enumTypes.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { type -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
-                let nullable = isNullable(type)
+            let className = "\(typePrefix)\(name.camelCased())"
+            let sortedEnumTypes = enumTypes.sorted {$0.0.enumCaseName < $0.1.enumCaseName}
+            let fieldValues = sortedEnumTypes.map { type -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
+                let nullable = isNullable(type: type)
                 
-                let (subInterfaces, subImplementations, parseExpression, fieldRequiredTypeNames, fieldFullTypeName) = declarationsFor(type, name: "\(name.camelCasedString)\(type.enumCaseName.camelCasedString)", valueToParse: "jsonValue")
+                let (subInterfaces, subImplementations, parseExpression, fieldRequiredTypeNames, fieldFullTypeName) = declarationsFor(type: type, name: "\(name.camelCased())\(type.enumCaseName.camelCased())", valueToParse: "jsonValue")
                 
-                var modifiers = [atomicyModifier, memoryManagementModifier(type)]
+                var modifiers = [atomicyModifier, memoryManagementModifier(type: type)]
                 if (readonly) {
                     modifiers.append("readonly")
                 }
@@ -61,7 +64,7 @@ public struct ObjcModelCreator: ModelTranslator {
                     modifiers.append("nullable")
                 }
                 let modifierList = String(joined: modifiers, separator: ", ")
-                let variableName = type.enumCaseName.pascalCasedString
+                let variableName = type.enumCaseName.pascalCased()
                 let propertyName: String
                 if fieldFullTypeName.hasSuffix("*") {
                     propertyName = variableName
@@ -73,9 +76,10 @@ public struct ObjcModelCreator: ModelTranslator {
                 return (property, initialization, fieldRequiredTypeNames, fieldFullTypeName, subInterfaces, subImplementations)
             }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
-            let forwardDeclarations = requiredTypeNames.sort(<)
-            let properties = fieldValues.sort{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.property}
-            let initializations = fieldValues.sort{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.initialization.indent(2)}
+            let forwardDeclarations = requiredTypeNames.sorted(isOrderedBefore: <)
+            let sortedFieldValues = fieldValues.sorted {$0.0.fieldTypeName < $0.1.fieldTypeName}
+            let properties = sortedFieldValues.map {$0.property}
+            let initializations = sortedFieldValues.map {$0.initialization.indent(level: 2)}
             
             var interface = ""
             if !forwardDeclarations.isEmpty {
@@ -109,14 +113,15 @@ public struct ObjcModelCreator: ModelTranslator {
             return (interfaces, implementations, parseExpression, [className], "\(className) *")
             
         case let .Object(fields):
-            let className = "\(typePrefix)\(name.camelCasedString)"
-            let fieldValues = fields.sort{$0.0.name < $0.1.name}.map { field -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
-                let nullable = isNullable(field.type)
+            let className = "\(typePrefix)\(name.camelCased())"
+            let sortedFields = fields.sorted {$0.0.name < $0.1.name}
+            let fieldValues = sortedFields.map { field -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<String>, implementations: Set<String>) in
+                let nullable = isNullable(type: field.type)
                 
                 let valueToParse = "dict[@\"\(field.name)\"]"
-                let (subInterfaces, subImplementations, parseExpression, fieldRequiredTypeNames, fieldFullTypeName) = declarationsFor(field.type, name: "\(name.camelCasedString)\(field.name.camelCasedString)", valueToParse: valueToParse)
+                let (subInterfaces, subImplementations, parseExpression, fieldRequiredTypeNames, fieldFullTypeName) = declarationsFor(type: field.type, name: "\(name.camelCased())\(field.name.camelCased())", valueToParse: valueToParse)
 
-                var modifiers = [atomicyModifier, memoryManagementModifier(field.type)]
+                var modifiers = [atomicyModifier, memoryManagementModifier(type: field.type)]
                 if (readonly) {
                     modifiers.append("readonly")
                 }
@@ -124,7 +129,7 @@ public struct ObjcModelCreator: ModelTranslator {
                     modifiers.append("nullable")
                 }
                 let modifierList = String(joined: modifiers, separator: ", ")
-                let variableName = field.name.pascalCasedString
+                let variableName = field.name.pascalCased()
                 let propertyName: String
                 if fieldFullTypeName.hasSuffix("*") {
                     propertyName = variableName
@@ -136,9 +141,10 @@ public struct ObjcModelCreator: ModelTranslator {
                 return (property, initialization, fieldRequiredTypeNames, fieldFullTypeName, subInterfaces, subImplementations)
             }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
-            let forwardDeclarations = requiredTypeNames.sort(<)
-            let properties = fieldValues.sort{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.property}
-            let initializations = fieldValues.sort{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.initialization.indent(2)}
+            let forwardDeclarations = requiredTypeNames.sorted(isOrderedBefore: <)
+            let sortedFieldValues = fieldValues.sorted {$0.0.fieldTypeName < $0.1.fieldTypeName}
+            let properties = sortedFieldValues.map {$0.property}
+            let initializations = sortedFieldValues.map {$0.initialization.indent(level: 2)}
             
             var interface = ""
             if !forwardDeclarations.isEmpty {
@@ -194,11 +200,11 @@ public struct ObjcModelCreator: ModelTranslator {
             } else {
                 subName = "\(name)Item"
             }
-            let listTypeValues = declarationsFor(listType, name: subName, valueToParse: "item")
+            let listTypeValues = declarationsFor(type: listType, name: subName, valueToParse: "item")
             let subParseExpression: String
-            if let lineBreakRange = listTypeValues.parseExpression.rangeOfString("\n") {
-                let firstLine = listTypeValues.parseExpression.substringToIndex(lineBreakRange.startIndex)
-                let remainingLines = listTypeValues.parseExpression.substringFromIndex(lineBreakRange.startIndex).indent(3)
+            if let lineBreakRange = listTypeValues.parseExpression.range(of: "\n") {
+                let firstLine = listTypeValues.parseExpression.substring(to: lineBreakRange.startIndex)
+                let remainingLines = listTypeValues.parseExpression.substring(from: lineBreakRange.startIndex).indent(level: 3)
                 subParseExpression = "\(firstLine)\n\(remainingLines)"
             } else {
                 subParseExpression = listTypeValues.parseExpression;
@@ -228,7 +234,7 @@ public struct ObjcModelCreator: ModelTranslator {
         case let .Optional(.Number(numberType)):
             return ([], [], "[\(valueToParse) isKindOfClass:[NSNumber class]] ? \(valueToParse) : nil", [], "NSNumber/*\(numberType.objcNumberType)*/ *")
         case .Optional(let optionalType):
-            return declarationsFor(optionalType, name: name, valueToParse: valueToParse)
+            return declarationsFor(type: optionalType, name: name, valueToParse: valueToParse)
         case .Unknown:
             return ([], [], valueToParse, [], "id<NSObject>")
         }

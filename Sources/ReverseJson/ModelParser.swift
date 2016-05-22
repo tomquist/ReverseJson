@@ -2,16 +2,17 @@ import Foundation
 
 extension NSNumber {
     private struct Constants {
-        private static let trueNumber = NSNumber(bool: true)
-        private static let falseNumber = NSNumber(bool: false)
-        private static let trueObjCType = String.fromCString(Constants.trueNumber.objCType)
-        private static let falseObjCType = String.fromCString(Constants.falseNumber.objCType)
+        private static let trueNumber = NSNumber(value: true)
+        private static let falseNumber = NSNumber(value: false)
+        private static let trueObjCType =  String(validatingUTF8: Constants.trueNumber.objCType)
+        private static let falseObjCType = String(validatingUTF8: Constants.falseNumber.objCType)
     }
     var isBool:Bool {
         get {
-            let objCType = String.fromCString(self.objCType)
-            if (self.compare(Constants.trueNumber) == NSComparisonResult.OrderedSame && objCType == Constants.trueObjCType)
-                || (self.compare(Constants.falseNumber) == NSComparisonResult.OrderedSame && objCType == Constants.falseObjCType){
+            let objCType = String(validatingUTF8: self.objCType)
+            let orderedSame: NSComparisonResult = .orderedSame
+            if (self.compare(Constants.trueNumber) == orderedSame && objCType == Constants.trueObjCType)
+                || (self.compare(Constants.falseNumber) == orderedSame && objCType == Constants.falseObjCType) {
                 return true
             }
             return false
@@ -23,7 +24,7 @@ extension NSNumber {
             return .Bool
         }
         let mappings: [String: ModelParser.NumberType] = ["c": .Int, "i": .Int, "l": .Int, "q": .Int, "f": .Float, "d": .Double]
-        let objcType = String.fromCString(self.objCType)?.lowercaseString
+        let objcType = String(validatingUTF8: self.objCType)?.lowercased()
         return objcType.flatMap { mappings[$0] } ?? .Double
     }
 }
@@ -56,7 +57,7 @@ public class ModelParser {
         case Optional(FieldType)
     }
     
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case UnsupportedValueType(Any, Any.Type)
     }
     
@@ -64,7 +65,7 @@ public class ModelParser {
         
     }
     
-    public func decode(value: Any) throws -> FieldType {
+    public func decode(_ value: Any) throws -> FieldType {
         switch value {
         case is String:
             return .Text
@@ -79,17 +80,17 @@ public class ModelParser {
         case is Bool:
             return .Number(.Bool)
         case let subObj as [String: AnyObject]:
-            return try decodeDict(subObj)
+            return try decode(dict: subObj)
         case let subObj as [String: Any]:
-            return try decodeDict(subObj)
+            return try decode(dict: subObj)
         case let subObj as [AnyObject]:
-            if let subType = try decodeList(subObj) {
+            if let subType = try decode(list: subObj) {
                 return .List(subType)
             } else {
                 return .List(.Unknown)
             }
         case let subObj as [Any]:
-            if let subType = try decodeList(subObj) {
+            if let subType = try decode(list: subObj) {
                 return .List(subType)
             } else {
                 return .List(.Unknown)
@@ -101,35 +102,35 @@ public class ModelParser {
         }
     }
     
-    private func decodeDict(dict: [String: AnyObject]) throws -> FieldType {
+    private func decode(dict: [String: AnyObject]) throws -> FieldType {
         let fields = try dict.map { (name: String, value: AnyObject) in
             return ObjectField(name: name, type: try decode(value))
         }
         return .Object(Set(fields))
     }
     
-    private func decodeDict(dict: [String: Any]) throws -> FieldType {
+    private func decode(dict: [String: Any]) throws -> FieldType {
         let fields = try dict.map { (name: String, value: Any) in
             return ObjectField(name: name, type: try decode(value))
         }
         return .Object(Set(fields))
     }
     
-    private func decodeList(list: [Any]) throws -> FieldType? {
+    private func decode(list: [Any]) throws -> FieldType? {
         let types = try list.flatMap { try decode($0)}
         return types.reduce(nil) { (type1, type2) -> FieldType? in
             if let type1 = type1 {
-                return type1.mergeWith(type2)
+                return type1.mergeWith(type: type2)
             }
             return type2
         }
     }
     
-    private func decodeList(list: [AnyObject]) throws -> FieldType? {
+    private func decode(list: [AnyObject]) throws -> FieldType? {
         let types = try list.flatMap { try decode($0)}
         return types.reduce(nil) { (type1, type2) -> FieldType? in
             if let type1 = type1 {
-                return type1.mergeWith(type2)
+                return type1.mergeWith(type: type2)
             }
             return type2
         }
@@ -140,24 +141,24 @@ public class ModelParser {
         switch rootField {
         case let .Object(fields):
             let mappedFields = fields.map {
-                ModelParser.ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl($0.type))
+                ModelParser.ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl(rootField: $0.type))
             }
             return .Optional(.Object(Set(mappedFields)))
         case let .List(fieldType):
-            return .Optional(.List(transformAllFieldsToOptional(fieldType)))
+            return .Optional(.List(transformAllFieldsToOptional(rootField: fieldType)))
         case .Text:
             return .Optional(.Text)
         case let .Number(numberType):
             return .Optional(.Number(numberType))
         case let .Enum(fields):
             let mappedFields = fields.map {
-                transformAllFieldsToOptional($0)
+                transformAllFieldsToOptional(rootField: $0)
             }
             return .Optional(.Enum(Set(mappedFields)))
         case .Unknown:
             return .Optional(.Unknown)
         case let .Optional(fieldType):
-            return .Optional(transformAllFieldsToOptional(fieldType))
+            return .Optional(transformAllFieldsToOptional(rootField: fieldType))
         }
     }
     
@@ -165,13 +166,13 @@ public class ModelParser {
         switch rootField {
         case let .Object(fields):
             let mappedFields = fields.map {
-                ModelParser.ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl($0.type))
+                ModelParser.ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl(rootField: $0.type))
             }
             return .Object(Set(mappedFields))
         case let .List(fieldType):
-            return .List(transformAllFieldsToOptional(fieldType))
+            return .List(transformAllFieldsToOptional(rootField: fieldType))
         case let .Enum(fields):
-            let mappedFields = fields.map { transformAllFieldsToOptional($0) }
+            let mappedFields = fields.map { transformAllFieldsToOptional(rootField: $0) }
             return .Enum(Set(mappedFields))
         default:
             return rootField
@@ -254,16 +255,16 @@ extension ModelParser.FieldType {
                 case let (.Optional(type1), type2):
                     merged = true
                     if case let .Optional(type2) = type2 {
-                        return .Optional(type1.mergeWith(type2))
+                        return .Optional(type1.mergeWith(type: type2))
                     } else {
-                        return .Optional(type1.mergeWith(type2))
+                        return .Optional(type1.mergeWith(type: type2))
                     }
                 case let (type1, .Optional(type2)):
                     merged = true
                     if case let .Optional(type1) = type1 {
-                        return .Optional(type1.mergeWith(type2))
+                        return .Optional(type1.mergeWith(type: type2))
                     } else {
-                        return .Optional(type1.mergeWith(type2))
+                        return .Optional(type1.mergeWith(type: type2))
                     }
                 case let (.Unknown, knownType):
                     merged = true
@@ -273,14 +274,14 @@ extension ModelParser.FieldType {
                     return knownType
                 case (.Object, .Object):
                     merged = true
-                    return enumType.mergeWith(otherType)
-                case let (.Number(numberType1), .Number(numberType2)) where numberType1.mergeWith(numberType2) != nil:
+                    return enumType.mergeWith(type: otherType)
+                case let (.Number(numberType1), .Number(numberType2)) where numberType1.mergeWith(numberType: numberType2) != nil:
                     merged = true
-                    let mergedNumberType = numberType1.mergeWith(numberType2)!
+                    let mergedNumberType = numberType1.mergeWith(numberType: numberType2)!
                     return .Number(mergedNumberType)
                 case let (.List(listType1), .List(listType2)):
                     merged = true
-                    return .List(listType1.mergeWith(listType2))
+                    return .List(listType1.mergeWith(type: listType2))
                 default:
                     return enumType
                 }
@@ -293,34 +294,34 @@ extension ModelParser.FieldType {
             return type1
         case let (.Optional(type1), type2):
             if case let .Optional(type2) = type2 {
-                return .Optional(type1.mergeWith(type2))
+                return .Optional(type1.mergeWith(type: type2))
             } else {
-                return .Optional(type1.mergeWith(type2))
+                return .Optional(type1.mergeWith(type: type2))
             }
         case let (type1, .Optional(type2)):
             if case let .Optional(type1) = type1 {
-                return .Optional(type1.mergeWith(type2))
+                return .Optional(type1.mergeWith(type: type2))
             } else {
-                return .Optional(type1.mergeWith(type2))
+                return .Optional(type1.mergeWith(type: type2))
             }
         case let (.Unknown, knownType):
             return knownType
         case let (knownType, .Unknown):
             return knownType
-        case let (.Number(numberType1), .Number(numberType2)) where numberType1.mergeWith(numberType2) != nil:
-            let mergedNumberType = numberType1.mergeWith(numberType2)!
+        case let (.Number(numberType1), .Number(numberType2)) where numberType1.mergeWith(numberType: numberType2) != nil:
+            let mergedNumberType = numberType1.mergeWith(numberType: numberType2)!
             return .Number(mergedNumberType)
         case let (.Object(fields1), .Object(fields2)):
             var resultFields: Set<ModelParser.ObjectField> = []
             var remainingFields = fields2
             for f1 in fields1 {
-                let foundItemIndex = remainingFields.indexOf { f -> Bool in
+                let foundItemIndex = remainingFields.index { f -> Bool in
                     return f1.name == f.name
                 }
                 let field: ModelParser.ObjectField
                 if let foundItemIndex = foundItemIndex {
-                    let foundItem = remainingFields.removeAtIndex(foundItemIndex)
-                    let mergedType = f1.type.mergeWith(foundItem.type)
+                    let foundItem = remainingFields.remove(at: foundItemIndex)
+                    let mergedType = f1.type.mergeWith(type: foundItem.type)
                     field = ModelParser.ObjectField(name: f1.name, type: mergedType)
                 } else if case .Optional = f1.type {
                     field = f1
@@ -338,11 +339,11 @@ extension ModelParser.FieldType {
             }
             return .Object(resultFields)
         case let (.List(listType1), .List(listType2)):
-            return .List(listType1.mergeWith(listType2))
+            return .List(listType1.mergeWith(type: listType2))
         case let (.Enum(enumTypes), type):
-            return .Enum(mergeEnumTypes(enumTypes, otherType: type))
+            return .Enum(mergeEnumTypes(enumTypes: enumTypes, otherType: type))
         case let (type, .Enum(enumTypes)):
-            return .Enum(mergeEnumTypes(enumTypes, otherType: type))
+            return .Enum(mergeEnumTypes(enumTypes: enumTypes, otherType: type))
         default:
             return .Enum([self, type])
         }

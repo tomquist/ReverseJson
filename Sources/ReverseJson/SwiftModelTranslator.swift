@@ -10,7 +10,7 @@ public struct SwiftTranslator: ModelTranslator {
             SwiftJsonParsingTranslator(args: args)
         ]
     }
-    public func translate(type: ModelParser.FieldType, name: String) -> String {
+    public func translate(_ type: ModelParser.FieldType, name: String) -> String {
         return String(joined: translators.lazy.map { $0.translate(type, name: name) }, separator: "\n\n")
     }
 }
@@ -57,21 +57,21 @@ struct SwiftModelCreator: ModelTranslator {
         self.typeVisibility = args.contains("-pt") || args.contains("--publictypes") ? .Public : .Internal
     }
     
-    func translate(type: ModelParser.FieldType, name: String) -> String {
-        let (typeName, decl) = makeSubtype(type, name: "", subName: name, level: 0)
+    func translate(_ type: ModelParser.FieldType, name: String) -> String {
+        let (typeName, decl) = makeSubtype(for: type, name: "", subName: name, level: 0)
         if let decl = decl {
             return decl
         }
         return "\(typeVisibility.visibilityPrefix)typealias \(name) = \(typeName)"
     }
     
-    private func makeSubtype(type: ModelParser.FieldType, name: String, subName: String, level: Int) -> (name: String, declaration: String?) {
+    private func makeSubtype(for type: ModelParser.FieldType, name: String, subName: String, level: Int) -> (name: String, declaration: String?) {
         let fieldType: String
         let declaration: String?
         switch type {
         case let .Object(fields):
-            fieldType = subName.camelCasedString
-            declaration = createStructDeclaration(fieldType, fields: fields, level: level)
+            fieldType = subName.camelCased()
+            declaration = createStructDeclaration(name: fieldType, fields: fields, level: level)
         case let .Number(numberType):
             fieldType = numberType.rawValue
             declaration = nil
@@ -85,54 +85,59 @@ struct SwiftModelCreator: ModelTranslator {
             } else {
                 newSubName = "\(subName)Item"
             }
-            let (subTypeName, subDeclaration) = makeSubtype(listItemType, name: "\(name)\(subName.camelCasedString)", subName: newSubName, level: level)
+            let (subTypeName, subDeclaration) = makeSubtype(for: listItemType, name: "\(name)\(subName.camelCased())", subName: newSubName, level: level)
             declaration = subDeclaration
             switch listType {
             case .Array: fieldType = "[\(subTypeName)]"
             case .ContiguousArray: fieldType = "\(listType.className)<\(subTypeName)>"
             }
         case let .Enum(enumTypes):
-            fieldType = subName.camelCasedString
-            declaration = createEnumDeclaration(fieldType, cases: enumTypes, level: level)
+            fieldType = subName.camelCased()
+            declaration = createEnumDeclaration(name: fieldType, cases: enumTypes, level: level)
         case let .Optional(type):
-            let (subTypeName, subDeclaration) = makeSubtype(type, name: name, subName: subName, level: level)
+            let (subTypeName, subDeclaration) = makeSubtype(for: type, name: name, subName: subName, level: level)
             declaration = subDeclaration
             fieldType = "\(subTypeName)?"
         case .Unknown:
-            fieldType = subName.camelCasedString
-            declaration = "\(typeVisibility.visibilityPrefix)typealias \(fieldType) = Void // TODO Specify type here. We couldn't infer it from json".indent(level)
+            fieldType = subName.camelCased()
+            declaration = "\(typeVisibility.visibilityPrefix)typealias \(fieldType) = Void // TODO Specify type here. We couldn't infer it from json".indent(level: level)
         }
         return (fieldType, declaration)
     }
     
     private func createStructDeclaration(name: String, fields: Set<ModelParser.ObjectField>, level: Int = 0) -> String {
-        var ret = "\(typeVisibility.visibilityPrefix)\(objectType.name) \(name) {".indent(level)
-        let fieldsAndTypes = fields.sort{$0.0.name < $0.1.name}.map { f -> (field: String, type: String?) in
+        var ret = "\(typeVisibility.visibilityPrefix)\(objectType.name) \(name) {".indent(level: level)
+        let sortedModelFields = fields.sorted {$0.0.name < $0.1.name}
+        let fieldsAndTypes = sortedModelFields.map { f -> (field: String, type: String?) in
             var fieldDeclaration = ""
-            let (typeName, subTypeDeclaration) = makeSubtype(f.type, name: name, subName: f.name, level: level + 1)
+            let (typeName, subTypeDeclaration) = makeSubtype(for: f.type, name: name, subName: f.name, level: level + 1)
             let varModifier = mutableFields ? "var" : "let"
-            fieldDeclaration += ("\(fieldVisibility.visibilityPrefix)\(varModifier) \(f.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
+            fieldDeclaration += ("\(fieldVisibility.visibilityPrefix)\(varModifier) \(f.name.pascalCased().asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
-        let typeDeclarations = fieldsAndTypes.lazy.flatMap {$0.type}
-        ret += String(joined: Set(typeDeclarations.map({ "\n\($0)"})).sort(<), separator: "")
-        let fields = fieldsAndTypes.lazy.map { $0.field }.map { $0.indent(level + 1) }.map { "\n\($0)" }
-        ret += String(joined: fields.sort(<), separator: "")
-        return ret + "\n" + "}".indent(level)
+        let typeDeclarations = Set(fieldsAndTypes.lazy.flatMap {$0.type}.map { "\n\($0)"})
+        let sortedTypeDeclarations = typeDeclarations.sorted()
+        ret += String(joined: sortedTypeDeclarations, separator: "")
+        let fields = fieldsAndTypes.lazy.map { $0.field }.map { $0.indent(level: level + 1) }.map { "\n\($0)" }
+        let sortedFields = fields.sorted()
+        ret += String(joined: sortedFields, separator: "")
+        return ret + "\n" + "}".indent(level: level)
     }
     
     private func createEnumDeclaration(name: String, cases: Set<ModelParser.FieldType>, level: Int = 0) -> String {
-        var ret = "\(typeVisibility.visibilityPrefix)enum \(name) {".indent(level)
-        ret += String(joined: cases.sort{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
+        var ret = "\(typeVisibility.visibilityPrefix)enum \(name) {".indent(level: level)
+        let isCaseBefore: (ModelParser.FieldType, ModelParser.FieldType) -> Bool = {$0.0.enumCaseName < $0.1.enumCaseName}
+        let sortedCases = cases.sorted(isOrderedBefore: isCaseBefore)
+        ret += String(joined: sortedCases.map { c -> String in
             var fieldDeclaration = ""
-            let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
+            let (typeName, subTypeDeclaration) = makeSubtype(for: c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
             if let subTypeDeclaration = subTypeDeclaration {
                 fieldDeclaration += subTypeDeclaration + "\n"
             }
-            fieldDeclaration += "case \(c.enumCaseName)(\(typeName))".indent(level + 1)
+            fieldDeclaration += "case \(c.enumCaseName)(\(typeName))".indent(level: level + 1)
             return fieldDeclaration
         }.map {"\n\($0)"}, separator: "")
-        return ret + "\n" + "}".indent(level)
+        return ret + "\n" + "}".indent(level: level)
     }
 
 }
@@ -309,19 +314,21 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
         self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
     }
     
-    func translate(type: ModelParser.FieldType, name: String) -> String {
-        let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")
+    func translate(_ type: ModelParser.FieldType, name: String) -> String {
+        let (parsers, instructions, typeName) = createParsers(for: type, parentTypeNames: [name], valueExpression: "jsonValue")
         
-        let declarations = parsers.sort {
+        let declarationOrderedBefore: (Declaration, Declaration) -> Bool =  {
             if $0.0.priority > $0.1.priority {
                 return true
             } else if $0.0.priority == $0.1.priority {
                 return $0.0.text < $0.1.text
             }
             return false
-        }.lazy.map { $0.text }
+        }
+        let sortedParsers = parsers.sorted(isOrderedBefore: declarationOrderedBefore)
+        let declarations = sortedParsers.lazy.map { $0.text }
         let parseFunction = [String(lines:
-            "func parse\(name.camelCasedString)(jsonValue: AnyObject?) throws -> \(typeName) {",
+            "func parse\(name.camelCased())(jsonValue: AnyObject?) throws -> \(typeName) {",
             "    return \(instructions)",
             "}"
         )]
@@ -330,7 +337,7 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
     
     
     
-    private func createParser(numberType: ModelParser.NumberType, valueExpression: String, tryOptional: Bool) -> (parserDeclarations: Set<Declaration>, parsingInstruction: String, typeName: String) {
+    private func createParser(for numberType: ModelParser.NumberType, valueExpression: String, tryOptional: Bool) -> (parserDeclarations: Set<Declaration>, parsingInstruction: String, typeName: String) {
         let parser: Declaration
         let instruction: String
         let typeName: String
@@ -358,11 +365,11 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
     
     
     
-    private func createParsers(type: ModelParser.FieldType, parentTypeNames: [String], valueExpression: String, tryOptional: Bool = false) -> (parserDeclarations: Set<Declaration>, parsingInstruction: String, typeName: String) {
+    private func createParsers(for type: ModelParser.FieldType, parentTypeNames: [String], valueExpression: String, tryOptional: Bool = false) -> (parserDeclarations: Set<Declaration>, parsingInstruction: String, typeName: String) {
         let tryOptionalModifier = tryOptional ? "?" : ""
         switch type {
         case let .Number(numberType):
-            return createParser(numberType, valueExpression: valueExpression, tryOptional: tryOptional)
+            return createParser(for: numberType, valueExpression: valueExpression, tryOptional: tryOptional)
         case .Text:
             return ([.errorType, .stringParser], "try\(tryOptionalModifier) String(jsonValue: \(valueExpression))", "String")
         case .List(.Unknown):
@@ -379,13 +386,13 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
                 }
                 childTypeNames = names
             }
-            let (subDeclarations, instruction, typeName) = createParsers(listType, parentTypeNames: childTypeNames, valueExpression: "$0")
+            let (subDeclarations, instruction, typeName) = createParsers(for: listType, parentTypeNames: childTypeNames, valueExpression: "$0")
             let declarations = subDeclarations.union([.errorType, self.listType.parser])
             return (declarations, "try\(tryOptionalModifier) \(self.listType.className)(jsonValue: \(valueExpression)) { \(instruction) }", "[\(typeName)]")
         case .Optional(.Unknown):
             return ([], "nil", String(joined: parentTypeNames, separator: "."))
         case let .Optional(optionalType):
-            let (subDeclarations, instruction, typeName) = createParsers(optionalType, parentTypeNames: parentTypeNames, valueExpression: "$0")
+            let (subDeclarations, instruction, typeName) = createParsers(for: optionalType, parentTypeNames: parentTypeNames, valueExpression: "$0")
             return (subDeclarations.union([.errorType, .optionalParser]), "try\(tryOptionalModifier) Optional(jsonValue: \(valueExpression)) { \(instruction) }", "\(typeName)?")
         case let .Object(fields):
             var declarations = Set<Declaration>()
@@ -398,9 +405,9 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
                 "        }\n"
             )
             parser += String(joined: fields.map { field in
-                let (subDeclarations, instruction, _) = createParsers(field.type, parentTypeNames: parentTypeNames + [field.name.camelCasedString], valueExpression: "dict[\"\(field.name)\"]")
+                let (subDeclarations, instruction, _) = createParsers(for: field.type, parentTypeNames: parentTypeNames + [field.name.camelCased()], valueExpression: "dict[\"\(field.name)\"]")
                 declarations.unionInPlace(subDeclarations)
-                return "self.\(field.name.pascalCasedString.asValidSwiftIdentifier.swiftKeywordEscaped) = \(instruction)".indent(2)
+                return "self.\(field.name.pascalCased().asValidSwiftIdentifier.swiftKeywordEscaped) = \(instruction)".indent(level: 2)
                 }) + "\n"
             parser += String(lines:
                 "    }",
@@ -418,7 +425,7 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
                 "        "
             )
             parser += String(joined: types.map { (type: ModelParser.FieldType) -> String in
-                let (subDeclarations, instruction, _) = createParsers(type, parentTypeNames: parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName)"], valueExpression: "jsonValue", tryOptional: true)
+                let (subDeclarations, instruction, _) = createParsers(for: type, parentTypeNames: parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName)"], valueExpression: "jsonValue", tryOptional: true)
                 declarations.unionInPlace(subDeclarations)
                 return String(lines:
                     "if let value = \(instruction) {",

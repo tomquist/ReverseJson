@@ -1,7 +1,5 @@
 import Foundation
 
-
-
 extension ModelParser.FieldType {
     public var enumCaseName: String {
         switch self {
@@ -21,14 +19,14 @@ extension ModelParser.FieldType {
 extension String {
     
     init(lines: String...) {
-        self = lines.joinWithSeparator("\n")
+        self.init(joined: lines, separator: "\n")
     }
     
     init(joined parts: [String], separator: String = "\n") {
-        self = parts.joinWithSeparator(separator)
+        self = parts.joined(separator: separator)
     }
     
-    public func times(times: Int) -> String {
+    public func times(_ times: Int) -> String {
         return String(joined: (0..<times).lazy.map { _ -> String in
             return self
         }, separator: "")
@@ -36,33 +34,39 @@ extension String {
     
     public func indent(level: Int, spaces: Int = 4) -> String {
         let suffix = self.hasSuffix("\n") ? "\n" : ""
-        let indented = String(joined: self.characters.split("\n").lazy.map { " ".times(level * spaces) + String($0) })
+        let lines = self.characters.split(separator: "\n")
+        let indented = String(joined: lines.lazy.map { " ".times(level * spaces) + String($0) })
         return indented + suffix
     }
-    public var firstCapitalizedString: String {
+    public func firstCapitalized() -> String {
         if isEmpty { return "" }
+        let replacement = String(self[startIndex])
         var result = self
-        result.replaceRange(startIndex...startIndex, with: String(self[startIndex]).uppercaseString)
+        result.replaceSubrange(startIndex...startIndex, with: replacement.uppercased())
         return result
     }
-    public var firstLowercasedString: String {
+    public func firstLowercased() -> String {
         if isEmpty { return "" }
+        let replacement = String(self[startIndex])
         var result = self
-        result.replaceRange(startIndex...startIndex, with: String(self[startIndex]).lowercaseString)
+        result.replaceSubrange(startIndex...startIndex, with: replacement.lowercased())
         return result
     }
     
-    public var pascalCasedString: String {
+    public func pascalCased() -> String {
         let slices = self.characters.split { $0 == "_" || $0 == " " }
         if let first = slices.first {
             return slices.dropFirst().reduce(String(first)) { (string, subSequence) in
-                return string + String(subSequence[subSequence.startIndex]).uppercaseString + String(subSequence.suffixFrom(subSequence.startIndex.advancedBy(1)))
-                }.firstLowercasedString
+                let firstLetter = String(subSequence[subSequence.startIndex])
+                let firstUppercased = firstLetter.uppercased()
+                let remaining = String(subSequence.suffix(from: subSequence.startIndex.advanced(by: 1)))
+                return string + firstUppercased + remaining
+            }.firstLowercased()
         }
         return self
     }
-    public var camelCasedString: String {
-        return self.pascalCasedString.firstCapitalizedString
+    public func camelCased() -> String {
+        return self.pascalCased().firstCapitalized()
     }
     
     
@@ -83,17 +87,19 @@ extension String {
         let chars = self.characters
         if let identifierHead = chars.first {
             let head: String
-            let identifierTail = chars.suffixFrom(chars.startIndex.successor())
-            let tail = String(joined: identifierTail.split(isSeparator: NSCharacterSet.swiftIdentifierValidTailChars.invertedSet.characterIsMember).map(String.init), separator: "_").pascalCasedString
+            let validTailChars = NSCharacterSet.swiftIdentifierValidTailChars
+            let identifierTail = chars.suffix(from: chars.startIndex.successor())
+            let invalidTailChars = validTailChars.inverted
+            let isSeparator: Character -> Bool = invalidTailChars.characterIsMember
+            let tail = String(joined: identifierTail.split(isSeparator: isSeparator).map(String.init), separator: "_").pascalCased()
             if NSCharacterSet.swiftIdentifierValidHeadChars.characterIsMember(identifierHead) {
                 head = String(identifierHead)
             } else {
                 head = tail.isEmpty || !NSCharacterSet.swiftIdentifierValidHeadChars.characterIsMember(tail.characters.first!) ? "_" : ""
             }
             return "\(head)\(tail)"
-        } else {
-            return "_"
         }
+        return "_"
     }
 }
 
@@ -150,11 +156,11 @@ extension NSCharacterSet {
             .init(location: 0xD0000, length: 0xDFFFD-0xD0000),
             .init(location: 0xE0000, length: 0xEFFFD-0xE0000)
         ]
-        let charset: NSMutableCharacterSet = .uppercaseLetterCharacterSet()
-        charset.formUnionWithCharacterSet(.lowercaseLetterCharacterSet())
-        charset.addCharactersInString("_")
+        let charset: NSMutableCharacterSet = .uppercaseLetters()
+        charset.formUnion(with: .lowercaseLetters())
+        charset.addCharacters(in: "_")
         return ranges.reduce(charset) {
-            $0.0.addCharactersInRange($0.1)
+            $0.0.addCharacters(in: $0.1)
             return $0.0
         }
     }()
@@ -166,15 +172,15 @@ extension NSCharacterSet {
             .init(location: 0x20D0, length: 0x20FF-0x20D0),
             .init(location: 0xFE20, length: 0xFE2F-0xFE20),
         ]
-        let charset: NSMutableCharacterSet = .decimalDigitCharacterSet()
-        charset.formUnionWithCharacterSet(.swiftIdentifierValidHeadChars)
+        let charset: NSMutableCharacterSet = .decimalDigits()
+        charset.formUnion(with: .swiftIdentifierValidHeadChars)
         return ranges.reduce(charset) {
-            $0.0.addCharactersInRange($0.1)
+            $0.0.addCharacters(in: $0.1)
             return $0.0
         }
     }()
     
-    func characterIsMember(char: Character) -> Bool {
+    func characterIsMember(_ char: Character) -> Bool {
         for codeUnit in String(char).utf16 {
             if !characterIsMember(codeUnit) {
                 return false
