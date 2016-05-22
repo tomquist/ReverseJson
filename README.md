@@ -31,6 +31,8 @@ Options:
    -m,  --mutable          (Swift and Objective-C) All object fields are mutable (var instead of
                            let in Swift and 'readwrite' instead of 'readonly' in Objective-C)
    -a,  --atomic           (Objective-C) Make properties 'atomic'
+   -p <prefix>             (Objective-C) Class-prefix to use for type declarations
+   --prefix <prefix>       
 ```
 
 ### To create a Swift data model:

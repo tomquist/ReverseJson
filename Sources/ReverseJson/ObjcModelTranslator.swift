@@ -4,11 +4,14 @@ public struct ObjcModelCreator: ModelTranslator {
     public init(args: [String] = []) {
         self.atomic = args.contains("-a") || args.contains("--atomic")
         self.readonly = !(args.contains("-m") || args.contains("--mutable"))
+        if let index = args.indexOf({ $0 == "-p" || $0 == "--prefix" }) where args.count > index + 1 {
+            self.typePrefix = args[index + 1]
+        }
     }
     
     private var atomic = false
     private var readonly = true
-    private let typePrefix = ""
+    private var typePrefix = ""
     private var atomicyModifier: String {
         return (atomic ? "atomic" : "nonatomic")
     }

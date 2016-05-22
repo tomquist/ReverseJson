@@ -21,6 +21,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             ("testEnumWithTwoCases", testEnumWithTwoCases),
             ("testListOfEmptyObject", testListOfEmptyObject),
             ("testMutableFieldsFlag", testMutableFieldsFlag),
+            ("testPrefixOption", testPrefixOption),
             ("testObjectWithDifferentFields", testObjectWithDifferentFields),
             ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
             ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
@@ -562,6 +563,45 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "}",
             "@end"
         )
+        XCTAssertEqual(expected, modelResult1)
+        XCTAssertEqual(expected, modelResult2)
+    }
+    
+    
+    func testPrefixOption() {
+        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        
+        let modelResult1 = ObjcModelCreator(args: ["-p", "ABC"]).translate(type, name: "TestObject")
+        let modelResult2 = ObjcModelCreator(args: ["--prefix", "ABC"]).translate(type, name: "TestObject")
+        let expected = [
+            "#import <Foundation/Foundation.h>",
+            "",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface ABCTestObject : NSObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
+            "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "@property (nonatomic, copy, readonly) NSString *text;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "",
+            "@implementation ABCTestObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
+            "    self = [super init];",
+            "    if (self) {",
+            "        _text = [dict[@\"text\"] isKindOfClass:[NSString class]] ? dict[@\"text\"] : nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    if ([jsonValue isKindOfClass:[NSDictionary class]]) {",
+            "        self = [self initWithJsonDictionary:jsonValue];",
+            "    } else {",
+            "        self = nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "@end"
+            ].joinWithSeparator("\n")
         XCTAssertEqual(expected, modelResult1)
         XCTAssertEqual(expected, modelResult2)
     }
