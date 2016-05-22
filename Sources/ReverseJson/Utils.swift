@@ -15,6 +15,14 @@ extension ModelParser.FieldType {
     }
 }
 
+#if os(Linux)
+extension NSCharacterSet {
+    var inverted: NSCharacterSet {
+        return self.invertedSet
+    }
+}
+#endif
+
 
 extension String {
     

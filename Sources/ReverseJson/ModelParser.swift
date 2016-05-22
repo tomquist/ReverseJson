@@ -1,5 +1,13 @@
 import Foundation
 
+#if os(Linux)
+extension NSComparisonResult {
+    static var orderedSame: NSComparisonResult {
+        return .OrderedSame
+    }
+}
+#endif
+
 extension NSNumber {
     private struct Constants {
         private static let trueNumber = NSNumber(value: true)
