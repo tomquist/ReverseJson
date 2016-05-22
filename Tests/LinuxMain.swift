@@ -2,7 +2,7 @@ import XCTest
 @testable import ReverseJsontest
 
 XCTMain([
-    ModelParserTest(),
-    ObjcModelTranslatorTest(),
-    SwiftTranslatorTest(),
+    testCase(ModelParserTest.allTests),
+    testCase(ObjcModelTranslatorTest.allTests),
+    testCase(SwiftTranslatorTest.allTests),
 ])

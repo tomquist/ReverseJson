@@ -21,7 +21,6 @@
 		421658C21CAF2DA200321F84 /* ModelParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B71CAF2D9900321F84 /* ModelParserTest.swift */; };
 		421658C31CAF2DA200321F84 /* ObjcModelTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */; };
 		421658C41CAF2DA200321F84 /* SwiftTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */; };
-		421658C61CAF2DB300321F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658C51CAF2DB300321F84 /* Utils.swift */; };
 		A79422761C8C9D9300700E66 /* ReverseJsonLib.h in Headers */ = {isa = PBXBuildFile; fileRef = A79422751C8C9D9300700E66 /* ReverseJsonLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A794227D1C8C9D9300700E66 /* ReverseJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79422731C8C9D9300700E66 /* ReverseJson.framework */; };
 /* End PBXBuildFile section */
@@ -61,7 +60,6 @@
 		421658B71CAF2D9900321F84 /* ModelParserTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParserTest.swift; sourceTree = "<group>"; };
 		421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslatorTest.swift; sourceTree = "<group>"; };
 		421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTranslatorTest.swift; sourceTree = "<group>"; };
-		421658C51CAF2DB300321F84 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		A7921A8A1C67BA27009AADAC /* ReverseJson */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ReverseJson; sourceTree = BUILT_PRODUCTS_DIR; };
 		A79421FB1C8C839800700E66 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A79422731C8C9D9300700E66 /* ReverseJson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReverseJson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,7 +139,6 @@
 				421658B71CAF2D9900321F84 /* ModelParserTest.swift */,
 				421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */,
 				421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */,
-				421658C51CAF2DB300321F84 /* Utils.swift */,
 			);
 			path = ReverseJson;
 			sourceTree = "<group>";
@@ -344,7 +341,6 @@
 				421658C21CAF2DA200321F84 /* ModelParserTest.swift in Sources */,
 				421658C31CAF2DA200321F84 /* ObjcModelTranslatorTest.swift in Sources */,
 				421658C41CAF2DA200321F84 /* SwiftTranslatorTest.swift in Sources */,
-				421658C61CAF2DB300321F84 /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

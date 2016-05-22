@@ -10,9 +10,9 @@ import XCTest
 import Foundation
 @testable import ReverseJson
 
-class ModelParserTest: XCTestCase, XCTestCaseProvider {
+class ModelParserTest: XCTestCase {
     
-    var allTests: [(String, () throws -> Void)] {
+    static var allTests: [(String, (ModelParserTest) -> () throws -> Void)] {
         return [
             ("testArrayObjectWithArrayFieldOfIntsStringsAndDoubles", testArrayObjectWithArrayFieldOfIntsStringsAndDoubles),
             ("testArrayObjectWithArrayFieldOfUnknownTypeAndStrings", testArrayObjectWithArrayFieldOfUnknownTypeAndStrings),

@@ -9,9 +9,9 @@
 import XCTest
 @testable import ReverseJson
 
-class SwiftTranslatorTest: XCTestCase, XCTestCaseProvider {
+class SwiftTranslatorTest: XCTestCase {
     
-    var allTests: [(String, () throws -> Void)] {
+    static var allTests: [(String, (SwiftTranslatorTest) -> () throws -> Void)] {
         return [
             ("testBoolDouble", testBoolDouble),
             ("testClassFlag", testClassFlag),

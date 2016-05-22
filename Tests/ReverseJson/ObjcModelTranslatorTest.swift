@@ -9,9 +9,9 @@
 import XCTest
 @testable import ReverseJson
 
-class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
+class ObjcModelTranslatorTest: XCTestCase {
     
-    var allTests: [(String, () throws -> Void)] {
+    static var allTests: [(String, (ObjcModelTranslatorTest) -> () throws -> Void)] {
         return [
             ("testAtomicFieldsFlag", testAtomicFieldsFlag),
             ("testBoolDouble", testBoolDouble),
