@@ -23,13 +23,13 @@ func usage() -> String {
         "   -ca, --contiguousarray  (Swift) Use ContiguousArray for lists",
         "   -pt, --publictypes      (Swift) Make type declarations public instead of internal",
         "   -pf, --publicfields     (Swift) Make field declarations public instead of internal",
-        "   -n,  --nullable         (Swift and Objective-C) Make all field declarations optional (nullable in Objective-C)"
+        "   -n,  --nullable         (Swift and Objective-C) Make all field declarations optional (nullable in Objective-C)",
         "   -m,  --mutable          (Swift and Objective-C) All object fields are mutable (var instead of",
         "                           let in Swift and 'readwrite' instead of 'readonly' in Objective-C)",
         "   -a,  --atomic           (Objective-C) Make properties 'atomic'",
         "   -p <prefix>             (Objective-C) Class-prefix to use for type declarations",
         "   --prefix <prefix>       "
-    ].joinWithSeparator("\n")
+    )
 }
 
 func main(args: [String]) -> ProgramResult {
@@ -62,7 +62,7 @@ func main(args: [String]) -> ProgramResult {
     let rootType: ModelParser.FieldType
     do {
         let rootTypeTmp = try ModelParser().decode(model)
-        let makeAllFieldDeclarationsOptional = remainingArgs.contains("-op") || remainingArgs.contains("--optional")
+        let makeAllFieldDeclarationsOptional = remainingArgs.contains("-n") || remainingArgs.contains("--nullable")
         if makeAllFieldDeclarationsOptional {
             rootType = ModelParser.transformAllFieldsToOptional(rootTypeTmp)
         } else {
