@@ -1,10 +1,10 @@
 
 
-public class SwiftTranslator: ModelTranslator {
+public struct SwiftTranslator: ModelTranslator {
     
-    let translators: [ModelTranslator]
+    private let translators: [ModelTranslator]
     
-    public required init(args: [String] = []) {
+    public init(args: [String] = []) {
         translators = [
             SwiftModelCreator(args: args),
             SwiftJsonParsingTranslator(args: args)
@@ -41,7 +41,7 @@ extension Visibility {
     }
 }
 
-class SwiftModelCreator: ModelTranslator {
+struct SwiftModelCreator: ModelTranslator {
     
     private let objectType: ObjectType
     private let listType: ListType
@@ -49,7 +49,7 @@ class SwiftModelCreator: ModelTranslator {
     private let typeVisibility: Visibility
     private let mutableFields: Bool
     
-    required init(args: [String] = []) {
+    init(args: [String] = []) {
         self.objectType = args.contains("-c") || args.contains("--class") ? .Class : .Struct
         self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
         self.mutableFields = args.contains("-m") || args.contains("--mutable")
@@ -301,11 +301,11 @@ extension ListType {
     }
 }
 
-class SwiftJsonParsingTranslator: ModelTranslator {
+struct SwiftJsonParsingTranslator: ModelTranslator {
     
     private var listType: ListType = .Array
     
-    required init(args: [String] = []) {
+    init(args: [String] = []) {
         self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
     }
     

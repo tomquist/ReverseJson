@@ -1,7 +1,7 @@
 
-public class ObjcModelCreator: ModelTranslator {
+public struct ObjcModelCreator: ModelTranslator {
     
-    public required init(args: [String] = []) {
+    public init(args: [String] = []) {
         self.atomic = args.contains("-a") || args.contains("--atomic")
         self.readonly = !(args.contains("-m") || args.contains("--mutable"))
     }

@@ -23,12 +23,14 @@ Generate data model code and JSON-parser code from JSON-files. Currently you can
 Usage: ReverseJson (swift|objc) NAME FILE <options>
 e.g. ReverseJson swift User testModel.json <options>
 Options:
-   -c,  --class            Swift: Use classes instead of structs for objects
-   -ca, --contiguousarray  Swift: Use ContiguousArray for lists
-   -m,  --mutable          Swift: All object fields are mutable (var instead of let)
-   -pt, --publictypes      Swift: Make type declarations public instead of internal
-   -pf, --publicfields     Swift: Make field declarations public instead of internal
-   -op, --optional         Swift: Make all field declarations optional
+   -c,  --class            (Swift) Use classes instead of structs for objects
+   -ca, --contiguousarray  (Swift) Use ContiguousArray for lists
+   -pt, --publictypes      (Swift) Make type declarations public instead of internal
+   -pf, --publicfields     (Swift) Make field declarations public instead of internal
+   -n,  --nullable         (Swift and Objective-C) Make all field declarations optional (nullable in Objective-C)
+   -m,  --mutable          (Swift and Objective-C) All object fields are mutable (var instead of
+                           let in Swift and 'readwrite' instead of 'readonly' in Objective-C)
+   -a,  --atomic           (Objective-C) Make properties 'atomic'
 ```
 
 ### To create a Swift data model:
