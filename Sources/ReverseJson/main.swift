@@ -9,14 +9,12 @@
 import Foundation
 
 enum ProgramResult {
-    case Success(String)
-    case Failure(String)
+    case success(String)
+    case failure(String)
 }
 
 func usage() -> String {
-    let commandArgChars = Process.arguments[0].characters
-    let commandPathComponents = commandArgChars.split(separator: "/")
-    let command = commandPathComponents.last.map(String.init) ?? ""
+    let command = Process.arguments[0].characters.split(separator: "/").last.map(String.init) ?? ""
     return String(lines:
         "Usage: \(command) (swift|objc) NAME FILE <options>",
         "e.g. \(command) swift User testModel.json <options>",
@@ -36,7 +34,7 @@ func usage() -> String {
 
 func main(with args: [String]) -> ProgramResult {
     guard args.count >= 4 else {
-        return .Failure(usage())
+        return .failure(usage())
     }
     let language = args[1]
     let name = args[2]
@@ -49,40 +47,40 @@ func main(with args: [String]) -> ProgramResult {
     case "objc":
         translatorTypes = [ObjcModelCreator.self]
     default:
-        return .Failure("Unsupported language \(language)")
+        return .failure("Unsupported language \(language)")
     }
-    guard let data = NSData(contentsOfFile: file) else {
-        return .Failure("Could not read file \(file)")
+    guard let data = try? Data(contentsOf: URL(fileURLWithPath: file)) else {
+        return .failure("Could not read file \(file)")
     }
     
     let model: Any
     do {
-        model = try NSJSONSerialization.jsonObject(with: data, options: [])
+        model = try JSONSerialization.jsonObject(with: data, options: [])
     } catch {
-        return .Failure("Could not parse json: \(error)")
+        return .failure("Could not parse json: \(error)")
     }
     let rootType: ModelParser.FieldType
     do {
         let rootTypeTmp = try ModelParser().decode(model)
         let makeAllFieldDeclarationsOptional = remainingArgs.contains("-n") || remainingArgs.contains("--nullable")
         if makeAllFieldDeclarationsOptional {
-            rootType = ModelParser.transformAllFieldsToOptional(rootField: rootTypeTmp)
+            rootType = ModelParser.transformAllFieldsToOptional(rootTypeTmp)
         } else {
             rootType = rootTypeTmp
         }
     } catch {
-        return .Failure("Could convert json to model: \(error)")
+        return .failure("Could convert json to model: \(error)")
     }
     let translators = translatorTypes.lazy.map { $0.init(args: remainingArgs) }
-    return .Success(String(joined: translators.map { $0.translate(rootType, name: name) }, separator: "\n\n"))
+    return .success(String(joined: translators.map { $0.translate(rootType, name: name) }, separator: "\n\n"))
 }
 
 
 switch main(with: Process.arguments) {
-case let .Success(output):
+case let .success(output):
     print(output)
     exit(0)
-case let .Failure(output):
+case let .failure(output):
     print(output)
     exit(1)
 }

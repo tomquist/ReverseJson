@@ -36,7 +36,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleString() {
-        let type: ModelParser.FieldType = .Text
+        let type: ModelParser.FieldType = .text
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleText")
@@ -44,7 +44,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleInt() {
-        let type: ModelParser.FieldType = .Number(.Int)
+        let type: ModelParser.FieldType = .number(.Int)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -52,7 +52,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
 
     func testSimpleFloat() {
-        let type: ModelParser.FieldType = .Number(.Float)
+        let type: ModelParser.FieldType = .number(.Float)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -60,7 +60,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleDouble() {
-        let type: ModelParser.FieldType = .Number(.Double)
+        let type: ModelParser.FieldType = .number(.Double)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -68,7 +68,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testBoolDouble() {
-        let type: ModelParser.FieldType = .Number(.Bool)
+        let type: ModelParser.FieldType = .number(.Bool)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -76,7 +76,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEmptyObject() {
-        let type: ModelParser.FieldType = .Object([])
+        let type: ModelParser.FieldType = .object([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -110,7 +110,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEmptyEnum() {
-        let type: ModelParser.FieldType = .Enum([])
+        let type: ModelParser.FieldType = .enum([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -135,7 +135,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testTextList() {
-        let type: ModelParser.FieldType = .List(.Text)
+        let type: ModelParser.FieldType = .list(.text)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TextList")
@@ -143,7 +143,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testUnknownType() {
-        let type: ModelParser.FieldType = .Unknown
+        let type: ModelParser.FieldType = .unknown
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "MyTypeName")
@@ -152,7 +152,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     
     func testListOfEmptyObject() {
         let modelCreator = ObjcModelCreator()
-        let modelResult = modelCreator.translate(.List(.Object([])), name: "TestObjectList")
+        let modelResult = modelCreator.translate(.list(.object([])), name: "TestObjectList")
         XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
@@ -182,7 +182,7 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     func testObjectWithSingleTextField() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -218,7 +218,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testObjectWithFieldContainingListOfText() {
-        let type: ModelParser.FieldType = .Object([.init(name: "texts", type: .List(.Text))])
+        let type: ModelParser.FieldType = .object([.init(name: "texts", type: .list(.text))])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -267,11 +267,11 @@ class ObjcModelTranslatorTest: XCTestCase {
 
     func testObjectWithDifferentFields() {
         let modelCreator = ObjcModelCreator()
-        let modelResult = modelCreator.translate(.Object([
-            .init(name: "listOfListsOfText", type: .List(.List(.Text))),
-            .init(name: "numbers", type: .List(.Number(.Int))),
-            .init(name: "int", type: .Number(.Int)),
-            .init(name: "optionalText", type: .Optional(.Text))
+        let modelResult = modelCreator.translate(.object([
+            .init(name: "listOfListsOfText", type: .list(.list(.text))),
+            .init(name: "numbers", type: .list(.number(.Int))),
+            .init(name: "int", type: .number(.Int)),
+            .init(name: "optionalText", type: .optional(.text))
         ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
@@ -348,8 +348,8 @@ class ObjcModelTranslatorTest: XCTestCase {
     
     func testObjectWithOneFieldWithSubDeclaration() {
         let modelCreator = ObjcModelCreator()
-        let modelResult = modelCreator.translate(.Object([
-            .init(name: "subObject", type: .Object([]))
+        let modelResult = modelCreator.translate(.object([
+            .init(name: "subObject", type: .object([]))
             ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
@@ -408,7 +408,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEnumWithOneCase() {
-        let type: ModelParser.FieldType = .Enum([.Text])
+        let type: ModelParser.FieldType = .enum([.text])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -435,9 +435,9 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEnumWithTwoCases() {
-        let type: ModelParser.FieldType = .Enum([
-            .Optional(.Object([])),
-            .Number(.Int)
+        let type: ModelParser.FieldType = .enum([
+            .optional(.object([])),
+            .number(.Int)
         ])
         
         let modelCreator = ObjcModelCreator()
@@ -492,7 +492,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testAtomicFieldsFlag() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = ObjcModelCreator(args: ["-a"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--atomic"]).translate(type, name: "TestObject")
@@ -530,7 +530,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testMutableFieldsFlag() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = ObjcModelCreator(args: ["-m"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
@@ -569,11 +569,11 @@ class ObjcModelTranslatorTest: XCTestCase {
     
     
     func testPrefixOption() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = ObjcModelCreator(args: ["-p", "ABC"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--prefix", "ABC"]).translate(type, name: "TestObject")
-        let expected = String(lines:
+        let expected = [
             "#import <Foundation/Foundation.h>",
             "",
             "NS_ASSUME_NONNULL_BEGIN",
@@ -601,7 +601,7 @@ class ObjcModelTranslatorTest: XCTestCase {
             "    return self;",
             "}",
             "@end"
-        )
+            ].joined(separator: "\n")
         XCTAssertEqual(expected, modelResult1)
         XCTAssertEqual(expected, modelResult2)
     }

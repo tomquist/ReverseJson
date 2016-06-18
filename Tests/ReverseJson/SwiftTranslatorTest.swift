@@ -46,7 +46,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testSimpleString() {
-        let type: ModelParser.FieldType = .Text
+        let type: ModelParser.FieldType = .text
 
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleText")
@@ -66,7 +66,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testSimpleInt() {
-        let type: ModelParser.FieldType = .Number(.Int)
+        let type: ModelParser.FieldType = .number(.Int)
 
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -86,7 +86,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testSimpleFloat() {
-        let type: ModelParser.FieldType = .Number(.Float)
+        let type: ModelParser.FieldType = .number(.Float)
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -106,7 +106,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testSimpleDouble() {
-        let type: ModelParser.FieldType = .Number(.Double)
+        let type: ModelParser.FieldType = .number(.Double)
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -126,7 +126,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testBoolDouble() {
-        let type: ModelParser.FieldType = .Number(.Bool)
+        let type: ModelParser.FieldType = .number(.Bool)
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -146,7 +146,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testEmptyObject() {
-        let type: ModelParser.FieldType = .Object([])
+        let type: ModelParser.FieldType = .object([])
 
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -173,7 +173,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testEmptyEnum() {
-        let type: ModelParser.FieldType = .Enum([])
+        let type: ModelParser.FieldType = .enum([])
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -181,7 +181,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testTextList() {
-        let type: ModelParser.FieldType = .List(.Text)
+        let type: ModelParser.FieldType = .list(.text)
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TextList")
@@ -203,7 +203,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testListOfTextList() {
-        let type: ModelParser.FieldType = .List(.List(.Text))
+        let type: ModelParser.FieldType = .list(.list(.text))
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TextList")
         XCTAssertEqual("typealias TextList = [[String]]", modelResult)
@@ -224,7 +224,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
 
     func testUnknownType() {
-        let type: ModelParser.FieldType = .Unknown
+        let type: ModelParser.FieldType = .unknown
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "MyTypeName")
@@ -240,7 +240,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testOptionalUnknown() {
-        let type: ModelParser.FieldType = .Optional(.Unknown)
+        let type: ModelParser.FieldType = .optional(.unknown)
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "MyTypeName")
@@ -256,7 +256,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testListOfUnknown() {
-        let type: ModelParser.FieldType = .List(.Unknown)
+        let type: ModelParser.FieldType = .list(.unknown)
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "MyTypeName")
@@ -272,7 +272,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testOptionalText() {
-        let type: ModelParser.FieldType = .Optional(.Text)
+        let type: ModelParser.FieldType = .optional(.text)
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "MyTypeName")
@@ -295,12 +295,12 @@ class SwiftTranslatorTest: XCTestCase {
     
     func testListOfEmptyObject() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.List(.Object([])), name: "TestObjectList")
+        let modelResult = modelCreator.translate(.list(.object([])), name: "TestObjectList")
         XCTAssertEqual("struct TestObjectListItem {\n}", modelResult)
     }
     
     func testObjectWithSingleTextField() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -333,7 +333,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testObjectWithFieldContainingListOfText() {
-        let type: ModelParser.FieldType = .Object([.init(name: "texts", type: .List(.Text))])
+        let type: ModelParser.FieldType = .object([.init(name: "texts", type: .list(.text))])
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -369,9 +369,9 @@ class SwiftTranslatorTest: XCTestCase {
     
     func testObjectWithTwoSimpleFields() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.Object([
-            .init(name: "number", type: .Number(.Double)),
-            .init(name: "texts", type: .List(.Text))
+        let modelResult = modelCreator.translate(.object([
+            .init(name: "number", type: .number(.Double)),
+            .init(name: "texts", type: .list(.text))
         ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "struct TestObject {",
@@ -383,8 +383,8 @@ class SwiftTranslatorTest: XCTestCase {
 
     func testObjectWithOneFieldWithSubDeclaration() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.Object([
-            .init(name: "subObject", type: .Object([]))
+        let modelResult = modelCreator.translate(.object([
+            .init(name: "subObject", type: .object([]))
             ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "struct TestObject {",
@@ -396,7 +396,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
 
     func testEnumWithOneCase() {
-        let type: ModelParser.FieldType = .Enum([.Text])
+        let type: ModelParser.FieldType = .enum([.text])
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -430,7 +430,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testEnumWithTwoCases() {
-        let type: ModelParser.FieldType = .Enum([.Text, .Number(.Int)])
+        let type: ModelParser.FieldType = .enum([.text, .number(.Int)])
         
         let modelCreator = SwiftModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -470,7 +470,7 @@ class SwiftTranslatorTest: XCTestCase {
 
     func testEnumWithOneSubDeclarationCase() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.Enum([.Object([])]), name: "TestObject")
+        let modelResult = modelCreator.translate(.enum([.object([])]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "enum TestObject {",
             "    struct TestObjectObject {",
@@ -481,7 +481,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testPublicTypeFlagWithObject() {
-        let type: ModelParser.FieldType = .Object([])
+        let type: ModelParser.FieldType = .object([])
         
         let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "TestObject")
         let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "TestObject")
@@ -491,7 +491,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testPublicTypeFlagWithTypealias() {
-        let type: ModelParser.FieldType = .Text
+        let type: ModelParser.FieldType = .text
         
         let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "SimpleText")
         let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "SimpleText")
@@ -501,7 +501,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testPublicTypeFlagWithEnum() {
-        let type: ModelParser.FieldType = .Enum([])
+        let type: ModelParser.FieldType = .enum([])
         
         let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "TestObject")
         let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "TestObject")
@@ -511,7 +511,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
 
     func testClassFlag() {
-        let type: ModelParser.FieldType = .Object([])
+        let type: ModelParser.FieldType = .object([])
         
         let modelResult1 = SwiftModelCreator(args: ["-c"]).translate(type, name: "TestObject")
         let modelResult2 = SwiftModelCreator(args: ["--class"]).translate(type, name: "TestObject")
@@ -521,7 +521,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testPublicFieldsFlag() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = SwiftModelCreator(args: ["-pf"]).translate(type, name: "TestObject")
         let modelResult2 = SwiftModelCreator(args: ["--publicfields"]).translate(type, name: "TestObject")
@@ -535,7 +535,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testMutableFieldsFlag() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = SwiftModelCreator(args: ["-m"]).translate(type, name: "TestObject")
         let modelResult2 = SwiftModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
@@ -549,7 +549,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testContiguousArrayFlag() {
-        let type: ModelParser.FieldType = .Object([.init(name: "texts", type: .List(.Text))])
+        let type: ModelParser.FieldType = .object([.init(name: "texts", type: .list(.text))])
         
         let modelResult1 = SwiftModelCreator(args: ["-ca"]).translate(type, name: "TestObject")
         let modelResult2 = SwiftModelCreator(args: ["--contiguousarray"]).translate(type, name: "TestObject")
@@ -588,7 +588,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testTranslatorCombination() {
-        let type: ModelParser.FieldType = .Object([])
+        let type: ModelParser.FieldType = .object([])
         
         let translator = SwiftTranslator()
         let result = translator.translate(type, name: "TestObject")
