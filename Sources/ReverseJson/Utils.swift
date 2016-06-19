@@ -1,5 +1,14 @@
 import Foundation
 
+#if os(Linux)
+    extension NSStringEncoding {
+        static var utf8: NSStringEncoding {
+            return NSStringEncoding(kCFStringEncodingUTF8)
+        }
+    }
+    typealias JSONSerialization = NSJSONSerialization
+#endif
+
 extension ModelParser.FieldType {
     public var enumCaseName: String {
         switch self {
@@ -95,6 +104,23 @@ extension String {
     }
 }
 
+#if os(Linux)
+    typealias CharacterSet = NSCharacterSet
+    
+    typealias ComparisonResult = NSComparisonResult
+    
+    extension CharacterSet {
+        convenience init(charactersIn range: Range<UnicodeScalar>) {
+            self.init(range: NSRange(location: Int(range.lowerBound.value), length: Int(range.upperBound.value - range.lowerBound.value)))
+        }
+        
+        func contains(_ scalar: UnicodeScalar) -> Bool {
+            return longCharacterIsMember(scalar.value)
+        }
+        
+    }
+#endif
+
 extension CharacterSet {
     private static let swiftIdentifierValidHeadChars: CharacterSet = {
         let ranges: [CountableClosedRange<UInt32>] = [
@@ -150,7 +176,7 @@ extension CharacterSet {
         ]
         // TODO Temporarily use NSMutableCharacterSet instead of CharacterSet struct because of a bug in Swift 3.0 beta
         let charset = NSMutableCharacterSet.uppercaseLetters()
-        charset.formUnion(with: .lowercaseLetters)
+        charset.formUnion(with: NSCharacterSet.lowercaseLetters())
         charset.addCharacters(in: "_")
         ranges.forEach {
             charset.formUnion(with: CharacterSet(charactersIn: UnicodeScalar($0.lowerBound)..<UnicodeScalar($0.upperBound)))
@@ -183,4 +209,5 @@ extension CharacterSet {
         }
         return true
     }
+    
 }
