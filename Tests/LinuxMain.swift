@@ -1,5 +1,5 @@
 import XCTest
-@testable import ReverseJsonTestSuite
+@testable import ReverseJsonTests
 
 XCTMain([
     testCase(ModelParserTest.allTests),
