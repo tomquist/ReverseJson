@@ -128,19 +128,19 @@
 			isa = PBXGroup;
 			children = (
 				421658B51CAF2D9900321F84 /* LinuxMain.swift */,
-				421658B61CAF2D9900321F84 /* ReverseJson */,
+				421658B61CAF2D9900321F84 /* ReverseJsonTests */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
 		};
-		421658B61CAF2D9900321F84 /* ReverseJson */ = {
+		421658B61CAF2D9900321F84 /* ReverseJsonTests */ = {
 			isa = PBXGroup;
 			children = (
 				421658B71CAF2D9900321F84 /* ModelParserTest.swift */,
 				421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */,
 				421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */,
 			);
-			path = ReverseJson;
+			path = ReverseJsonTests;
 			sourceTree = "<group>";
 		};
 		A7921A811C67BA27009AADAC = {
