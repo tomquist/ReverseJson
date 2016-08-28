@@ -4,7 +4,7 @@ public struct ObjcModelCreator: ModelTranslator {
     public init(args: [String] = []) {
         self.atomic = args.contains("-a") || args.contains("--atomic")
         self.readonly = !(args.contains("-m") || args.contains("--mutable"))
-        if let index = args.index(where: { $0 == "-p" || $0 == "--prefix" }) where args.count > index + 1 {
+        if let index = args.index(where: { $0 == "-p" || $0 == "--prefix" }) , args.count > index + 1 {
             self.typePrefix = args[index + 1]
         }
     }
@@ -73,7 +73,7 @@ public struct ObjcModelCreator: ModelTranslator {
                 return (property, initialization, fieldRequiredTypeNames, fieldFullTypeName, subInterfaces, subImplementations)
             }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
-            let forwardDeclarations = requiredTypeNames.sorted(isOrderedBefore: <)
+            let forwardDeclarations = requiredTypeNames.sorted(by: <)
             let properties = fieldValues.sorted{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.property}
             let initializations = fieldValues.sorted{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.initialization.indent(2)}
             
@@ -136,7 +136,7 @@ public struct ObjcModelCreator: ModelTranslator {
                 return (property, initialization, fieldRequiredTypeNames, fieldFullTypeName, subInterfaces, subImplementations)
             }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
-            let forwardDeclarations = requiredTypeNames.sorted(isOrderedBefore: <)
+            let forwardDeclarations = requiredTypeNames.sorted(by: <)
             let properties = fieldValues.sorted{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.property}
             let initializations = fieldValues.sorted{$0.0.fieldTypeName < $0.1.fieldTypeName}.map {$0.initialization.indent(2)}
             
@@ -237,20 +237,20 @@ public struct ObjcModelCreator: ModelTranslator {
 }
 
 extension ModelParser.NumberType {
-    private var objcNumberType: String {
+    fileprivate var objcNumberType: String {
         switch self {
-        case .Bool: return "BOOL"
-        case .Int: return "NSInteger"
-        case .Float: return "float"
-        case .Double: return "double"
+        case .bool: return "BOOL"
+        case .int: return "NSInteger"
+        case .float: return "float"
+        case .double: return "double"
         }
     }
-    private var objcNSNumberMethod: String {
+    fileprivate var objcNSNumberMethod: String {
         switch self {
-        case .Bool: return "boolValue"
-        case .Int: return "integerValue"
-        case .Float: return "floatValue"
-        case .Double: return "doubleValue"
+        case .bool: return "boolValue"
+        case .int: return "integerValue"
+        case .float: return "floatValue"
+        case .double: return "doubleValue"
         }
     }
 }

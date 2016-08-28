@@ -44,7 +44,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleInt() {
-        let type: ModelParser.FieldType = .number(.Int)
+        let type: ModelParser.FieldType = .number(.int)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -52,7 +52,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
 
     func testSimpleFloat() {
-        let type: ModelParser.FieldType = .number(.Float)
+        let type: ModelParser.FieldType = .number(.float)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -60,7 +60,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleDouble() {
-        let type: ModelParser.FieldType = .number(.Double)
+        let type: ModelParser.FieldType = .number(.double)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -68,7 +68,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testBoolDouble() {
-        let type: ModelParser.FieldType = .number(.Bool)
+        let type: ModelParser.FieldType = .number(.bool)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -269,8 +269,8 @@ class ObjcModelTranslatorTest: XCTestCase {
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(.object([
             .init(name: "listOfListsOfText", type: .list(.list(.text))),
-            .init(name: "numbers", type: .list(.number(.Int))),
-            .init(name: "int", type: .number(.Int)),
+            .init(name: "numbers", type: .list(.number(.int))),
+            .init(name: "int", type: .number(.int)),
             .init(name: "optionalText", type: .optional(.text))
         ]), name: "TestObject")
         XCTAssertEqual(String(lines:
@@ -437,7 +437,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     func testEnumWithTwoCases() {
         let type: ModelParser.FieldType = .enum([
             .optional(.object([])),
-            .number(.Int)
+            .number(.int)
         ])
         
         let modelCreator = ObjcModelCreator()

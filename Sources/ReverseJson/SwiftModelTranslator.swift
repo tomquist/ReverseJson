@@ -16,8 +16,8 @@ public struct SwiftTranslator: ModelTranslator {
 }
 
 private enum ObjectType: String {
-    case Struct = "struct"
-    case Class = "class"
+    case structType = "struct"
+    case classType = "class"
 }
 extension ObjectType {
     var name: String {
@@ -25,19 +25,18 @@ extension ObjectType {
     }
 }
 private enum ListType: String {
-    case Array
-    case ContiguousArray
+    case array = "Array"
+    case contiguousArray = "ContiguousArray"
 }
 
 private enum Visibility: String {
-    case Internal = "internal"
-    case Public = "public"
-    case Private = "private"
+    case internalVisibility = "internal"
+    case publicVisibility = "public"
 }
 
 extension Visibility {
     var visibilityPrefix: String {
-        return self == .Internal ? "" : "\(self.rawValue) "
+        return self == .internalVisibility ? "" : "\(self.rawValue) "
     }
 }
 
@@ -50,11 +49,11 @@ struct SwiftModelCreator: ModelTranslator {
     private let mutableFields: Bool
     
     init(args: [String] = []) {
-        self.objectType = args.contains("-c") || args.contains("--class") ? .Class : .Struct
-        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
+        self.objectType = args.contains("-c") || args.contains("--class") ? .classType : .structType
+        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .contiguousArray : .array
         self.mutableFields = args.contains("-m") || args.contains("--mutable")
-        self.fieldVisibility = args.contains("-pf") || args.contains("--publicfields") ? .Public : .Internal
-        self.typeVisibility = args.contains("-pt") || args.contains("--publictypes") ? .Public : .Internal
+        self.fieldVisibility = args.contains("-pf") || args.contains("--publicfields") ? .publicVisibility : .internalVisibility
+        self.typeVisibility = args.contains("-pt") || args.contains("--publictypes") ? .publicVisibility : .internalVisibility
     }
     
     func translate(_ type: ModelParser.FieldType, name: String) -> String {
@@ -88,8 +87,8 @@ struct SwiftModelCreator: ModelTranslator {
             let (subTypeName, subDeclaration) = makeSubtype(listItemType, name: "\(name)\(subName.camelCasedString)", subName: newSubName, level: level)
             declaration = subDeclaration
             switch listType {
-            case .Array: fieldType = "[\(subTypeName)]"
-            case .ContiguousArray: fieldType = "\(listType.className)<\(subTypeName)>"
+            case .array: fieldType = "[\(subTypeName)]"
+            case .contiguousArray: fieldType = "\(listType.className)<\(subTypeName)>"
             }
         case let .enum(enumTypes):
             fieldType = subName.camelCasedString
@@ -115,9 +114,9 @@ struct SwiftModelCreator: ModelTranslator {
             return (fieldDeclaration, subTypeDeclaration)
         }
         let typeDeclarations = fieldsAndTypes.lazy.flatMap {$0.type}
-        ret += String(joined: Set(typeDeclarations.map({ "\n\($0)"})).sorted(isOrderedBefore: <), separator: "")
+        ret += String(joined: Set(typeDeclarations.map({ "\n\($0)"})).sorted(by: <), separator: "")
         let fields = fieldsAndTypes.lazy.map { $0.field }.map { $0.indent(level + 1) }.map { "\n\($0)" }
-        ret += String(joined: fields.sorted(isOrderedBefore: <), separator: "")
+        ret += String(joined: fields.sorted(by: <), separator: "")
         return ret + "\n" + "}".indent(level)
     }
     
@@ -125,7 +124,7 @@ struct SwiftModelCreator: ModelTranslator {
         var ret = "\(typeVisibility.visibilityPrefix)enum \(name) {".indent(level)
         ret += String(joined: cases.sorted{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
             var fieldDeclaration = ""
-            let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName)", level: level + 1)
+            let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName.firstCapitalized())", level: level + 1)
             if let subTypeDeclaration = subTypeDeclaration {
                 fieldDeclaration += subTypeDeclaration + "\n"
             }
@@ -153,16 +152,16 @@ private func ==(lhs: Declaration, rhs: Declaration) -> Bool {
 }
 
 let swiftErrorType = String(lines:
-    "enum JsonParsingError: ErrorType {",
-    "    case UnsupportedTypeError",
+    "enum JsonParsingError: Error {",
+    "    case unsupportedTypeError",
     "}"
 )
 
 let swiftStringParser = String(lines:
     "extension String {",
-    "    init(jsonValue: AnyObject?) throws {",
+    "    init(jsonValue: Any?) throws {",
     "        guard let string = jsonValue as? String else {",
-    "            throw JsonParsingError.UnsupportedTypeError",
+    "            throw JsonParsingError.unsupportedTypeError",
     "        }",
     "        self = string",
     "    }",
@@ -171,9 +170,9 @@ let swiftStringParser = String(lines:
 
 let swiftIntParser = String(lines:
     "extension Int {",
-    "    init(jsonValue: AnyObject?) throws {",
+    "    init(jsonValue: Any?) throws {",
     "        if let number = jsonValue as? NSNumber {",
-    "            self = number.integerValue",
+    "            self = number.intValue",
     "        } else if let number = jsonValue as? Int {",
     "            self = number",
     "        } else if let number = jsonValue as? Double {",
@@ -181,7 +180,7 @@ let swiftIntParser = String(lines:
     "        } else if let number = jsonValue as? Float {",
     "            self = Int(number)",
     "        } else {",
-    "            throw JsonParsingError.UnsupportedTypeError",
+    "            throw JsonParsingError.unsupportedTypeError",
     "        }",
     "    }",
     "}"
@@ -189,7 +188,7 @@ let swiftIntParser = String(lines:
 
 let swiftFloatParser = String(lines:
     "extension Float {",
-    "    init(jsonValue: AnyObject?) throws {",
+    "    init(jsonValue: Any?) throws {",
     "        if let number = jsonValue as? NSNumber {",
     "            self = number.floatValue",
     "        } else if let number = jsonValue as? Int {",
@@ -199,7 +198,7 @@ let swiftFloatParser = String(lines:
     "        } else if let number = jsonValue as? Float {",
     "            self = number",
     "        } else {",
-    "            throw JsonParsingError.UnsupportedTypeError",
+    "            throw JsonParsingError.unsupportedTypeError",
     "        }",
     "    }",
     "}"
@@ -207,7 +206,7 @@ let swiftFloatParser = String(lines:
 
 let swiftDoubleParser = String(lines:
     "extension Double {",
-    "    init(jsonValue: AnyObject?) throws {",
+    "    init(jsonValue: Any?) throws {",
     "        if let number = jsonValue as? NSNumber {",
     "            self = number.doubleValue",
     "        } else if let number = jsonValue as? Int {",
@@ -217,7 +216,7 @@ let swiftDoubleParser = String(lines:
     "        } else if let number = jsonValue as? Float {",
     "            self = Double(number)",
     "        } else {",
-    "            throw JsonParsingError.UnsupportedTypeError",
+    "            throw JsonParsingError.unsupportedTypeError",
     "        }",
     "    }",
     "}"
@@ -225,19 +224,16 @@ let swiftDoubleParser = String(lines:
 
 let swiftBoolParser = String(lines:
     "extension Bool {",
-    "    init(jsonValue: AnyObject?) throws {",
+    "    init(jsonValue: Any?) throws {",
     "        if let number = jsonValue as? NSNumber {",
+    "            guard String(cString: number.objCType) == String(cString: NSNumber(value: true).objCType) else {",
+    "                throw JsonParsingError.unsupportedTypeError",
+    "            }",
     "            self = number.boolValue",
     "        } else if let number = jsonValue as? Bool {",
     "            self = number",
-    "        } else if let number = jsonValue as? Double {",
-    "            self = Bool(number)",
-    "        } else if let number = jsonValue as? Float {",
-    "            self = Bool(number)",
-    "        } else if let number = jsonValue as? Int {",
-    "            self = Bool(number)",
     "        } else {",
-    "            throw JsonParsingError.UnsupportedTypeError",
+    "            throw JsonParsingError.unsupportedTypeError",
     "        }",
     "    }",
     "}"
@@ -245,8 +241,8 @@ let swiftBoolParser = String(lines:
 
 let swiftOptionalParser = String(lines:
     "extension Optional {",
-    "    init(jsonValue: AnyObject?, map: AnyObject throws -> Wrapped) throws {",
-    "        if let jsonValue = jsonValue where !(jsonValue is NSNull) {",
+    "    init(jsonValue: Any?, map: (Any) throws -> Wrapped) throws {",
+    "        if let jsonValue = jsonValue, !(jsonValue is NSNull) {",
     "            self = try map(jsonValue)",
     "        } else {",
     "            self = nil",
@@ -257,9 +253,9 @@ let swiftOptionalParser = String(lines:
 
 let swiftArrayParser = String(lines:
     "extension Array {",
-    "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
-    "        guard let items = jsonValue as? [AnyObject] else {",
-    "            throw JsonParsingError.UnsupportedTypeError",
+    "    init(jsonValue: Any?, map: (Any) throws -> Element) throws {",
+    "        guard let items = jsonValue as? [Any] else {",
+    "            throw JsonParsingError.unsupportedTypeError",
     "        }",
     "        self = try items.map(map)",
     "    }",
@@ -268,9 +264,9 @@ let swiftArrayParser = String(lines:
 
 let swiftContiguousArrayParser = String(lines:
     "extension ContiguousArray {",
-    "    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {",
-    "        guard let items = jsonValue as? [AnyObject] else {",
-    "            throw JsonParsingError.UnsupportedTypeError",
+    "    init(jsonValue: Any?, map: (Any) throws -> Element) throws {",
+    "        guard let items = jsonValue as? [Any] else {",
+    "            throw JsonParsingError.unsupportedTypeError",
     "        }",
     "        self = ContiguousArray(try items.lazy.map(map))",
     "    }",
@@ -278,22 +274,22 @@ let swiftContiguousArrayParser = String(lines:
 )
 
 private extension Declaration {
-    private static let errorType = Declaration(text: swiftErrorType, priority: 1000)
-    private static let arrayParser = Declaration(text: swiftArrayParser, priority: 500)
-    private static let contiguousArrayParser = Declaration(text: swiftContiguousArrayParser, priority: 500)
-    private static let stringParser = Declaration(text: swiftStringParser, priority: 500)
-    private static let boolParser = Declaration(text: swiftBoolParser, priority: 500)
-    private static let intParser = Declaration(text: swiftIntParser, priority: 500)
-    private static let floatParser = Declaration(text: swiftFloatParser, priority: 500)
-    private static let doubleParser = Declaration(text: swiftDoubleParser, priority: 500)
-    private static let optionalParser = Declaration(text: swiftOptionalParser, priority:  500)
+    static let errorType = Declaration(text: swiftErrorType, priority: 1000)
+    static let arrayParser = Declaration(text: swiftArrayParser, priority: 500)
+    static let contiguousArrayParser = Declaration(text: swiftContiguousArrayParser, priority: 500)
+    static let stringParser = Declaration(text: swiftStringParser, priority: 500)
+    static let boolParser = Declaration(text: swiftBoolParser, priority: 500)
+    static let intParser = Declaration(text: swiftIntParser, priority: 500)
+    static let floatParser = Declaration(text: swiftFloatParser, priority: 500)
+    static let doubleParser = Declaration(text: swiftDoubleParser, priority: 500)
+    static let optionalParser = Declaration(text: swiftOptionalParser, priority:  500)
 }
 
 extension ListType {
     var parser: Declaration {
         switch self {
-        case .Array: return .arrayParser
-        case .ContiguousArray: return .contiguousArrayParser
+        case .array: return .arrayParser
+        case .contiguousArray: return .contiguousArrayParser
         }
     }
     var className: String {
@@ -301,12 +297,24 @@ extension ListType {
     }
 }
 
+extension ModelParser.FieldType {
+    
+    static fileprivate func orderedBefore(_ type1: ModelParser.FieldType, before type2: ModelParser.FieldType) -> Bool {
+        switch (type1, type2) {
+        case (.number(.bool), _): return true
+        case (_, .number(.bool)): return false
+        default: return type1.enumCaseName < type2.enumCaseName
+        }
+    }
+    
+}
+
 struct SwiftJsonParsingTranslator: ModelTranslator {
     
-    private var listType: ListType = .Array
+    private var listType: ListType = .array
     
     init(args: [String] = []) {
-        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .ContiguousArray : .Array
+        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .contiguousArray : .array
     }
     
     func translate(_ type: ModelParser.FieldType, name: String) -> String {
@@ -321,7 +329,7 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
             return false
         }.lazy.map { $0.text }
         let parseFunction = [String(lines:
-            "func parse\(name.camelCasedString)(jsonValue: AnyObject?) throws -> \(typeName) {",
+            "func parse\(name.camelCasedString)(jsonValue: Any?) throws -> \(typeName) {",
             "    return \(instructions)",
             "}"
         )]
@@ -336,19 +344,19 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
         let typeName: String
         let tryOptionalModifier = tryOptional ? "?" : ""
         switch numberType {
-        case .Bool:
+        case .bool:
             parser = .boolParser
             instruction = "try\(tryOptionalModifier) Bool(jsonValue: \(valueExpression))"
             typeName = "Bool"
-        case .Int:
+        case .int:
             parser = .intParser
             instruction = "try\(tryOptionalModifier) Int(jsonValue: \(valueExpression))"
             typeName = "Int"
-        case .Float:
+        case .float:
             parser = .floatParser
             instruction = "try\(tryOptionalModifier) Float(jsonValue: \(valueExpression))"
             typeName = "Float"
-        case .Double:
+        case .double:
             parser = .doubleParser
             instruction = "try\(tryOptionalModifier) Double(jsonValue: \(valueExpression))"
             typeName = "Double"
@@ -392,9 +400,9 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
             let typeName = String(joined: parentTypeNames, separator: ".")
             var parser = String(lines:
                 "extension \(typeName) {",
-                "    init(jsonValue: AnyObject?) throws {",
-                "        guard let dict = jsonValue as? [NSObject: AnyObject] else {",
-                "            throw JsonParsingError.UnsupportedTypeError",
+                "    init(jsonValue: Any?) throws {",
+                "        guard let dict = jsonValue as? [String: Any] else {",
+                "            throw JsonParsingError.unsupportedTypeError",
                 "        }\n"
             )
             parser += String(joined: fields.map { field in
@@ -414,21 +422,22 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
             let typeName = String(joined: parentTypeNames, separator: ".")
             var parser = String(lines:
                 "extension \(typeName) {",
-                "    init(jsonValue: AnyObject?) throws {",
+                "    init(jsonValue: Any?) throws {",
                 "        "
             )
-            parser += String(joined: types.map { (type: ModelParser.FieldType) -> String in
-                let (subDeclarations, instruction, _) = createParsers(type, parentTypeNames: parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName)"], valueExpression: "jsonValue", tryOptional: true)
+            let sortedTypes = types.sorted(by: ModelParser.FieldType.orderedBefore)
+            parser += String(joined: sortedTypes.map { (type: ModelParser.FieldType) -> String in
+                let (subDeclarations, instruction, _) = createParsers(type, parentTypeNames: parentTypeNames + ["\(parentTypeNames.last!)\(type.enumCaseName.firstCapitalized())"], valueExpression: "jsonValue", tryOptional: true)
                 declarations.formUnion(subDeclarations)
                 return String(lines:
                     "if let value = \(instruction) {",
-                    "            self = \(type.enumCaseName)(value)",
+                    "            self = .\(type.enumCaseName)(value)",
                     "        }"
                 )
             }, separator: " else ")
             parser += String(lines:
                           " else {",
-                "            throw JsonParsingError.UnsupportedTypeError",
+                "            throw JsonParsingError.unsupportedTypeError",
                 "        }",
                 "    }",
                 "}"

@@ -74,40 +74,40 @@ class ModelParserTest: XCTestCase {
     
     func testEqualTypeUnknown() {
         XCTAsserEqualFieldType(.unknown, .unknown)
-        XCTAsserNotEqualFieldType(.unknown, .number(.Int))
+        XCTAsserNotEqualFieldType(.unknown, .number(.int))
     }
     
     func testEqualTypeText() {
         XCTAsserEqualFieldType(ModelParser.FieldType.text, .text)
-        XCTAsserNotEqualFieldType(.text, .number(.Int))
+        XCTAsserNotEqualFieldType(.text, .number(.int))
     }
     
     func testEqualNumberTypes() {
-        XCTAssertEqual(ModelParser.NumberType.Int, ModelParser.NumberType.Int)
-        XCTAssertEqual(ModelParser.NumberType.Float, ModelParser.NumberType.Float)
-        XCTAssertEqual(ModelParser.NumberType.Bool, ModelParser.NumberType.Bool)
-        XCTAssertEqual(ModelParser.NumberType.Double, ModelParser.NumberType.Double)
-        XCTAssertNotEqual(ModelParser.NumberType.Int, ModelParser.NumberType.Double)
-        XCTAssertNotEqual(ModelParser.NumberType.Float, ModelParser.NumberType.Double)
+        XCTAssertEqual(ModelParser.NumberType.int, ModelParser.NumberType.int)
+        XCTAssertEqual(ModelParser.NumberType.float, ModelParser.NumberType.float)
+        XCTAssertEqual(ModelParser.NumberType.bool, ModelParser.NumberType.bool)
+        XCTAssertEqual(ModelParser.NumberType.double, ModelParser.NumberType.double)
+        XCTAssertNotEqual(ModelParser.NumberType.int, ModelParser.NumberType.double)
+        XCTAssertNotEqual(ModelParser.NumberType.float, ModelParser.NumberType.double)
     }
 
     func testEqualTypeNumber() {
-        XCTAsserEqualFieldType(.number(.Int), .number(.Int))
-        XCTAsserNotEqualFieldType(.number(.Int), .text)
-        XCTAsserNotEqualFieldType(.number(.Int), .number(.Double))
+        XCTAsserEqualFieldType(.number(.int), .number(.int))
+        XCTAsserNotEqualFieldType(.number(.int), .text)
+        XCTAsserNotEqualFieldType(.number(.int), .number(.double))
     }
     
     func testEqualTypeList() {
         XCTAsserEqualFieldType(.list(.text), .list(.text))
         XCTAsserNotEqualFieldType(.list(.text), .text)
-        XCTAsserNotEqualFieldType(.list(.text), .list(.number(.Int)))
+        XCTAsserNotEqualFieldType(.list(.text), .list(.number(.int)))
     }
     
     func testEqualTypeOptional() {
         XCTAsserEqualFieldType(.optional(.text), .optional(.text))
         XCTAsserNotEqualFieldType(.optional(.text), .text)
         XCTAsserNotEqualFieldType(.optional(.text), .list(.text))
-        XCTAsserNotEqualFieldType(.optional(.text), .optional(.number(.Int)))
+        XCTAsserNotEqualFieldType(.optional(.text), .optional(.number(.int)))
     }
     
     func testEqualTypeObject() {
@@ -115,29 +115,29 @@ class ModelParserTest: XCTestCase {
         XCTAsserEqualFieldType(.object([.init(name: "object", type: .text)]), .object([.init(name: "object", type: .text)]))
         XCTAsserEqualFieldType(.object([
             .init(name: "object", type: .text),
-            .init(name: "int", type: .number(.Int)),
+            .init(name: "int", type: .number(.int)),
         ]), .object([
-            .init(name: "int", type: .number(.Int)),
+            .init(name: "int", type: .number(.int)),
             .init(name: "object", type: .text),
         ]))
         XCTAsserNotEqualFieldType(.object([
             .init(name: "object", type: .text),
-            .init(name: "int", type: .number(.Int)),
+            .init(name: "int", type: .number(.int)),
         ]), .object([
             .init(name: "int", type: .text),
             .init(name: "object", type: .text),
         ]))
         XCTAsserNotEqualFieldType(.object([
             .init(name: "object", type: .text),
-            .init(name: "integer", type: .number(.Int)),
+            .init(name: "integer", type: .number(.int)),
         ]), .object([
-            .init(name: "int", type: .number(.Int)),
+            .init(name: "int", type: .number(.int)),
             .init(name: "object", type: .text),
         ]))
         XCTAsserNotEqualFieldType(.object([
             .init(name: "object", type: .text),
         ]), .object([
-            .init(name: "int", type: .number(.Int)),
+            .init(name: "int", type: .number(.int)),
             .init(name: "object", type: .text),
         ]))
         XCTAsserNotEqualFieldType(.object([.init(name: "object", type: .text)]), .object([.init(name: "text", type: .text)]))
@@ -145,22 +145,22 @@ class ModelParserTest: XCTestCase {
     }
     
     func testEqualTypeEnum() {
-        XCTAsserEqualFieldType(.enum([]), .enum([]))
+        XCTAsserEqualFieldType(.`enum`([]), .enum([]))
         XCTAsserEqualFieldType(.enum([.text]), .enum([.text]))
         XCTAsserEqualFieldType(.enum([
             .text,
-            .number(.Int),
+            .number(.int),
         ]), .enum([
-            .number(.Int),
+            .number(.int),
             .text,
         ]))
         XCTAsserNotEqualFieldType(.enum([
             .text,
-            .number(.Int),
+            .number(.int),
         ]), .enum([
             .text
         ]))
-        XCTAsserNotEqualFieldType(.enum([.text]), .enum([.number(.Int)]))
+        XCTAsserNotEqualFieldType(.enum([.text]), .enum([.number(.int)]))
         XCTAsserNotEqualFieldType(.enum([.text]), .text)
     }
     
@@ -171,34 +171,34 @@ class ModelParserTest: XCTestCase {
     
     func testInt() throws {
         let type = try parser.decode(10)
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Int))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.int))
     }
     
     func testJsonIntExponential() throws {
         let jsonValue = "1E3"
         let type = try parser.decode(try data(from: jsonValue))
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Double))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.double))
     }
     
     func testJsonIntNegativeExponential() throws {
         let jsonValue = "1E-3"
         let type = try parser.decode(try data(from: jsonValue))
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Double))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.double))
     }
     
     func testDouble() throws {
         let type = try parser.decode(10.0)
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Double))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.double))
     }
     
     func testFloat() throws {
         let type = try parser.decode(Float(10.0))
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Float))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.float))
     }
     
     func testBool() throws {
         let type = try parser.decode(true)
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Bool))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.bool))
     }
     
     private func data(from jsonValue: String) throws -> Any {
@@ -216,19 +216,19 @@ class ModelParserTest: XCTestCase {
     func testJsonBool() throws {
         let jsonValue = "true"
         let type = try parser.decode(try data(from: jsonValue))
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Bool))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.bool))
     }
     
     func testJsonInt() throws {
         let jsonValue = "1"
         let type = try parser.decode(try data(from: jsonValue))
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Int))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.int))
     }
     
     func testJsonDouble() throws {
         let jsonValue = "1.2"
         let type = try parser.decode(try data(from: jsonValue))
-        XCTAssertEqual(type, ModelParser.FieldType.number(.Double))
+        XCTAssertEqual(type, ModelParser.FieldType.number(.double))
     }
 
     func testJsonString() throws {
@@ -264,7 +264,7 @@ class ModelParserTest: XCTestCase {
     func testJsonIntArray() throws {
         let jsonValue = "[1,2,3]"
         let type = try parser.decode(try data(from: jsonValue))
-        XCTAssertEqual(type, ModelParser.FieldType.list(.number(.Int)))
+        XCTAssertEqual(type, ModelParser.FieldType.list(.number(.int)))
     }
     
     func testJsonOptionalStringArray() throws {
@@ -296,7 +296,7 @@ class ModelParserTest: XCTestCase {
             Int(10),
             Int(20)
         ))
-        XCTAssertEqual(type, ModelParser.FieldType.list(.number(.Int)))
+        XCTAssertEqual(type, ModelParser.FieldType.list(.number(.int)))
     }
 
     func testOptionalStringArray() throws {
@@ -329,7 +329,7 @@ class ModelParserTest: XCTestCase {
         ))
         let expectedType: ModelParser.FieldType = .object([
             .init(name: "string", type: .text),
-            .init(name: "integer", type: .number(.Int)),
+            .init(name: "integer", type: .number(.int)),
             .init(name: "object", type: .object([]))
         ])
         XCTAssertEqual(type, expectedType)
@@ -357,7 +357,7 @@ class ModelParserTest: XCTestCase {
             Double(10),
             Float(10)
         ))
-        XCTAssertEqual(type, ModelParser.FieldType.list(.number(.Double)), "Mixed number types with at least one Double should be merged to Double")
+        XCTAssertEqual(type, ModelParser.FieldType.list(.number(.double)), "Mixed number types with at least one Double should be merged to Double")
     }
     
     func testArrayOfMixedIntAndFloat() throws {
@@ -366,7 +366,7 @@ class ModelParserTest: XCTestCase {
             Float(10)
         ))
         let expectedResult: ModelParser.FieldType = .list(
-            .number(.Float)
+            .number(.float)
         )
         XCTAssertEqual(type, expectedResult, "Mixed number types with Int and Float should be merged to Float")
     }
@@ -378,8 +378,8 @@ class ModelParserTest: XCTestCase {
         ))
         let expectedResult: ModelParser.FieldType = .list(
             .enum([
-                .number(.Bool),
-                .number(.Double)
+                .number(.bool),
+                .number(.double)
             ])
         )
         XCTAssertEqual(type, expectedResult, "Mixed number types with Bool and Double should be merged to enum containing Bool and Double numbers")
@@ -393,8 +393,8 @@ class ModelParserTest: XCTestCase {
         ))
         let expectedResult: ModelParser.FieldType = .list(
             .enum([
-                .number(.Bool),
-                .number(.Double)
+                .number(.bool),
+                .number(.double)
             ])
         )
         XCTAssertEqual(type, expectedResult, "Mixed number types with Bool, Int and Double should be merged to enum containing Bool and Double numbers")
@@ -430,7 +430,7 @@ class ModelParserTest: XCTestCase {
                 .init(name: "mixed", type: .optional(
                     .enum([
                         .text,
-                        .number(.Double)
+                        .number(.double)
                     ])
                 ))
             ])
@@ -461,7 +461,7 @@ class ModelParserTest: XCTestCase {
             .object([
                 .init(name: "mixed", type: .list(
                     .enum([
-                        .number(.Double),
+                        .number(.double),
                         .text
                     ])
                 ))
@@ -484,11 +484,11 @@ class ModelParserTest: XCTestCase {
                         .optional(
                             .enum([
                                 .text,
-                                .number(.Double)
+                                .number(.double)
                             ])
                         )
                     ),
-                    .number(.Int)
+                    .number(.int)
                 ]))
             ])
         )
@@ -497,7 +497,7 @@ class ModelParserTest: XCTestCase {
     
     
     func testUnsupported() {
-        var error: ErrorProtocol? = nil
+        var error: Error? = nil
         do {
             let _ = try parser.decode(NSObject())
         } catch let e {
@@ -518,12 +518,12 @@ class ModelParserTest: XCTestCase {
                 )
             ),
             .init(name: "text", type: .text),
-            .init(name: "number", type: .number(.Int)),
+            .init(name: "number", type: .number(.int)),
             .init(name: "enum", type: .enum([
                     .object([
                         .init(name: "textInEnum", type: .text)
                     ]),
-                    .number(.Float)
+                    .number(.float)
                 ])
             ),
             .init(name: "unknown", type: .unknown),
@@ -544,13 +544,13 @@ class ModelParserTest: XCTestCase {
                 ))
             ),
             .init(name: "text", type: .optional(.text)),
-            .init(name: "number", type: .optional(.number(.Int))),
+            .init(name: "number", type: .optional(.number(.int))),
             .init(name: "enum", type: .optional(.
                 enum([
                     .object([
                         .init(name: "textInEnum", type: .optional(.text))
                     ]),
-                    .number(.Float)
+                    .number(.float)
                 ])
             )),
             .init(name: "unknown", type: .optional(.unknown)),
@@ -573,8 +573,8 @@ class ModelParserTest: XCTestCase {
     }
     
     func testTransformAllFieldsToOptionalWithToplevelEnum() {
-        let type: ModelParser.FieldType = .enum([.text, .number(.Int)])
-        let expectedResult: ModelParser.FieldType = .enum([.text, .number(.Int)])
+        let type: ModelParser.FieldType = .enum([.text, .number(.int)])
+        let expectedResult: ModelParser.FieldType = .enum([.text, .number(.int)])
         
         let transformedResult = ModelParser.transformAllFieldsToOptional(type)
         XCTAssertEqual(expectedResult, transformedResult)

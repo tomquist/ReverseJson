@@ -72,8 +72,8 @@ Turns this:
 ```swift
 struct User {
     enum MixedItem {
-        case Number(Int)
-        case Text(String)
+        case number(Int)
+        case text(String)
     }
     struct LocationsItem {
         struct Address {
@@ -92,48 +92,33 @@ struct User {
     let numbers: [Int]
 }
 
-enum JsonParsingError: ErrorType {
-    case UnsupportedTypeError
-}
-
-extension String {
-    init(jsonValue: AnyObject?) throws {
-        guard let string = jsonValue as? String else {
-            throw JsonParsingError.UnsupportedTypeError
-        }
-        self = string
-    }
-}
-
-extension Bool {
-    init(jsonValue: AnyObject?) throws {
-        if let number = jsonValue as? NSNumber {
-            self = number.boolValue
-        } else if let number = jsonValue as? Bool {
-            self = number
-        } else if let number = jsonValue as? Double {
-            self = Bool(number)
-        } else if let number = jsonValue as? Float {
-            self = Bool(number)
-        } else if let number = jsonValue as? Int {
-            self = Bool(number)
-        } else {
-            throw JsonParsingError.UnsupportedTypeError
-        }
-    }
+enum JsonParsingError: Error {
+    case unsupportedTypeError
 }
 
 extension Array {
-    init(jsonValue: AnyObject?, map: AnyObject throws -> Element) throws {
-        guard let items = jsonValue as? [AnyObject] else {
-            throw JsonParsingError.UnsupportedTypeError
+    init(jsonValue: Any?, map: (Any) throws -> Element) throws {
+        guard let items = jsonValue as? [Any] else {
+            throw JsonParsingError.unsupportedTypeError
         }
         self = try items.map(map)
     }
 }
 
+extension Bool {
+    init(jsonValue: Any?) throws {
+        if let number = jsonValue as? NSNumber {
+            self = number.boolValue
+        } else if let number = jsonValue as? Bool {
+            self = number
+        } else {
+            throw JsonParsingError.unsupportedTypeError
+        }
+    }
+}
+
 extension Double {
-    init(jsonValue: AnyObject?) throws {
+    init(jsonValue: Any?) throws {
         if let number = jsonValue as? NSNumber {
             self = number.doubleValue
         } else if let number = jsonValue as? Int {
@@ -143,15 +128,15 @@ extension Double {
         } else if let number = jsonValue as? Float {
             self = Double(number)
         } else {
-            throw JsonParsingError.UnsupportedTypeError
+            throw JsonParsingError.unsupportedTypeError
         }
     }
 }
 
 extension Int {
-    init(jsonValue: AnyObject?) throws {
+    init(jsonValue: Any?) throws {
         if let number = jsonValue as? NSNumber {
-            self = number.integerValue
+            self = number.intValue
         } else if let number = jsonValue as? Int {
             self = number
         } else if let number = jsonValue as? Double {
@@ -159,14 +144,14 @@ extension Int {
         } else if let number = jsonValue as? Float {
             self = Int(number)
         } else {
-            throw JsonParsingError.UnsupportedTypeError
+            throw JsonParsingError.unsupportedTypeError
         }
     }
 }
 
 extension Optional {
-    init(jsonValue: AnyObject?, map: AnyObject throws -> Wrapped) throws {
-        if let jsonValue = jsonValue where !(jsonValue is NSNull) {
+    init(jsonValue: Any?, map: (Any) throws -> Wrapped) throws {
+        if let jsonValue = jsonValue, !(jsonValue is NSNull) {
             self = try map(jsonValue)
         } else {
             self = nil
@@ -174,32 +159,33 @@ extension Optional {
     }
 }
 
-extension User.MixedItem {
-    init(jsonValue: AnyObject?) throws {
-        if let value = try? Int(jsonValue: jsonValue) {
-            self = Number(value)
-        } else if let value = try? String(jsonValue: jsonValue) {
-            self = Text(value)
-        } else {
-            throw JsonParsingError.UnsupportedTypeError
+extension String {
+    init(jsonValue: Any?) throws {
+        guard let string = jsonValue as? String else {
+            throw JsonParsingError.unsupportedTypeError
         }
+        self = string
     }
 }
 
-extension User.LocationsItem.Address {
-    init(jsonValue: AnyObject?) throws {
-        guard let dict = jsonValue as? [NSObject: AnyObject] else {
-            throw JsonParsingError.UnsupportedTypeError
+extension User {
+    init(jsonValue: Any?) throws {
+        guard let dict = jsonValue as? [String: Any] else {
+            throw JsonParsingError.unsupportedTypeError
         }
-        self.city = try String(jsonValue: dict["city"])
-        self.street = try String(jsonValue: dict["street"])
+        self.`internal` = try Bool(jsonValue: dict["internal"])
+        self.numbers = try Array(jsonValue: dict["numbers"]) { try Int(jsonValue: $0) }
+        self.locations = try Array(jsonValue: dict["locations"]) { try User.LocationsItem(jsonValue: $0) }
+        self.mixed = try Array(jsonValue: dict["mixed"]) { try User.MixedItem(jsonValue: $0) }
+        self.isPrivate = try Bool(jsonValue: dict["is_private"])
+        self.name = try String(jsonValue: dict["name"])
     }
 }
 
 extension User.LocationsItem {
-    init(jsonValue: AnyObject?) throws {
-        guard let dict = jsonValue as? [NSObject: AnyObject] else {
-            throw JsonParsingError.UnsupportedTypeError
+    init(jsonValue: Any?) throws {
+        guard let dict = jsonValue as? [String: Any] else {
+            throw JsonParsingError.unsupportedTypeError
         }
         self.lat = try Double(jsonValue: dict["lat"])
         self.lon = try Double(jsonValue: dict["lon"])
@@ -207,21 +193,29 @@ extension User.LocationsItem {
     }
 }
 
-extension User {
-    init(jsonValue: AnyObject?) throws {
-        guard let dict = jsonValue as? [NSObject: AnyObject] else {
-            throw JsonParsingError.UnsupportedTypeError
+extension User.LocationsItem.Address {
+    init(jsonValue: Any?) throws {
+        guard let dict = jsonValue as? [String: Any] else {
+            throw JsonParsingError.unsupportedTypeError
         }
-        self.mixed = try Array(jsonValue: dict["mixed"]) { try User.MixedItem(jsonValue: $0) }
-        self.isPrivate = try Bool(jsonValue: dict["is_private"])
-        self.numbers = try Array(jsonValue: dict["numbers"]) { try Int(jsonValue: $0) }
-        self.name = try String(jsonValue: dict["name"])
-        self.locations = try Array(jsonValue: dict["locations"]) { try User.LocationsItem(jsonValue: $0) }
-        self.`internal` = try Bool(jsonValue: dict["internal"])
+        self.street = try String(jsonValue: dict["street"])
+        self.city = try String(jsonValue: dict["city"])
     }
 }
 
-func parseUser(jsonValue: AnyObject?) throws -> User {
+extension User.MixedItem {
+    init(jsonValue: Any?) throws {
+        if let value = try? Int(jsonValue: jsonValue) {
+            self = .number(value)
+        } else if let value = try? String(jsonValue: jsonValue) {
+            self = .text(value)
+        } else {
+            throw JsonParsingError.unsupportedTypeError
+        }
+    }
+}
+
+func parseUser(jsonValue: Any?) throws -> User {
     return try User(jsonValue: jsonValue)
 }
 ```

@@ -1,30 +1,28 @@
 import Foundation
 
 extension NSNumber {
-    private struct Constants {
-        private static let trueNumber = NSNumber(value: true)
-        private static let falseNumber = NSNumber(value: false)
-        private static let trueObjCType = String(cString: Constants.trueNumber.objCType)
-        private static let falseObjCType = String(cString: Constants.falseNumber.objCType)
-    }
+    private static let trueNumber = NSNumber(value: true)
+    private static let falseNumber = NSNumber(value: false)
+    private static let trueObjCType = String(cString: NSNumber.trueNumber.objCType)
+    private static let falseObjCType = String(cString: NSNumber.falseNumber.objCType)
+    
     var isBool:Bool {
         get {
             let objCType = String(cString: self.objCType)
-            if (self.compare(Constants.trueNumber) == ComparisonResult.orderedSame && objCType == Constants.trueObjCType)
-                || (self.compare(Constants.falseNumber) == ComparisonResult.orderedSame && objCType == Constants.falseObjCType){
+            if (self.compare(NSNumber.trueNumber) == .orderedSame && objCType == NSNumber.trueObjCType)
+                || (self.compare(NSNumber.falseNumber) == ComparisonResult.orderedSame && objCType == NSNumber.falseObjCType){
                 return true
             }
             return false
         }
     }
-    
     var numberType: ModelParser.NumberType {
-        if self.isBool {
-            return .Bool
+        if isBool {
+            return .bool
         }
-        let mappings: [String: ModelParser.NumberType] = ["c": .Int, "i": .Int, "l": .Int, "q": .Int, "f": .Float, "d": .Double]
+        let mappings: [String: ModelParser.NumberType] = ["b": .bool, "c": .bool, "i": .int, "l": .int, "q": .int, "f": .float, "d": .double]
         let objcType = String(validatingUTF8: self.objCType)?.lowercased()
-        return objcType.flatMap { mappings[$0] } ?? .Double
+        return objcType.flatMap { mappings[$0] } ?? .double
     }
 }
 
@@ -40,10 +38,10 @@ public class ModelParser {
         }
     }
     public enum NumberType: String {
-        case Bool
-        case Int
-        case Float
-        case Double
+        case bool = "Bool"
+        case int = "Int"
+        case float = "Float"
+        case double = "Double"
     }
     
     public indirect enum FieldType {
@@ -56,7 +54,7 @@ public class ModelParser {
         case optional(FieldType)
     }
     
-    public enum Error: ErrorProtocol {
+    public enum Error: Swift.Error {
         case unsupportedValueType(Any, Any.Type)
     }
     
@@ -71,13 +69,13 @@ public class ModelParser {
         case let number as NSNumber where value is Double: // Only on ios/osx we can bridge numbers to double and NSNumber
             return .number(number.numberType)
         case is Double:
-            return .number(.Double)
+            return .number(.double)
         case is Float:
-            return .number(.Float)
+            return .number(.float)
         case is Int:
-            return .number(.Int)
+            return .number(.int)
         case is Bool:
-            return .number(.Bool)
+            return .number(.bool)
         case let subObj as [String: AnyObject]:
             return try decodeDict(subObj)
         case let subObj as [String: Any]:
@@ -97,7 +95,7 @@ public class ModelParser {
         case is NSNull:
             return .optional(.unknown)
         default:
-            throw Error.unsupportedValueType(value, value.dynamicType)
+            throw Error.unsupportedValueType(value, type(of: value))
         }
     }
     
@@ -231,19 +229,19 @@ public func ==(lhs: ModelParser.FieldType, rhs: ModelParser.FieldType) -> Bool {
 }
 
 extension ModelParser.NumberType {
-    private func mergeWith(_ numberType: ModelParser.NumberType) -> ModelParser.NumberType? {
+    fileprivate func mergeWith(_ numberType: ModelParser.NumberType) -> ModelParser.NumberType? {
         switch (self, numberType) {
         case let (numberType1, numberType2) where numberType1 == numberType2: return numberType1
-        case (.Bool, _), (_, .Bool): return nil
-        case (.Double, _), (_, .Double): return .Double
-        case (.Float, _), (_, .Float): return .Float
+        case (.bool, _), (_, .bool): return nil
+        case (.double, _), (_, .double): return .double
+        case (.float, _), (_, .float): return .float
         default: return self // Can't be reached
         }
     }
 }
 
 extension ModelParser.FieldType {
-    private func mergeWith(_ type: ModelParser.FieldType) -> ModelParser.FieldType {
+    fileprivate func mergeWith(_ type: ModelParser.FieldType) -> ModelParser.FieldType {
         func mergeEnumTypes(_ enumTypes: Set<ModelParser.FieldType>, otherType: ModelParser.FieldType) -> Set<ModelParser.FieldType> {
             if enumTypes.contains(otherType) {
                 return enumTypes

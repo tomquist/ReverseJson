@@ -12,13 +12,13 @@ import Foundation
 extension ModelParser.FieldType {
     public var enumCaseName: String {
         switch self {
-        case .object: return "Object"
-        case .list: return "List"
-        case .text: return "Text"
-        case .number(.Bool): return "Boolean"
-        case .number: return "Number"
-        case .enum: return "Enum"
-        case .unknown: return "UnknownType"
+        case .object: return "object"
+        case .list: return "list"
+        case .text: return "text"
+        case .number(.bool): return "boolean"
+        case .number: return "number"
+        case .enum: return "enum"
+        case .unknown: return "unknownType"
         case let .optional(type): return type.enumCaseName
         }
     }
@@ -91,11 +91,11 @@ extension String {
         if let identifierHead = chars.first {
             let head: String
             let identifierTail = chars.suffix(from: chars.index(after: chars.startIndex))
-            let tail = String(joined: identifierTail.split(isSeparator: CharacterSet.swiftIdentifierValidTailChars.inverted.characterIsMember).map(String.init), separator: "_").pascalCased()
-            if CharacterSet.swiftIdentifierValidHeadChars.characterIsMember(identifierHead) {
+            let tail = String(joined: identifierTail.split(whereSeparator: CharacterSet.swiftIdentifierValidTailChars.inverted.contains).map(String.init), separator: "_").pascalCased()
+            if CharacterSet.swiftIdentifierValidHeadChars.contains(identifierHead) {
                 head = String(identifierHead)
             } else {
-                head = tail.isEmpty || !CharacterSet.swiftIdentifierValidHeadChars.characterIsMember(tail.characters.first!) ? "_" : ""
+                head = tail.isEmpty || !CharacterSet.swiftIdentifierValidHeadChars.contains(tail.characters.first!) ? "_" : ""
             }
             return "\(head)\(tail)"
         } else {
@@ -122,7 +122,7 @@ extension String {
 #endif
 
 extension CharacterSet {
-    private static let swiftIdentifierValidHeadChars: CharacterSet = {
+    fileprivate static let swiftIdentifierValidHeadChars: CharacterSet = {
         let ranges: [CountableClosedRange<UInt32>] = [
             0xA8...0xA8,
             0xAA...0xAA,
@@ -174,36 +174,34 @@ extension CharacterSet {
             0xD0000...0xDFFFD,
             0xE0000...0xEFFFD
         ]
-        // TODO Temporarily use NSMutableCharacterSet instead of CharacterSet struct because of a bug in Swift 3.0 beta
-        let charset = NSMutableCharacterSet.uppercaseLetters()
-        charset.formUnion(with: NSCharacterSet.lowercaseLetters())
-        charset.addCharacters(in: "_")
+        var charset = CharacterSet.uppercaseLetters
+        charset.formUnion(.lowercaseLetters)
+        charset.insert(charactersIn: "_")
         ranges.forEach {
-            charset.formUnion(with: CharacterSet(charactersIn: UnicodeScalar($0.lowerBound)..<UnicodeScalar($0.upperBound)))
+            charset.formUnion(CharacterSet(charactersIn: UnicodeScalar($0.lowerBound)!..<UnicodeScalar($0.upperBound)!))
             
         }
-        return charset as CharacterSet
+        return charset
     }()
     
-    private static let swiftIdentifierValidTailChars: CharacterSet = {
+    fileprivate static let swiftIdentifierValidTailChars: CharacterSet = {
         let ranges: [CountableClosedRange<UInt32>] = [
             0x300...0x36F,
             0x1DC0...0x1DFF,
             0x20D0...0x20FF,
             0xFE20...0xFE2F,
         ]
-        // TODO Temporarily use NSMutableCharacterSet instead of CharacterSet struct because of a bug in Swift 3.0 beta
-        var charset = NSMutableCharacterSet.decimalDigits()
-        charset.formUnion(with: .swiftIdentifierValidHeadChars)
+        var charset = CharacterSet.decimalDigits
+        charset.formUnion(.swiftIdentifierValidHeadChars)
         ranges.forEach {
-            charset.formUnion(with: CharacterSet(charactersIn: UnicodeScalar($0.lowerBound)..<UnicodeScalar($0.upperBound)))
+            charset.formUnion(CharacterSet(charactersIn: UnicodeScalar($0.lowerBound)!..<UnicodeScalar($0.upperBound)!))
         }
-        return charset as CharacterSet
+        return charset
     }()
     
-    func characterIsMember(_ char: Character) -> Bool {
+    func contains(_ char: Character) -> Bool {
         for codeUnit in String(char).utf16 {
-            if !contains(UnicodeScalar(codeUnit)) {
+            if !contains(UnicodeScalar(codeUnit)!) {
                 return false
             }
         }

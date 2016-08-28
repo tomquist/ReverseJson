@@ -14,7 +14,7 @@ enum ProgramResult {
 }
 
 func usage() -> String {
-    let command = Process.arguments[0].characters.split(separator: "/").last.map(String.init) ?? ""
+    let command = ProcessInfo.processInfo.arguments[0].characters.split(separator: "/").last.map(String.init) ?? ""
     return String(lines:
         "Usage: \(command) (swift|objc) NAME FILE <options>",
         "e.g. \(command) swift User testModel.json <options>",
@@ -75,8 +75,7 @@ func main(with args: [String]) -> ProgramResult {
     return .success(String(joined: translators.map { $0.translate(rootType, name: name) }, separator: "\n\n"))
 }
 
-
-switch main(with: Process.arguments) {
+switch main(with: ProcessInfo.processInfo.arguments) {
 case let .success(output):
     print(output)
     exit(0)
