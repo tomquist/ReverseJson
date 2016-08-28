@@ -1,14 +1,5 @@
 import Foundation
 
-#if os(Linux)
-    extension NSStringEncoding {
-        static var utf8: NSStringEncoding {
-            return NSStringEncoding(kCFStringEncodingUTF8)
-        }
-    }
-    typealias JSONSerialization = NSJSONSerialization
-#endif
-
 extension ModelParser.FieldType {
     public var enumCaseName: String {
         switch self {
@@ -103,23 +94,6 @@ extension String {
         }
     }
 }
-
-#if os(Linux)
-    typealias CharacterSet = NSCharacterSet
-    
-    typealias ComparisonResult = NSComparisonResult
-    
-    extension CharacterSet {
-        convenience init(charactersIn range: Range<UnicodeScalar>) {
-            self.init(range: NSRange(location: Int(range.lowerBound.value), length: Int(range.upperBound.value - range.lowerBound.value)))
-        }
-        
-        func contains(_ scalar: UnicodeScalar) -> Bool {
-            return longCharacterIsMember(scalar.value)
-        }
-        
-    }
-#endif
 
 extension CharacterSet {
     fileprivate static let swiftIdentifierValidHeadChars: CharacterSet = {

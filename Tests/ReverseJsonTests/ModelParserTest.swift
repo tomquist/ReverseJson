@@ -203,13 +203,8 @@ class ModelParserTest: XCTestCase {
     
     private func data(from jsonValue: String) throws -> Any {
         let data = "{\"value\":\(jsonValue)}".data(using: .utf8)!
-        #if os(iOS) || os(watchOS) || os(tvOS) || os(OSX)
-            typealias JsonDict = [String: AnyObject]
-        #else
-            typealias JsonDict = [String: Any]
-        #endif
         
-        let jsonObj = try JSONSerialization.jsonObject(with: data, options: []) as! JsonDict
+        let jsonObj = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         return jsonObj["value"]!
     }
     
