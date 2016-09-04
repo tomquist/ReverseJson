@@ -309,6 +309,13 @@ class ModelParserTest: XCTestCase {
         XCTAssertEqual(type, ModelParser.FieldType.list(.optional(.unknown)))
     }
 
+    func testNilArray() throws {
+        let type = try parser.decode(Array<Any>(arrayLiteral:
+            Optional<Any>.none
+        ))
+        XCTAssertEqual(type, ModelParser.FieldType.list(.optional(.unknown)))
+    }
+    
     func testSingleFieldObject() throws {
         let type = try parser.decode(Dictionary<String, Any>(dictionaryLiteral:
             ("string", "Test")

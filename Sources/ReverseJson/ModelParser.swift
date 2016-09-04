@@ -26,6 +26,25 @@ extension NSNumber {
     }
 }
 
+protocol OptionalType {
+    var isNil: Bool { get }
+}
+
+extension Optional: OptionalType {
+    var isNil: Bool {
+        if case .none = self {
+            return true
+        }
+        return false
+    }
+}
+
+extension NSNull: OptionalType {
+    var isNil: Bool {
+        return true
+    }
+}
+
 public class ModelParser {
     
     public struct ObjectField {
@@ -72,38 +91,23 @@ public class ModelParser {
             return .number(.double)
         case is Float:
             return .number(.float)
-        case is Int:
+        case is Integer:
             return .number(.int)
         case is Bool:
             return .number(.bool)
-        case let subObj as [String: AnyObject]:
-            return try decodeDict(subObj)
+        case let optional as OptionalType where optional.isNil:
+            return .optional(.unknown)
         case let subObj as [String: Any]:
             return try decodeDict(subObj)
-        case let subObj as [AnyObject]:
-            if let subType = try decodeList(subObj) {
-                return .list(subType)
-            } else {
-                return .list(.unknown)
-            }
         case let subObj as [Any]:
             if let subType = try decodeList(subObj) {
                 return .list(subType)
             } else {
                 return .list(.unknown)
             }
-        case is NSNull:
-            return .optional(.unknown)
         default:
             throw Error.unsupportedValueType(value, type(of: value))
         }
-    }
-    
-    private func decodeDict(_ dict: [String: AnyObject]) throws -> FieldType {
-        let fields = try dict.map { (name: String, value: AnyObject) in
-            return ObjectField(name: name, type: try decode(value))
-        }
-        return .object(Set(fields))
     }
     
     private func decodeDict(_ dict: [String: Any]) throws -> FieldType {
@@ -122,17 +126,6 @@ public class ModelParser {
             return type2
         }
     }
-    
-    private func decodeList(_ list: [AnyObject]) throws -> FieldType? {
-        let types = try list.flatMap { try decode($0)}
-        return types.reduce(nil) { (type1, type2) -> FieldType? in
-            if let type1 = type1 {
-                return type1.mergeWith(type2)
-            }
-            return type2
-        }
-    }
-    
     
     private class func transformAllFieldsToOptionalImpl(_ rootField: ModelParser.FieldType) -> ModelParser.FieldType {
         switch rootField {
@@ -249,24 +242,14 @@ extension ModelParser.FieldType {
             var merged = false
             let newEnumTypes: [ModelParser.FieldType] = enumTypes.map { enumType in
                 switch (enumType, otherType) {
-                case let (.optional(type1), type2):
+                case let (.optional(type1), type2), let (type2, .optional(type1)):
                     merged = true
                     if case let .optional(type2) = type2 {
                         return .optional(type1.mergeWith(type2))
                     } else {
                         return .optional(type1.mergeWith(type2))
                     }
-                case let (type1, .optional(type2)):
-                    merged = true
-                    if case let .optional(type1) = type1 {
-                        return .optional(type1.mergeWith(type2))
-                    } else {
-                        return .optional(type1.mergeWith(type2))
-                    }
-                case let (.unknown, knownType):
-                    merged = true
-                    return knownType
-                case let (knownType, .unknown):
+                case let (.unknown, knownType), let (knownType, .unknown):
                     merged = true
                     return knownType
                 case (.object, .object):
@@ -289,21 +272,9 @@ extension ModelParser.FieldType {
         switch (self, type) {
         case let (type1, type2) where type1 == type2:
             return type1
-        case let (.optional(type1), type2):
-            if case let .optional(type2) = type2 {
-                return .optional(type1.mergeWith(type2))
-            } else {
-                return .optional(type1.mergeWith(type2))
-            }
-        case let (type1, .optional(type2)):
-            if case let .optional(type1) = type1 {
-                return .optional(type1.mergeWith(type2))
-            } else {
-                return .optional(type1.mergeWith(type2))
-            }
-        case let (.unknown, knownType):
-            return knownType
-        case let (knownType, .unknown):
+        case let (.optional(type1), type2), let (type2, .optional(type1)):
+            return .optional(type1.mergeWith(type2))
+        case let (.unknown, knownType), let (knownType, .unknown):
             return knownType
         case let (.number(numberType1), .number(numberType2)) where numberType1.mergeWith(numberType2) != nil:
             let mergedNumberType = numberType1.mergeWith(numberType2)!
@@ -337,9 +308,7 @@ extension ModelParser.FieldType {
             return .object(resultFields)
         case let (.list(listType1), .list(listType2)):
             return .list(listType1.mergeWith(listType2))
-        case let (.enum(enumTypes), type):
-            return .enum(mergeEnumTypes(enumTypes, otherType: type))
-        case let (type, .enum(enumTypes)):
+        case let (.enum(enumTypes), type), let (type, .enum(enumTypes)):
             return .enum(mergeEnumTypes(enumTypes, otherType: type))
         default:
             return .enum([self, type])
