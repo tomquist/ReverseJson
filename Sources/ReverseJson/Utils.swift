@@ -1,6 +1,6 @@
 import Foundation
 
-extension ModelParser.FieldType {
+extension FieldType {
     public var enumCaseName: String {
         switch self {
         case .object: return "object"

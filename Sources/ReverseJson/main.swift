@@ -53,23 +53,21 @@ func main(with args: [String]) -> ProgramResult {
         return .failure("Could not read file \(file)")
     }
     
-    let model: Any
+    let model: JSON
     do {
-        model = try JSONSerialization.jsonObject(with: data, options: [])
+        let parsed = try JSONSerialization.jsonObject(with: data, options: [])
+        model = try FoundationJSONTransformer().transform(parsed)
     } catch {
         return .failure("Could not parse json: \(error)")
     }
-    let rootType: ModelParser.FieldType
-    do {
-        let rootTypeTmp = try ModelParser().decode(model)
-        let makeAllFieldDeclarationsOptional = remainingArgs.contains("-n") || remainingArgs.contains("--nullable")
-        if makeAllFieldDeclarationsOptional {
-            rootType = ModelParser.transformAllFieldsToOptional(rootTypeTmp)
-        } else {
-            rootType = rootTypeTmp
-        }
-    } catch {
-        return .failure("Could convert json to model: \(error)")
+    
+    let rootType: FieldType
+    let rootTypeTmp = ModelGenerator().decode(model)
+    let makeAllFieldDeclarationsOptional = remainingArgs.contains("-n") || remainingArgs.contains("--nullable")
+    if makeAllFieldDeclarationsOptional {
+        rootType = ModelGenerator.transformAllFieldsToOptional(rootTypeTmp)
+    } else {
+        rootType = rootTypeTmp
     }
     let translators = translatorTypes.lazy.map { $0.init(args: remainingArgs) }
     return .success(String(joined: translators.map { $0.translate(rootType, name: name) }, separator: "\n\n"))

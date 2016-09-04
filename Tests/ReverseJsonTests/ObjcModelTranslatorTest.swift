@@ -1,10 +1,3 @@
-//
-//  ObjcModelTranslatorTest.swift
-//  ReverseJson
-//
-//  Created by Tom Quist on 08.03.16.
-//  Copyright © 2016 Tom Quist. All rights reserved.
-//
 
 import XCTest
 @testable import ReverseJson
@@ -36,7 +29,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleString() {
-        let type: ModelParser.FieldType = .text
+        let type: FieldType = .text
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleText")
@@ -44,7 +37,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleInt() {
-        let type: ModelParser.FieldType = .number(.int)
+        let type: FieldType = .number(.int)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -52,7 +45,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
 
     func testSimpleFloat() {
-        let type: ModelParser.FieldType = .number(.float)
+        let type: FieldType = .number(.float)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -60,7 +53,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testSimpleDouble() {
-        let type: ModelParser.FieldType = .number(.double)
+        let type: FieldType = .number(.double)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -68,7 +61,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testBoolDouble() {
-        let type: ModelParser.FieldType = .number(.bool)
+        let type: FieldType = .number(.bool)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -76,7 +69,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEmptyObject() {
-        let type: ModelParser.FieldType = .object([])
+        let type: FieldType = .object([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -110,7 +103,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEmptyEnum() {
-        let type: ModelParser.FieldType = .enum([])
+        let type: FieldType = .enum([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -135,7 +128,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testTextList() {
-        let type: ModelParser.FieldType = .list(.text)
+        let type: FieldType = .list(.text)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TextList")
@@ -143,7 +136,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testUnknownType() {
-        let type: ModelParser.FieldType = .unknown
+        let type: FieldType = .unknown
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "MyTypeName")
@@ -182,7 +175,7 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     func testObjectWithSingleTextField() {
-        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -218,7 +211,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testObjectWithFieldContainingListOfText() {
-        let type: ModelParser.FieldType = .object([.init(name: "texts", type: .list(.text))])
+        let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -408,7 +401,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEnumWithOneCase() {
-        let type: ModelParser.FieldType = .enum([.text])
+        let type: FieldType = .enum([.text])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -435,7 +428,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEnumWithTwoCases() {
-        let type: ModelParser.FieldType = .enum([
+        let type: FieldType = .enum([
             .optional(.object([])),
             .number(.int)
         ])
@@ -492,7 +485,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testAtomicFieldsFlag() {
-        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = ObjcModelCreator(args: ["-a"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--atomic"]).translate(type, name: "TestObject")
@@ -530,7 +523,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testMutableFieldsFlag() {
-        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = ObjcModelCreator(args: ["-m"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
@@ -569,7 +562,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     
     
     func testPrefixOption() {
-        let type: ModelParser.FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
         let modelResult1 = ObjcModelCreator(args: ["-p", "ABC"]).translate(type, name: "TestObject")
         let modelResult2 = ObjcModelCreator(args: ["--prefix", "ABC"]).translate(type, name: "TestObject")

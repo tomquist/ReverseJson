@@ -16,7 +16,7 @@ public struct ObjcModelCreator: ModelTranslator {
         return (atomic ? "atomic" : "nonatomic")
     }
     
-    public func translate(_ type: ModelParser.FieldType, name: String) -> String {
+    public func translate(_ type: FieldType, name: String) -> String {
         let a = declarationsFor(type, name: name, valueToParse: "jsonValue")
         return String(joined:
                 ["#import <Foundation/Foundation.h>"]
@@ -24,7 +24,7 @@ public struct ObjcModelCreator: ModelTranslator {
                 + a.implementations.sorted(), separator: "\n\n")
     }
     
-    public func isNullable(_ type: ModelParser.FieldType) -> Bool {
+    public func isNullable(_ type: FieldType) -> Bool {
         switch type {
         case .optional:
             return true
@@ -33,7 +33,7 @@ public struct ObjcModelCreator: ModelTranslator {
         }
     }
     
-    func memoryManagementModifier(_ type: ModelParser.FieldType) -> String {
+    func memoryManagementModifier(_ type: FieldType) -> String {
         switch type {
         case .optional(.number), .text:
             return "copy"
@@ -44,7 +44,7 @@ public struct ObjcModelCreator: ModelTranslator {
         }
     }
     
-    private func declarationsFor(_ type: ModelParser.FieldType, name: String, valueToParse: String) -> (interfaces: Set<String>, implementations: Set<String>, parseExpression: String, fieldRequiredTypeNames: Set<String>, fullTypeName: String) {
+    private func declarationsFor(_ type: FieldType, name: String, valueToParse: String) -> (interfaces: Set<String>, implementations: Set<String>, parseExpression: String, fieldRequiredTypeNames: Set<String>, fullTypeName: String) {
         switch type {
         case let .enum(enumTypes):
             let className = "\(typePrefix)\(name.camelCasedString)"
@@ -236,7 +236,7 @@ public struct ObjcModelCreator: ModelTranslator {
     
 }
 
-extension ModelParser.NumberType {
+extension NumberType {
     fileprivate var objcNumberType: String {
         switch self {
         case .bool: return "BOOL"

@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		421658A81CAF2C2800321F84 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A21CAF2C2800321F84 /* main.swift */; };
-		421658AA1CAF2C2800321F84 /* ModelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A31CAF2C2800321F84 /* ModelParser.swift */; };
-		421658AB1CAF2C2800321F84 /* ModelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A31CAF2C2800321F84 /* ModelParser.swift */; };
+		421658AA1CAF2C2800321F84 /* ModelGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A31CAF2C2800321F84 /* ModelGenerator.swift */; };
+		421658AB1CAF2C2800321F84 /* ModelGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A31CAF2C2800321F84 /* ModelGenerator.swift */; };
 		421658AC1CAF2C2800321F84 /* ModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A41CAF2C2800321F84 /* ModelTranslator.swift */; };
 		421658AD1CAF2C2800321F84 /* ModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A41CAF2C2800321F84 /* ModelTranslator.swift */; };
 		421658AE1CAF2C2800321F84 /* ObjcModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A51CAF2C2800321F84 /* ObjcModelTranslator.swift */; };
@@ -18,9 +18,14 @@
 		421658B11CAF2C2800321F84 /* SwiftModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A61CAF2C2800321F84 /* SwiftModelTranslator.swift */; };
 		421658B21CAF2C2800321F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A71CAF2C2800321F84 /* Utils.swift */; };
 		421658B31CAF2C2800321F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658A71CAF2C2800321F84 /* Utils.swift */; };
-		421658C21CAF2DA200321F84 /* ModelParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B71CAF2D9900321F84 /* ModelParserTest.swift */; };
+		421658C21CAF2DA200321F84 /* ModelGeneratorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B71CAF2D9900321F84 /* ModelGeneratorTest.swift */; };
 		421658C31CAF2DA200321F84 /* ObjcModelTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */; };
 		421658C41CAF2DA200321F84 /* SwiftTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */; };
+		A75402DE1D7C085400BE070A /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75402DD1D7C085400BE070A /* JSON.swift */; };
+		A75402E01D7C08E900BE070A /* FoundationTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75402DF1D7C08E900BE070A /* FoundationTransformer.swift */; };
+		A75402E11D7C0B5300BE070A /* FoundationTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75402DF1D7C08E900BE070A /* FoundationTransformer.swift */; };
+		A75402E21D7C0B7600BE070A /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75402DD1D7C085400BE070A /* JSON.swift */; };
+		A75402E51D7C11FF00BE070A /* FoundationTransformerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75402E31D7C101800BE070A /* FoundationTransformerTest.swift */; };
 		A79422761C8C9D9300700E66 /* ReverseJsonLib.h in Headers */ = {isa = PBXBuildFile; fileRef = A79422751C8C9D9300700E66 /* ReverseJsonLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A794227D1C8C9D9300700E66 /* ReverseJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79422731C8C9D9300700E66 /* ReverseJson.framework */; };
 /* End PBXBuildFile section */
@@ -51,15 +56,18 @@
 		421632A61CAF1CA200F0A432 /* testModel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testModel.json; sourceTree = "<group>"; };
 		421650F61CAF20ED00670E9B /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		421658A21CAF2C2800321F84 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		421658A31CAF2C2800321F84 /* ModelParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParser.swift; sourceTree = "<group>"; };
+		421658A31CAF2C2800321F84 /* ModelGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelGenerator.swift; sourceTree = "<group>"; };
 		421658A41CAF2C2800321F84 /* ModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTranslator.swift; sourceTree = "<group>"; };
 		421658A51CAF2C2800321F84 /* ObjcModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslator.swift; sourceTree = "<group>"; };
 		421658A61CAF2C2800321F84 /* SwiftModelTranslator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftModelTranslator.swift; sourceTree = "<group>"; };
 		421658A71CAF2C2800321F84 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		421658B51CAF2D9900321F84 /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
-		421658B71CAF2D9900321F84 /* ModelParserTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelParserTest.swift; sourceTree = "<group>"; };
+		421658B71CAF2D9900321F84 /* ModelGeneratorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelGeneratorTest.swift; sourceTree = "<group>"; };
 		421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslatorTest.swift; sourceTree = "<group>"; };
 		421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTranslatorTest.swift; sourceTree = "<group>"; };
+		A75402DD1D7C085400BE070A /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+		A75402DF1D7C08E900BE070A /* FoundationTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationTransformer.swift; sourceTree = "<group>"; };
+		A75402E31D7C101800BE070A /* FoundationTransformerTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoundationTransformerTest.swift; sourceTree = "<group>"; };
 		A7921A8A1C67BA27009AADAC /* ReverseJson */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ReverseJson; sourceTree = BUILT_PRODUCTS_DIR; };
 		A79421FB1C8C839800700E66 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A79422731C8C9D9300700E66 /* ReverseJson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ReverseJson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,8 +122,10 @@
 		421658A11CAF2C2800321F84 /* ReverseJson */ = {
 			isa = PBXGroup;
 			children = (
+				A75402DF1D7C08E900BE070A /* FoundationTransformer.swift */,
+				A75402DD1D7C085400BE070A /* JSON.swift */,
 				421658A21CAF2C2800321F84 /* main.swift */,
-				421658A31CAF2C2800321F84 /* ModelParser.swift */,
+				421658A31CAF2C2800321F84 /* ModelGenerator.swift */,
 				421658A41CAF2C2800321F84 /* ModelTranslator.swift */,
 				421658A51CAF2C2800321F84 /* ObjcModelTranslator.swift */,
 				421658A61CAF2C2800321F84 /* SwiftModelTranslator.swift */,
@@ -136,7 +146,8 @@
 		421658B61CAF2D9900321F84 /* ReverseJsonTests */ = {
 			isa = PBXGroup;
 			children = (
-				421658B71CAF2D9900321F84 /* ModelParserTest.swift */,
+				A75402E31D7C101800BE070A /* FoundationTransformerTest.swift */,
+				421658B71CAF2D9900321F84 /* ModelGeneratorTest.swift */,
 				421658B81CAF2D9900321F84 /* ObjcModelTranslatorTest.swift */,
 				421658B91CAF2D9900321F84 /* SwiftTranslatorTest.swift */,
 			);
@@ -317,11 +328,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				421658AC1CAF2C2800321F84 /* ModelTranslator.swift in Sources */,
+				A75402DE1D7C085400BE070A /* JSON.swift in Sources */,
 				421658AE1CAF2C2800321F84 /* ObjcModelTranslator.swift in Sources */,
-				421658AA1CAF2C2800321F84 /* ModelParser.swift in Sources */,
+				421658AA1CAF2C2800321F84 /* ModelGenerator.swift in Sources */,
 				421658A81CAF2C2800321F84 /* main.swift in Sources */,
 				421658B01CAF2C2800321F84 /* SwiftModelTranslator.swift in Sources */,
 				421658B21CAF2C2800321F84 /* Utils.swift in Sources */,
+				A75402E01D7C08E900BE070A /* FoundationTransformer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,8 +343,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				421658AD1CAF2C2800321F84 /* ModelTranslator.swift in Sources */,
+				A75402E21D7C0B7600BE070A /* JSON.swift in Sources */,
+				A75402E11D7C0B5300BE070A /* FoundationTransformer.swift in Sources */,
 				421658AF1CAF2C2800321F84 /* ObjcModelTranslator.swift in Sources */,
-				421658AB1CAF2C2800321F84 /* ModelParser.swift in Sources */,
+				421658AB1CAF2C2800321F84 /* ModelGenerator.swift in Sources */,
 				421658B11CAF2C2800321F84 /* SwiftModelTranslator.swift in Sources */,
 				421658B31CAF2C2800321F84 /* Utils.swift in Sources */,
 			);
@@ -341,7 +356,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				421658C21CAF2DA200321F84 /* ModelParserTest.swift in Sources */,
+				A75402E51D7C11FF00BE070A /* FoundationTransformerTest.swift in Sources */,
+				421658C21CAF2DA200321F84 /* ModelGeneratorTest.swift in Sources */,
 				421658C31CAF2DA200321F84 /* ObjcModelTranslatorTest.swift in Sources */,
 				421658C41CAF2DA200321F84 /* SwiftTranslatorTest.swift in Sources */,
 			);
