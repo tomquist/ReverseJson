@@ -32,6 +32,7 @@ class ModelGeneratorTest: XCTestCase {
             ("testEqualTypeUnknown", testEqualTypeUnknown),
             ("testFloat", testFloat),
             ("testInt", testInt),
+            ("testUInt", testUInt),
             ("testIntArray", testIntArray),
             ("testNullArray", testNullArray),
             ("testOptionalStringArray", testOptionalStringArray),
@@ -153,6 +154,11 @@ class ModelGeneratorTest: XCTestCase {
     
     func testInt() throws {
         let type = parser.decode(10)
+        XCTAssertEqual(type, FieldType.number(.int))
+    }
+    
+    func testUInt() throws {
+        let type = parser.decode(.number(.uint(10)))
         XCTAssertEqual(type, FieldType.number(.int))
     }
     

@@ -26,8 +26,9 @@ public indirect enum FieldType {
     case optional(FieldType)
 }
 
-public class ModelGenerator {
+public struct ModelGenerator {
     
+    public init() {}
     
     public func decode(_ value: JSON) -> FieldType {
         switch value {
@@ -69,7 +70,7 @@ public class ModelGenerator {
         }
     }
     
-    private class func transformAllFieldsToOptionalImpl(_ rootField: FieldType) -> FieldType {
+    private static func transformAllFieldsToOptionalImpl(_ rootField: FieldType) -> FieldType {
         switch rootField {
         case let .object(fields):
             let mappedFields = fields.map {
@@ -94,7 +95,7 @@ public class ModelGenerator {
         }
     }
     
-    public class func transformAllFieldsToOptional(_ rootField: FieldType) -> FieldType {
+    public static func transformAllFieldsToOptional(_ rootField: FieldType) -> FieldType {
         switch rootField {
         case let .object(fields):
             let mappedFields = fields.map {
