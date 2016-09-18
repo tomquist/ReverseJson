@@ -12,7 +12,7 @@ function xcode_tests {
         set -e;
         
         
-        XCB1='xcodebuild test -project ReverseJson.xcodeproj -scheme ReverseJsonLib -destination "platform=OS X"'
+        XCB1='xcodebuild test -project ReverseJson.xcodeproj -scheme ReverseJson -destination "platform=OS X"'
 
         if [[ $TRAVIS || $XCPRETTY_INSTALLED == 0 ]]; then
             eval "set -o pipefail && ${XCB1} | xcpretty" && eval "set -o pipefail && ${XCB1} | xcpretty" && eval "set -o pipefail && ${XCB1} | xcpretty"

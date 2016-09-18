@@ -1,17 +1,11 @@
-//
-//  ObjcModelTranslatorTest.swift
-//  ReverseJson
-//
-//  Created by Tom Quist on 08.03.16.
-//  Copyright © 2016 Tom Quist. All rights reserved.
-//
 
 import XCTest
-@testable import ReverseJson
+import ReverseJsonCore
+@testable import ReverseJsonObjc
 
-class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
+class ObjcModelTranslatorTest: XCTestCase {
     
-    var allTests: [(String, () throws -> Void)] {
+    static var allTests: [(String, (ObjcModelTranslatorTest) -> () throws -> Void)] {
         return [
             ("testAtomicFieldsFlag", testAtomicFieldsFlag),
             ("testBoolDouble", testBoolDouble),
@@ -36,7 +30,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testSimpleString() {
-        let type: ModelParser.FieldType = .Text
+        let type: FieldType = .text
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleText")
@@ -44,7 +38,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testSimpleInt() {
-        let type: ModelParser.FieldType = .Number(.Int)
+        let type: FieldType = .number(.int)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -52,7 +46,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
 
     func testSimpleFloat() {
-        let type: ModelParser.FieldType = .Number(.Float)
+        let type: FieldType = .number(.float)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -60,7 +54,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testSimpleDouble() {
-        let type: ModelParser.FieldType = .Number(.Double)
+        let type: FieldType = .number(.double)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -68,7 +62,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testBoolDouble() {
-        let type: ModelParser.FieldType = .Number(.Bool)
+        let type: FieldType = .number(.bool)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "SimpleNumber")
@@ -76,7 +70,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testEmptyObject() {
-        let type: ModelParser.FieldType = .Object([])
+        let type: FieldType = .object([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -110,7 +104,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testEmptyEnum() {
-        let type: ModelParser.FieldType = .Enum([])
+        let type: FieldType = .enum([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -135,7 +129,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testTextList() {
-        let type: ModelParser.FieldType = .List(.Text)
+        let type: FieldType = .list(.text)
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TextList")
@@ -143,7 +137,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testUnknownType() {
-        let type: ModelParser.FieldType = .Unknown
+        let type: FieldType = .unknown
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "MyTypeName")
@@ -152,7 +146,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     
     func testListOfEmptyObject() {
         let modelCreator = ObjcModelCreator()
-        let modelResult = modelCreator.translate(.List(.Object([])), name: "TestObjectList")
+        let modelResult = modelCreator.translate(.list(.object([])), name: "TestObjectList")
         XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
             "",
@@ -182,7 +176,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
         ), modelResult)
     }
     func testObjectWithSingleTextField() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -218,7 +212,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testObjectWithFieldContainingListOfText() {
-        let type: ModelParser.FieldType = .Object([.init(name: "texts", type: .List(.Text))])
+        let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -267,11 +261,11 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
 
     func testObjectWithDifferentFields() {
         let modelCreator = ObjcModelCreator()
-        let modelResult = modelCreator.translate(.Object([
-            .init(name: "listOfListsOfText", type: .List(.List(.Text))),
-            .init(name: "numbers", type: .List(.Number(.Int))),
-            .init(name: "int", type: .Number(.Int)),
-            .init(name: "optionalText", type: .Optional(.Text))
+        let modelResult = modelCreator.translate(.object([
+            .init(name: "listOfListsOfText", type: .list(.list(.text))),
+            .init(name: "numbers", type: .list(.number(.int))),
+            .init(name: "int", type: .number(.int)),
+            .init(name: "optionalText", type: .optional(.text))
         ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
@@ -348,8 +342,8 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     
     func testObjectWithOneFieldWithSubDeclaration() {
         let modelCreator = ObjcModelCreator()
-        let modelResult = modelCreator.translate(.Object([
-            .init(name: "subObject", type: .Object([]))
+        let modelResult = modelCreator.translate(.object([
+            .init(name: "subObject", type: .object([]))
             ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "#import <Foundation/Foundation.h>",
@@ -408,7 +402,7 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testEnumWithOneCase() {
-        let type: ModelParser.FieldType = .Enum([.Text])
+        let type: FieldType = .enum([.text])
         
         let modelCreator = ObjcModelCreator()
         let modelResult = modelCreator.translate(type, name: "TestObject")
@@ -435,9 +429,9 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testEnumWithTwoCases() {
-        let type: ModelParser.FieldType = .Enum([
-            .Optional(.Object([])),
-            .Number(.Int)
+        let type: FieldType = .enum([
+            .optional(.object([])),
+            .number(.int)
         ])
         
         let modelCreator = ObjcModelCreator()
@@ -492,10 +486,11 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
     }
     
     func testAtomicFieldsFlag() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = ObjcModelCreator(args: ["-a"]).translate(type, name: "TestObject")
-        let modelResult2 = ObjcModelCreator(args: ["--atomic"]).translate(type, name: "TestObject")
+        var modelCreator = ObjcModelCreator()
+        modelCreator.atomic = true
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
             "#import <Foundation/Foundation.h>",
             "",
@@ -525,15 +520,15 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "}",
             "@end"
         )
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     func testMutableFieldsFlag() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = ObjcModelCreator(args: ["-m"]).translate(type, name: "TestObject")
-        let modelResult2 = ObjcModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
+        var modelCreator = ObjcModelCreator()
+        modelCreator.readonly = false
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
             "#import <Foundation/Foundation.h>",
             "",
@@ -563,16 +558,16 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "}",
             "@end"
         )
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     
     func testPrefixOption() {
-        let type: ModelParser.FieldType = .Object([.init(name: "text", type: .Text)])
+        let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = ObjcModelCreator(args: ["-p", "ABC"]).translate(type, name: "TestObject")
-        let modelResult2 = ObjcModelCreator(args: ["--prefix", "ABC"]).translate(type, name: "TestObject")
+        var modelCreator = ObjcModelCreator()
+        modelCreator.typePrefix = "ABC"
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = [
             "#import <Foundation/Foundation.h>",
             "",
@@ -601,9 +596,8 @@ class ObjcModelTranslatorTest: XCTestCase, XCTestCaseProvider {
             "    return self;",
             "}",
             "@end"
-            ].joinWithSeparator("\n")
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+            ].joined(separator: "\n")
+        XCTAssertEqual(expected, modelResult)
     }
     
 }
