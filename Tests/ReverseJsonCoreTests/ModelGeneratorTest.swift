@@ -1,5 +1,6 @@
 
 import XCTest
+import Foundation
 @testable import ReverseJsonCore
 
 class ModelGeneratorTest: XCTestCase {
