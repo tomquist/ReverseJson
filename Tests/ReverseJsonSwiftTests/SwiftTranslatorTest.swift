@@ -1,6 +1,7 @@
 
 import XCTest
-@testable import ReverseJson
+import ReverseJsonCore
+@testable import ReverseJsonSwift
 
 class SwiftTranslatorTest: XCTestCase {
     

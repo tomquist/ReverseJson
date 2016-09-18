@@ -1,3 +1,5 @@
+import Foundation
+import ReverseJsonCore
 
 public struct ObjcModelCreator: ModelTranslator {
     

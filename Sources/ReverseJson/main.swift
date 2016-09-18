@@ -7,6 +7,10 @@
 //
 
 import Foundation
+import ReverseJsonCore
+import ReverseJsonSwift
+import ReverseJsonObjc
+import ReverseJsonFoundation
 
 enum ProgramResult {
     case success(String)
@@ -14,8 +18,8 @@ enum ProgramResult {
 }
 
 func usage() -> String {
-    let command = ProcessInfo.processInfo.arguments[0].characters.split(separator: "/").last.map(String.init) ?? ""
-    return String(lines:
+    let command = CommandLine.arguments[0].characters.split(separator: "/").last.map(String.init) ?? ""
+    return [
         "Usage: \(command) (swift|objc) NAME FILE <options>",
         "e.g. \(command) swift User testModel.json <options>",
         "Options:",
@@ -29,7 +33,7 @@ func usage() -> String {
         "   -a,  --atomic           (Objective-C) Make properties 'atomic'",
         "   -p <prefix>             (Objective-C) Class-prefix to use for type declarations",
         "   --prefix <prefix>       "
-    )
+    ].joined(separator: "\n")
 }
 
 func main(with args: [String]) -> ProgramResult {
@@ -70,10 +74,10 @@ func main(with args: [String]) -> ProgramResult {
         rootType = rootTypeTmp
     }
     let translators = translatorTypes.lazy.map { $0.init(args: remainingArgs) }
-    return .success(String(joined: translators.map { $0.translate(rootType, name: name) }, separator: "\n\n"))
+    return .success(translators.map { $0.translate(rootType, name: name) }.joined(separator: "\n\n"))
 }
 
-switch main(with: ProcessInfo.processInfo.arguments) {
+switch main(with: CommandLine.arguments) {
 case let .success(output):
     print(output)
     exit(0)

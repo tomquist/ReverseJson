@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0800"
+   LastUpgradeVersion = "9999"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,65 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A7921A891C67BA27009AADAC"
+               BlueprintIdentifier = "______Target_ReverseJson"
                BuildableName = "ReverseJson"
                BlueprintName = "ReverseJson"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_ReverseJsonCore"
+               BuildableName = "ReverseJsonCore.framework"
+               BlueprintName = "ReverseJsonCore"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_ReverseJsonFoundation"
+               BuildableName = "ReverseJsonFoundation.framework"
+               BlueprintName = "ReverseJsonFoundation"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_ReverseJsonObjc"
+               BuildableName = "ReverseJsonObjc.framework"
+               BlueprintName = "ReverseJsonObjc"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_ReverseJsonSwift"
+               BuildableName = "ReverseJsonSwift.framework"
+               BlueprintName = "ReverseJsonSwift"
                ReferencedContainer = "container:ReverseJson.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,22 +89,43 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A70AEB471C83104100307E50"
-               BuildableName = "ReverseJsonTests.xctest"
-               BlueprintName = "ReverseJsonTests"
+               BlueprintIdentifier = "______Target_ReverseJsonCoreTests"
+               BuildableName = "ReverseJsonCoreTests.xctest"
+               BlueprintName = "ReverseJsonCoreTests"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_ReverseJsonFoundationTests"
+               BuildableName = "ReverseJsonFoundationTests.xctest"
+               BlueprintName = "ReverseJsonFoundationTests"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_ReverseJsonObjcTests"
+               BuildableName = "ReverseJsonObjcTests.xctest"
+               BlueprintName = "ReverseJsonObjcTests"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_ReverseJsonSwiftTests"
+               BuildableName = "ReverseJsonSwiftTests.xctest"
+               BlueprintName = "ReverseJsonSwiftTests"
                ReferencedContainer = "container:ReverseJson.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A7921A891C67BA27009AADAC"
-            BuildableName = "ReverseJson"
-            BlueprintName = "ReverseJson"
-            ReferencedContainer = "container:ReverseJson.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -66,7 +143,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A7921A891C67BA27009AADAC"
+            BlueprintIdentifier = "______Target_ReverseJson"
             BuildableName = "ReverseJson"
             BlueprintName = "ReverseJson"
             ReferencedContainer = "container:ReverseJson.xcodeproj">
@@ -81,16 +158,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A7921A891C67BA27009AADAC"
-            BuildableName = "ReverseJson"
-            BlueprintName = "ReverseJson"
-            ReferencedContainer = "container:ReverseJson.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

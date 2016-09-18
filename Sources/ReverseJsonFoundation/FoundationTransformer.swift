@@ -1,4 +1,5 @@
 import Foundation
+import ReverseJsonCore
 
 /// Transforms output of Foundations JSONSerialization into JSON
 public struct FoundationJSONTransformer: JSONTransformer {
@@ -6,6 +7,8 @@ public struct FoundationJSONTransformer: JSONTransformer {
     public enum TransformationError: Error {
         case unsupportedValueType(Any, Any.Type)
     }
+    
+    public init() {}
     
     private func transform(_ object: [String: Any]) throws -> [String: JSON] {
         var result = [String: JSON]()

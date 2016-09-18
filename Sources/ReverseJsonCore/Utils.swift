@@ -18,11 +18,11 @@ extension FieldType {
 
 extension String {
     
-    init(lines: String...) {
+    public init(lines: String...) {
         self = lines.joined(separator: "\n")
     }
     
-    init(joined parts: [String], separator: String = "\n") {
+    public init(joined parts: [String], separator: String = "\n") {
         self = parts.joined(separator: separator)
     }
     

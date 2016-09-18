@@ -1,10 +1,9 @@
-import Foundation
 
 public struct ObjectField {
     public let name: String
     public let type: FieldType
     
-    init(name: String, type: FieldType) {
+    public init(name: String, type: FieldType) {
         self.name = name
         self.type = type
     }

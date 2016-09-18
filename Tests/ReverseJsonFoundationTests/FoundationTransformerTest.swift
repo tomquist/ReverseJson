@@ -1,7 +1,8 @@
 
 import XCTest
 import Foundation
-@testable import ReverseJson
+import ReverseJsonCore
+@testable import ReverseJsonFoundation
 
 class FoundationTransformerTest: XCTestCase {
     

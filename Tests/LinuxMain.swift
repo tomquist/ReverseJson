@@ -1,5 +1,6 @@
 import XCTest
-@testable import ReverseJsonTests
+@testable import ReverseJsonLibTests
+@testable import ReverseJsonFoundationTests
 
 XCTMain([
     testCase(FoundationTransformerTest.allTests),

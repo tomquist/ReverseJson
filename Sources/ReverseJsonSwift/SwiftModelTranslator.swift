@@ -1,4 +1,4 @@
-
+import ReverseJsonCore
 
 public struct SwiftTranslator: ModelTranslator {
     
