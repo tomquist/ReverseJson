@@ -13,9 +13,21 @@ Generate data model code and JSON-parser code from JSON-files. Currently you can
 - Generates parsing instructions for Swift and Objective-C 
 
 ## Usage
+
+### Prerequisites
+
+* Swift 3.0
+* Any Swift 3.0 compatible platform (e.g. macOS or Linux)
+
 ### Build
 
-	xcrun swiftc ReverseJson/*.swift -o ReverseJson
+	swift build --configuration release
+
+By default, you'll find the executable in ```.build/release/ReverseJson```
+
+### Test
+
+    swift test
 
 ### General usage:
 
