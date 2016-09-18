@@ -7,7 +7,8 @@ let package = Package(
         Target(name: "ReverseJsonFoundation", dependencies: ["ReverseJsonCore"]),
         Target(name: "ReverseJsonObjc", dependencies: ["ReverseJsonCore"]),
         Target(name: "ReverseJsonSwift", dependencies: ["ReverseJsonCore"]),
-        Target(name: "ReverseJson", dependencies: ["ReverseJsonCore", "ReverseJsonObjc", "ReverseJsonSwift", "ReverseJsonFoundation"]),
+        Target(name: "ReverseJsonCommandLine", dependencies: ["ReverseJsonCore", "ReverseJsonObjc", "ReverseJsonSwift", "ReverseJsonFoundation"]),
+        Target(name: "ReverseJson", dependencies: ["ReverseJsonCommandLine"]),
     ],
     dependencies: []
 )

@@ -27,9 +27,19 @@ public indirect enum FieldType {
 
 public struct ModelGenerator {
     
+    public var allFieldsOptional = false
+    
     public init() {}
     
     public func decode(_ value: JSON) -> FieldType {
+        let fieldType = internalDecode(value)
+        if allFieldsOptional {
+            return ModelGenerator.transformAllFieldsToOptional(fieldType)
+        }
+        return fieldType
+    }
+    
+    public func internalDecode(_ value: JSON) -> FieldType {
         switch value {
         case .string: return .text
         case let .number(number):
@@ -54,13 +64,13 @@ public struct ModelGenerator {
     
     private func decode(_ dict: [String: JSON]) -> FieldType {
         let fields = dict.map { (name: String, value: JSON) in
-            return ObjectField(name: name, type: decode(value))
+            return ObjectField(name: name, type: internalDecode(value))
         }
         return .object(Set(fields))
     }
     
     private func decode(_ list: [JSON]) -> FieldType? {
-        let types = list.flatMap { decode($0)}
+        let types = list.flatMap(internalDecode)
         return types.reduce(nil) { (type1, type2) -> FieldType? in
             if let type1 = type1 {
                 return type1.mergeWith(type2)
@@ -94,7 +104,7 @@ public struct ModelGenerator {
         }
     }
     
-    public static func transformAllFieldsToOptional(_ rootField: FieldType) -> FieldType {
+    static func transformAllFieldsToOptional(_ rootField: FieldType) -> FieldType {
         switch rootField {
         case let .object(fields):
             let mappedFields = fields.map {

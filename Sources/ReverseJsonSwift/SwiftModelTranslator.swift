@@ -2,20 +2,44 @@ import ReverseJsonCore
 
 public struct SwiftTranslator: ModelTranslator {
     
-    private let translators: [ModelTranslator]
+    private var modelCreator = SwiftModelCreator()
+    private var mappingCreator = SwiftJsonParsingTranslator()
     
-    public init(args: [String] = []) {
-        translators = [
-            SwiftModelCreator(args: args),
-            SwiftJsonParsingTranslator(args: args)
-        ]
-    }
+    public init() {}
+    
     public func translate(_ type: FieldType, name: String) -> String {
-        return String(joined: translators.lazy.map { $0.translate(type, name: name) }, separator: "\n\n")
+        let model = modelCreator.translate(type, name: name)
+        let mapping = mappingCreator.translate(type, name: name)
+        return "\(model)\n\n\(mapping)"
     }
+    
+    public var objectType: ObjectType {
+        get {return modelCreator.objectType}
+        set {modelCreator.objectType = newValue}
+    }
+    public var listType: ListType {
+        get {return modelCreator.listType}
+        set {
+            modelCreator.listType = newValue
+            mappingCreator.listType = newValue
+        }
+    }
+    public var fieldVisibility: Visibility {
+        get {return modelCreator.fieldVisibility}
+        set {modelCreator.fieldVisibility = newValue}
+    }
+    public var typeVisibility: Visibility {
+        get {return modelCreator.typeVisibility}
+        set {modelCreator.typeVisibility = newValue}
+    }
+    public var mutableFields: Bool {
+        get {return modelCreator.mutableFields}
+        set {modelCreator.mutableFields = newValue}
+    }
+    
 }
 
-private enum ObjectType: String {
+public enum ObjectType: String {
     case structType = "struct"
     case classType = "class"
 }
@@ -24,12 +48,12 @@ extension ObjectType {
         return self.rawValue
     }
 }
-private enum ListType: String {
+public enum ListType: String {
     case array = "Array"
     case contiguousArray = "ContiguousArray"
 }
 
-private enum Visibility: String {
+public enum Visibility: String {
     case internalVisibility = "internal"
     case publicVisibility = "public"
 }
@@ -42,19 +66,11 @@ extension Visibility {
 
 struct SwiftModelCreator: ModelTranslator {
     
-    private let objectType: ObjectType
-    private let listType: ListType
-    private let fieldVisibility: Visibility
-    private let typeVisibility: Visibility
-    private let mutableFields: Bool
-    
-    init(args: [String] = []) {
-        self.objectType = args.contains("-c") || args.contains("--class") ? .classType : .structType
-        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .contiguousArray : .array
-        self.mutableFields = args.contains("-m") || args.contains("--mutable")
-        self.fieldVisibility = args.contains("-pf") || args.contains("--publicfields") ? .publicVisibility : .internalVisibility
-        self.typeVisibility = args.contains("-pt") || args.contains("--publictypes") ? .publicVisibility : .internalVisibility
-    }
+    public var objectType: ObjectType = .structType
+    public var listType: ListType = .array
+    public var fieldVisibility: Visibility = .internalVisibility
+    public var typeVisibility: Visibility = .internalVisibility
+    public var mutableFields: Bool = false
     
     func translate(_ type: FieldType, name: String) -> String {
         let (typeName, decl) = makeSubtype(type, name: "", subName: name, level: 0)
@@ -286,7 +302,7 @@ private extension Declaration {
 }
 
 extension ListType {
-    var parser: Declaration {
+    fileprivate var parser: Declaration {
         switch self {
         case .array: return .arrayParser
         case .contiguousArray: return .contiguousArrayParser
@@ -311,11 +327,7 @@ extension FieldType {
 
 struct SwiftJsonParsingTranslator: ModelTranslator {
     
-    private var listType: ListType = .array
-    
-    init(args: [String] = []) {
-        self.listType = args.contains("-ca") || args.contains("--contiguousarray") ? .contiguousArray : .array
-    }
+    public var listType: ListType = .array
     
     func translate(_ type: FieldType, name: String) -> String {
         let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")

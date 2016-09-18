@@ -477,86 +477,87 @@ class SwiftTranslatorTest: XCTestCase {
     func testPublicTypeFlagWithObject() {
         let type: FieldType = .object([])
         
-        let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "TestObject")
-        let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "TestObject")
+        var modelCreator = SwiftModelCreator()
+        modelCreator.typeVisibility = .publicVisibility
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = "public struct TestObject {\n}"
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     func testPublicTypeFlagWithTypealias() {
         let type: FieldType = .text
         
-        let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "SimpleText")
-        let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "SimpleText")
+        var modelCreator = SwiftModelCreator()
+        modelCreator.typeVisibility = .publicVisibility
+        let modelResult = modelCreator.translate(type, name: "SimpleText")
         let expected = "public typealias SimpleText = String"
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     func testPublicTypeFlagWithEnum() {
         let type: FieldType = .enum([])
         
-        let modelResult1 = SwiftModelCreator(args: ["-pt"]).translate(type, name: "TestObject")
-        let modelResult2 = SwiftModelCreator(args: ["--publictypes"]).translate(type, name: "TestObject")
+        var modelCreator = SwiftModelCreator()
+        modelCreator.typeVisibility = .publicVisibility
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = "public enum TestObject {\n}"
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
 
     func testClassFlag() {
         let type: FieldType = .object([])
         
-        let modelResult1 = SwiftModelCreator(args: ["-c"]).translate(type, name: "TestObject")
-        let modelResult2 = SwiftModelCreator(args: ["--class"]).translate(type, name: "TestObject")
+        var modelCreator = SwiftModelCreator()
+        modelCreator.objectType = .classType
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = "class TestObject {\n}"
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     func testPublicFieldsFlag() {
         let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = SwiftModelCreator(args: ["-pf"]).translate(type, name: "TestObject")
-        let modelResult2 = SwiftModelCreator(args: ["--publicfields"]).translate(type, name: "TestObject")
+        var modelCreator = SwiftModelCreator()
+        modelCreator.fieldVisibility = .publicVisibility
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
             "struct TestObject {",
             "    public let text: String",
             "}"
         )
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     func testMutableFieldsFlag() {
         let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = SwiftModelCreator(args: ["-m"]).translate(type, name: "TestObject")
-        let modelResult2 = SwiftModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
+        var modelCreator = SwiftModelCreator()
+        modelCreator.mutableFields = true
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
             "struct TestObject {",
             "    var text: String",
             "}"
         )
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     func testContiguousArrayFlag() {
         let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
         
-        let modelResult1 = SwiftModelCreator(args: ["-ca"]).translate(type, name: "TestObject")
-        let modelResult2 = SwiftModelCreator(args: ["--contiguousarray"]).translate(type, name: "TestObject")
+        var modelCreator = SwiftModelCreator()
+        modelCreator.listType = .contiguousArray
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expectedModel = String(lines:
             "struct TestObject {",
             "    let texts: ContiguousArray<String>",
             "}"
         )
-        XCTAssertEqual(expectedModel, modelResult1)
-        XCTAssertEqual(expectedModel, modelResult2)
+        XCTAssertEqual(expectedModel, modelResult)
         
-        let parserResult1 = SwiftJsonParsingTranslator(args: ["-ca"]).translate(type, name: "TestObject")
-        let parserResult2 = SwiftJsonParsingTranslator(args: ["--contiguousarray"]).translate(type, name: "TestObject")
+        var mappingCreator = SwiftJsonParsingTranslator()
+        mappingCreator.listType = .contiguousArray
+        let parserResult = mappingCreator.translate(type, name: "TestObject")
         let expectedParser = String(lines:
             swiftErrorType,
             "",
@@ -577,8 +578,7 @@ class SwiftTranslatorTest: XCTestCase {
             "    return try TestObject(jsonValue: jsonValue)",
             "}"
         )
-        XCTAssertEqual(expectedParser, parserResult1)
-        XCTAssertEqual(expectedParser, parserResult2)
+        XCTAssertEqual(expectedParser, parserResult)
     }
     
     func testTranslatorCombination() {

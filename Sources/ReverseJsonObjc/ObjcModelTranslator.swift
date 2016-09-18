@@ -3,20 +3,14 @@ import ReverseJsonCore
 
 public struct ObjcModelCreator: ModelTranslator {
     
-    public init(args: [String] = []) {
-        self.atomic = args.contains("-a") || args.contains("--atomic")
-        self.readonly = !(args.contains("-m") || args.contains("--mutable"))
-        if let index = args.index(where: { $0 == "-p" || $0 == "--prefix" }) , args.count > index + 1 {
-            self.typePrefix = args[index + 1]
-        }
-    }
-    
-    private var atomic = false
-    private var readonly = true
-    private var typePrefix = ""
+    public var atomic = false
+    public var readonly = true
+    public var typePrefix = ""
     private var atomicyModifier: String {
         return (atomic ? "atomic" : "nonatomic")
     }
+    
+    public init() {}
     
     public func translate(_ type: FieldType, name: String) -> String {
         let a = declarationsFor(type, name: name, valueToParse: "jsonValue")

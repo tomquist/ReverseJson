@@ -488,8 +488,9 @@ class ObjcModelTranslatorTest: XCTestCase {
     func testAtomicFieldsFlag() {
         let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = ObjcModelCreator(args: ["-a"]).translate(type, name: "TestObject")
-        let modelResult2 = ObjcModelCreator(args: ["--atomic"]).translate(type, name: "TestObject")
+        var modelCreator = ObjcModelCreator()
+        modelCreator.atomic = true
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
             "#import <Foundation/Foundation.h>",
             "",
@@ -519,15 +520,15 @@ class ObjcModelTranslatorTest: XCTestCase {
             "}",
             "@end"
         )
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     func testMutableFieldsFlag() {
         let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = ObjcModelCreator(args: ["-m"]).translate(type, name: "TestObject")
-        let modelResult2 = ObjcModelCreator(args: ["--mutable"]).translate(type, name: "TestObject")
+        var modelCreator = ObjcModelCreator()
+        modelCreator.readonly = false
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
             "#import <Foundation/Foundation.h>",
             "",
@@ -557,16 +558,16 @@ class ObjcModelTranslatorTest: XCTestCase {
             "}",
             "@end"
         )
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
     
     func testPrefixOption() {
         let type: FieldType = .object([.init(name: "text", type: .text)])
         
-        let modelResult1 = ObjcModelCreator(args: ["-p", "ABC"]).translate(type, name: "TestObject")
-        let modelResult2 = ObjcModelCreator(args: ["--prefix", "ABC"]).translate(type, name: "TestObject")
+        var modelCreator = ObjcModelCreator()
+        modelCreator.typePrefix = "ABC"
+        let modelResult = modelCreator.translate(type, name: "TestObject")
         let expected = [
             "#import <Foundation/Foundation.h>",
             "",
@@ -596,8 +597,7 @@ class ObjcModelTranslatorTest: XCTestCase {
             "}",
             "@end"
             ].joined(separator: "\n")
-        XCTAssertEqual(expected, modelResult1)
-        XCTAssertEqual(expected, modelResult2)
+        XCTAssertEqual(expected, modelResult)
     }
     
 }
