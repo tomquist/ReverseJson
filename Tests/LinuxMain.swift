@@ -1,5 +1,7 @@
 import XCTest
-@testable import ReverseJsonLibTests
+@testable import ReverseJsonCoreTests
+@testable import ReverseJsonObjcTests
+@testable import ReverseJsonSwiftTests
 @testable import ReverseJsonFoundationTests
 
 XCTMain([
