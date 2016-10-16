@@ -60,10 +60,11 @@ class ReverseJsonTest: XCTestCase {
         let reverseJson = ReverseJson(json: "Test", modelName: "Name", modelGenerator: modelGenerator, translator: DummyTranslator(fileName: fileName), writeToConsole: false, outputDirectory: outUrl.path)
         do {
             let _ = try reverseJson.main()
+            XCTFail()
         } catch ReverseJsonError.outputPathIsNoDirectory(let dir) {
             XCTAssertEqual(dir, outUrl.path)
         } catch {
-            XCTFail(error.localizedDescription)
+            XCTFail("\(error)")
         }
     }
     
@@ -76,6 +77,7 @@ class ReverseJsonTest: XCTestCase {
         let reverseJson = ReverseJson(json: "Test", modelName: "Name", modelGenerator: modelGenerator, translator: DummyTranslator(fileName: "fileName"), writeToConsole: false, outputDirectory: outUrl.path)
         do {
             let _ = try reverseJson.main()
+            XCTFail()
         } catch ReverseJsonError.outputDirectoryDoesNotExist(let dir) {
             XCTAssertEqual(dir, outUrl.path)
         } catch {

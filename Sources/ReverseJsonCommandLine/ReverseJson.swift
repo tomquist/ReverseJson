@@ -13,14 +13,11 @@ public enum ReverseJsonError: Error {
     case unableToParseFile(error: Error)
 }
 
-#if os(Linux)
-    fileprivate typealias ObjCBool = Bool
-    extension ObjCBool {
-        fileprivate var boolValue: Bool {
-            return self
-        }
+extension Bool {
+    fileprivate var boolValue: Bool {
+        return self
     }
-#endif
+}
 
 public struct ReverseJson: CommandLineArgumentsConvertible {
     
@@ -80,12 +77,19 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
             throw ReverseJsonError.outputPathIsNoDirectory(outputDirectory)
         }
         var output = ""
-        try files.forEach { file in
+        let count = files.reduce(0) { count, file in
             let fileUrl = baseUrl.appendingPathComponent(file.name, isDirectory: false)
-            output += "Writing \(fileUrl.path)\n"
-            try file.content.data(using: .utf8)?.write(to: fileUrl)
+            output += "Writing \(fileUrl.path)"
+            defer { output += "\n" }
+            do {
+                try file.content.data(using: .utf8)?.write(to: fileUrl)
+                return count + 1
+            } catch {
+                output += " (FAILED: \(error))"
+                return count
+            }
         }
-        return output + "Wrote \(files.count) files"
+        return output + "Wrote \(count) files"
     }
     
 }
