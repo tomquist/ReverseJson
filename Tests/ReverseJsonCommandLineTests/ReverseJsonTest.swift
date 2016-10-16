@@ -33,6 +33,8 @@ class ReverseJsonTest: XCTestCase {
             ("testPassArgumentsToTranslator", testPassArgumentsToTranslator),
             ("testPassArgumentsToModelGenerator", testPassArgumentsToModelGenerator),
             ("testParsedJson", testParsedJson),
+            ("testVerbose", testVerbose),
+            ("testOutDir", testOutDir)
         ]
     }
     
@@ -54,7 +56,7 @@ class ReverseJsonTest: XCTestCase {
         if FileManager.default.fileExists(atPath: outUrl.path, isDirectory: nil) {
             try? FileManager.default.removeItem(at: outUrl)
         }
-        FileManager.default.createFile(atPath: outUrl.path, contents: nil, attributes: nil)
+        let _ = FileManager.default.createFile(atPath: outUrl.path, contents: nil, attributes: nil)
         defer {
             try? FileManager.default.removeItem(at: outUrl)
         }
