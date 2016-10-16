@@ -45,7 +45,7 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
             "e.g. \(exec) swift User testModel.json <options>",
             "Options:",
             "   -v,  --verbose          Print result instead of creating files",
-            "   -o,  --out <dir>        Output directory",
+            "   -o,  --out <dir>        Output directory (default is current directory)",
             "   -c,  --class            (Swift) Use classes instead of structs for objects",
             "   -ca, --contiguousarray  (Swift) Use ContiguousArray for lists",
             "   -pt, --publictypes      (Swift) Make type declarations public instead of internal",
@@ -54,8 +54,7 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
             "   -m,  --mutable          (Swift and Objective-C) All object fields are mutable (var instead of",
             "                           let in Swift and 'readwrite' instead of 'readonly' in Objective-C)",
             "   -a,  --atomic           (Objective-C) Make properties 'atomic'",
-            "   -p <prefix>             (Objective-C) Class-prefix to use for type declarations",
-            "   --prefix <prefix>       "
+            "   -p, --prefix <prefix>   (Objective-C) Class-prefix to use for type declarations",
         ].joined(separator: "\n")
     }
     

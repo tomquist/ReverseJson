@@ -35,6 +35,8 @@ By default, you'll find the executable in ```.build/release/ReverseJson```
 Usage: ReverseJson (swift|objc) NAME FILE <options>
 e.g. ReverseJson swift User testModel.json <options>
 Options:
+   -v,  --verbose          Print result instead of creating files
+   -o,  --out <dir>        Output directory (default is current directory)
    -c,  --class            (Swift) Use classes instead of structs for objects
    -ca, --contiguousarray  (Swift) Use ContiguousArray for lists
    -pt, --publictypes      (Swift) Make type declarations public instead of internal
@@ -43,8 +45,7 @@ Options:
    -m,  --mutable          (Swift and Objective-C) All object fields are mutable (var instead of
                            let in Swift and 'readwrite' instead of 'readonly' in Objective-C)
    -a,  --atomic           (Objective-C) Make properties 'atomic'
-   -p <prefix>             (Objective-C) Class-prefix to use for type declarations
-   --prefix <prefix>       
+   -p, --prefix <prefix>   (Objective-C) Class-prefix to use for type declarations
 ```
 
 ### To create a Swift data model:
@@ -82,6 +83,7 @@ Turns this:
 ...into this:
 
 ```swift
+// JsonModel.swift
 struct User {
     enum MixedItem {
         case number(Int)
@@ -103,7 +105,7 @@ struct User {
     let name: String
     let numbers: [Int]
 }
-
+// JsonModelMapping.swift
 enum JsonParsingError: Error {
     case unsupportedTypeError
 }
@@ -120,6 +122,9 @@ extension Array {
 extension Bool {
     init(jsonValue: Any?) throws {
         if let number = jsonValue as? NSNumber {
+            guard String(cString: number.objCType) == String(cString: NSNumber(value: true).objCType) else {
+                throw JsonParsingError.unsupportedTypeError
+            }
             self = number.boolValue
         } else if let number = jsonValue as? Bool {
             self = number
@@ -185,11 +190,11 @@ extension User {
         guard let dict = jsonValue as? [String: Any] else {
             throw JsonParsingError.unsupportedTypeError
         }
-        self.`internal` = try Bool(jsonValue: dict["internal"])
-        self.numbers = try Array(jsonValue: dict["numbers"]) { try Int(jsonValue: $0) }
-        self.locations = try Array(jsonValue: dict["locations"]) { try User.LocationsItem(jsonValue: $0) }
         self.mixed = try Array(jsonValue: dict["mixed"]) { try User.MixedItem(jsonValue: $0) }
+        self.numbers = try Array(jsonValue: dict["numbers"]) { try Int(jsonValue: $0) }
+        self.`internal` = try Bool(jsonValue: dict["internal"])
         self.isPrivate = try Bool(jsonValue: dict["is_private"])
+        self.locations = try Array(jsonValue: dict["locations"]) { try User.LocationsItem(jsonValue: $0) }
         self.name = try String(jsonValue: dict["name"])
     }
 }
@@ -235,36 +240,8 @@ func parseUser(jsonValue: Any?) throws -> User {
 ...or into this...
 
 ```objective-c
+// User.h
 #import <Foundation/Foundation.h>
-
-@class UserLocationsItemAddress;
-NS_ASSUME_NONNULL_BEGIN
-@interface UserLocationsItem : NSObject
-- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
-- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
-@property (nonatomic, strong, readonly, nullable) UserLocationsItemAddress *address;
-@property (nonatomic, assign, readonly) double lat;
-@property (nonatomic, assign, readonly) double lon;
-@end
-NS_ASSUME_NONNULL_END
-
-NS_ASSUME_NONNULL_BEGIN
-@interface UserLocationsItemAddress : NSObject
-- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
-- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
-@property (nonatomic, copy, readonly) NSString *city;
-@property (nonatomic, copy, readonly) NSString *street;
-@end
-NS_ASSUME_NONNULL_END
-
-NS_ASSUME_NONNULL_BEGIN
-@interface UserMixedItem : NSObject
-- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
-@property (nonatomic, assign, readonly) NSInteger number;
-@property (nonatomic, copy, readonly) NSString *text;
-@end
-NS_ASSUME_NONNULL_END
-
 @class UserLocationsItem, UserMixedItem;
 NS_ASSUME_NONNULL_BEGIN
 @interface User : NSObject
@@ -278,37 +255,41 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSString *name;
 @end
 NS_ASSUME_NONNULL_END
-
-@implementation UserLocationsItemAddress
-- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {
-    self = [super init];
-    if (self) {
-        _city = [dict[@"city"] isKindOfClass:[NSString class]] ? dict[@"city"] : nil;
-        _street = [dict[@"street"] isKindOfClass:[NSString class]] ? dict[@"street"] : nil;
-    }
-    return self;
-}
-- (instancetype)initWithJsonValue:(id)jsonValue {
-    if ([jsonValue isKindOfClass:[NSDictionary class]]) {
-        self = [self initWithJsonDictionary:jsonValue];
-    } else {
-        self = nil;
-    }
-    return self;
-}
+// UserLocationsItem.h
+#import <Foundation/Foundation.h>
+@class UserLocationsItemAddress;
+NS_ASSUME_NONNULL_BEGIN
+@interface UserLocationsItem : NSObject
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
+- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+@property (nonatomic, strong, readonly, nullable) UserLocationsItemAddress *address;
+@property (nonatomic, assign, readonly) double lat;
+@property (nonatomic, assign, readonly) double lon;
 @end
-
-@implementation UserMixedItem
-- (instancetype)initWithJsonValue:(id)jsonValue {
-    self = [super init];
-    if (self) {
-        _number = [jsonValue isKindOfClass:[NSNumber class]] ? [jsonValue integerValue] : 0;
-        _text = [jsonValue isKindOfClass:[NSString class]] ? jsonValue : nil;
-    }
-    return self;
-}
+NS_ASSUME_NONNULL_END
+// UserLocationsItemAddress.h
+#import <Foundation/Foundation.h>
+NS_ASSUME_NONNULL_BEGIN
+@interface UserLocationsItemAddress : NSObject
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
+- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+@property (nonatomic, copy, readonly) NSString *city;
+@property (nonatomic, copy, readonly) NSString *street;
 @end
-
+NS_ASSUME_NONNULL_END
+// UserMixedItem.h
+#import <Foundation/Foundation.h>
+NS_ASSUME_NONNULL_BEGIN
+@interface UserMixedItem : NSObject
+- (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+@property (nonatomic, assign, readonly) NSInteger number;
+@property (nonatomic, copy, readonly) NSString *text;
+@end
+NS_ASSUME_NONNULL_END
+// User.m
+#import "User.h"
+#import "UserLocationsItem.h"
+#import "UserMixedItem.h"
 @implementation User
 - (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {
     self = [super init];
@@ -326,7 +307,7 @@ NS_ASSUME_NONNULL_END
                     [values addObject:parsedItem ?: (id)[NSNull null]];
                 }
             }
-            [values copy];
+            [values copy] ?: @[];
         });
         _locations = ({
             id value = dict[@"locations"];
@@ -335,11 +316,11 @@ NS_ASSUME_NONNULL_END
                 NSArray *array = value;
                 values = [NSMutableArray arrayWithCapacity:array.count];
                 for (id item in array) {
-                    UserLocationsItem *parsedItem = [[UserLocationsItem alloc] initWithJsonValue:item];
+                    UserLocationsItem *parsedItem = ([[UserLocationsItem alloc] initWithJsonValue:item] ?: [[UserLocationsItem alloc] initWithJsonDictionary:@{}]);
                     [values addObject:parsedItem ?: (id)[NSNull null]];
                 }
             }
-            [values copy];
+            [values copy] ?: @[];
         });
         _mixed = ({
             id value = dict[@"mixed"];
@@ -352,9 +333,9 @@ NS_ASSUME_NONNULL_END
                     [values addObject:parsedItem ?: (id)[NSNull null]];
                 }
             }
-            [values copy];
+            [values copy] ?: @[];
         });
-        _name = [dict[@"name"] isKindOfClass:[NSString class]] ? dict[@"name"] : nil;
+        _name = [dict[@"name"] isKindOfClass:[NSString class]] ? dict[@"name"] : @"";
     }
     return self;
 }
@@ -367,7 +348,9 @@ NS_ASSUME_NONNULL_END
     return self;
 }
 @end
-
+// UserLocationsItem.m
+#import "UserLocationsItem.h"
+#import "UserLocationsItemAddress.h"
 @implementation UserLocationsItem
 - (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {
     self = [super init];
@@ -383,6 +366,38 @@ NS_ASSUME_NONNULL_END
         self = [self initWithJsonDictionary:jsonValue];
     } else {
         self = nil;
+    }
+    return self;
+}
+@end
+// UserLocationsItemAddress.m
+#import "UserLocationsItemAddress.h"
+@implementation UserLocationsItemAddress
+- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {
+    self = [super init];
+    if (self) {
+        _city = [dict[@"city"] isKindOfClass:[NSString class]] ? dict[@"city"] : @"";
+        _street = [dict[@"street"] isKindOfClass:[NSString class]] ? dict[@"street"] : @"";
+    }
+    return self;
+}
+- (instancetype)initWithJsonValue:(id)jsonValue {
+    if ([jsonValue isKindOfClass:[NSDictionary class]]) {
+        self = [self initWithJsonDictionary:jsonValue];
+    } else {
+        self = nil;
+    }
+    return self;
+}
+@end
+// UserMixedItem.m
+#import "UserMixedItem.h"
+@implementation UserMixedItem
+- (instancetype)initWithJsonValue:(id)jsonValue {
+    self = [super init];
+    if (self) {
+        _number = [jsonValue isKindOfClass:[NSNumber class]] ? [jsonValue integerValue] : 0;
+        _text = [jsonValue isKindOfClass:[NSString class]] ? jsonValue : @"";
     }
     return self;
 }
