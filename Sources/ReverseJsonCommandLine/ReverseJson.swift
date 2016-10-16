@@ -13,6 +13,15 @@ public enum ReverseJsonError: Error {
     case unableToParseFile(error: Error)
 }
 
+#if os(Linux)
+    fileprivate typealias ObjCBool = Bool
+    extension ObjCBool {
+        fileprivate var boolValue: Bool {
+            return self
+        }
+    }
+#endif
+
 public struct ReverseJson: CommandLineArgumentsConvertible {
     
     public var translator: ModelTranslator
@@ -60,7 +69,7 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
             return translator.translate(rootType, name: modelName)
         }
         
-        // File output
+        
         let files: [TranslatorOutput] = translator.translate(rootType, name: modelName)
         let baseUrl = URL(fileURLWithPath: outputDirectory, isDirectory: true)
         var isDir: ObjCBool = false
