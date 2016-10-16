@@ -69,7 +69,9 @@ class ReverseJsonTest: XCTestCase {
     }
     
     func testExistingOutputButNotADir() {
-        let outUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("ReverseJsonTestNonExistingDir", isDirectory: true)
+        let tmpDir = URL(fileURLWithPath: NSTemporaryDirectory())
+        try? FileManager.default.createDirectory(at: tmpDir, withIntermediateDirectories: true, attributes: nil)
+        let outUrl = tmpDir.appendingPathComponent("ReverseJsonTestNonExistingDir", isDirectory: true)
         if FileManager.default.fileExists(atPath: outUrl.path, isDirectory: nil) {
             try? FileManager.default.removeItem(at: outUrl)
         }
