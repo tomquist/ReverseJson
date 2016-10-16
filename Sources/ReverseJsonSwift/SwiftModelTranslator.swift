@@ -2,15 +2,30 @@ import ReverseJsonCore
 
 public struct SwiftTranslator: ModelTranslator {
     
+    public enum FileSplitMode {
+        case single(name: String)
+        case split(modelName: String, mappingName: String)
+    }
+    
     private var modelCreator = SwiftModelCreator()
     private var mappingCreator = SwiftJsonParsingTranslator()
     
-    public init() {}
+    public init() {
+        fileSplitMode = .split(modelName: modelCreator.fileName, mappingName: mappingCreator.fileName)
+    }
     
-    public func translate(_ type: FieldType, name: String) -> String {
-        let model = modelCreator.translate(type, name: name)
-        let mapping = mappingCreator.translate(type, name: name)
-        return "\(model)\n\n\(mapping)"
+    public func translate(_ type: FieldType, name: String) -> [TranslatorOutput] {
+        var models: [TranslatorOutput] = modelCreator.translate(type, name: name)
+        var mappings: [TranslatorOutput] = mappingCreator.translate(type, name: name)
+        mappings = mappings.filter { mapping in
+            if let sameNameIdx = models.index(where: { $0.name == mapping.name }) {
+                models[sameNameIdx].content += "\n" + mapping.content
+                return false
+            }
+            return true
+        }
+        models.append(contentsOf: mappings)
+        return models
     }
     
     public var objectType: ObjectType {
@@ -35,6 +50,43 @@ public struct SwiftTranslator: ModelTranslator {
     public var mutableFields: Bool {
         get {return modelCreator.mutableFields}
         set {modelCreator.mutableFields = newValue}
+    }
+    public var fileSplitMode: FileSplitMode {
+        set {
+            switch newValue {
+            case let .single(name: name):
+                modelCreator.fileName = name
+                mappingCreator.fileName = name
+            case let .split(modelName: modelName, mappingName: mappingName):
+                modelCreator.fileName = modelName
+                mappingCreator.fileName = mappingName
+            }
+        }
+        get {
+            if modelCreator.fileName == mappingCreator.fileName {
+                return .single(name: modelCreator.fileName)
+            } else {
+                return .split(modelName: modelCreator.fileName, mappingName: mappingCreator.fileName)
+            }
+        }
+    }
+    
+    public var modelFileName: String {
+        set {
+            modelCreator.fileName = newValue
+        }
+        get {
+            return modelCreator.fileName
+        }
+    }
+    
+    public var mappingFileName: String {
+        set {
+            mappingCreator.fileName = newValue
+        }
+        get {
+            return mappingCreator.fileName
+        }
     }
     
 }
@@ -71,8 +123,14 @@ struct SwiftModelCreator: ModelTranslator {
     public var fieldVisibility: Visibility = .internalVisibility
     public var typeVisibility: Visibility = .internalVisibility
     public var mutableFields: Bool = false
+    public var fileName: String = "JsonModel.swift"
     
-    func translate(_ type: FieldType, name: String) -> String {
+    func translate(_ type: FieldType, name: String) -> [TranslatorOutput] {
+        let result: String = translate(type, name: name)
+        return [TranslatorOutput(name: fileName, content: result)]
+    }
+    
+    private func translate(_ type: FieldType, name: String) -> String {
         let (typeName, decl) = makeSubtype(type, name: "", subName: name, level: 0)
         if let decl = decl {
             return decl
@@ -328,8 +386,14 @@ extension FieldType {
 struct SwiftJsonParsingTranslator: ModelTranslator {
     
     public var listType: ListType = .array
+    public var fileName: String = "JsonModelMapping.swift"
     
-    func translate(_ type: FieldType, name: String) -> String {
+    func translate(_ type: FieldType, name: String) -> [TranslatorOutput] {
+        let result: String = translate(type, name: name)
+        return [TranslatorOutput(name: fileName, content: result)]
+    }
+    
+    private func translate(_ type: FieldType, name: String) -> String {
         let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")
         
         let declarations = parsers.sorted {

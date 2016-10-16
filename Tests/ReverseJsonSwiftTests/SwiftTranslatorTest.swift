@@ -43,12 +43,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .text
 
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "SimpleText")
-        XCTAssertEqual("typealias SimpleText = String", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "SimpleText")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias SimpleText = String", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "SimpleText")
+        let parserResult: String = parserCreator.translate(type, name: "SimpleText")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftStringParser,
@@ -63,12 +64,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .number(.int)
 
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("typealias SimpleNumber = Int", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "SimpleNumber")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias SimpleNumber = Int", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "SimpleNumber")
+        let parserResult: String = parserCreator.translate(type, name: "SimpleNumber")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftIntParser,
@@ -83,12 +85,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .number(.float)
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("typealias SimpleNumber = Float", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "SimpleNumber")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias SimpleNumber = Float", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "SimpleNumber")
+        let parserResult: String = parserCreator.translate(type, name: "SimpleNumber")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftFloatParser,
@@ -103,12 +106,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .number(.double)
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("typealias SimpleNumber = Double", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "SimpleNumber")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias SimpleNumber = Double", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "SimpleNumber")
+        let parserResult: String = parserCreator.translate(type, name: "SimpleNumber")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftDoubleParser,
@@ -123,12 +127,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .number(.bool)
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "SimpleNumber")
-        XCTAssertEqual("typealias SimpleNumber = Bool", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "SimpleNumber")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias SimpleNumber = Bool", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "SimpleNumber")
+        let parserResult: String = parserCreator.translate(type, name: "SimpleNumber")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftBoolParser,
@@ -143,12 +148,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .object([])
 
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual("struct TestObject {\n}", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual("// \(modelCreator.fileName)\nstruct TestObject {\n}", modelResult)
 
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "TestObject")
+        let parserResult: String = parserCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             "extension TestObject {",
@@ -170,20 +176,21 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .enum([])
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TestObject")
-        XCTAssertEqual("enum TestObject {\n}", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual("// \(modelCreator.fileName)\nenum TestObject {\n}", modelResult)
     }
     
     func testTextList() {
         let type: FieldType = .list(.text)
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TextList")
-        XCTAssertEqual("typealias TextList = [String]", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "TextList")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias TextList = [String]", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "TestObject")
+        let parserResult: String = parserCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftArrayParser,
@@ -199,12 +206,13 @@ class SwiftTranslatorTest: XCTestCase {
     func testListOfTextList() {
         let type: FieldType = .list(.list(.text))
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TextList")
-        XCTAssertEqual("typealias TextList = [[String]]", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "TextList")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias TextList = [[String]]", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "TestObject")
+        let parserResult: String = parserCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftArrayParser,
@@ -221,12 +229,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .unknown
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "MyTypeName")
-        XCTAssertEqual("typealias MyTypeName = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias MyTypeName = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "MyTypeName")
+        let parserResult: String = parserCreator.translate(type, name: "MyTypeName")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             "func parseMyTypeName(jsonValue: Any?) throws -> MyTypeName {",
             "    return nil",
             "}"
@@ -237,12 +246,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .optional(.unknown)
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "MyTypeName")
-        XCTAssertEqual("typealias MyTypeName = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias MyTypeName = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "MyTypeName")
+        let parserResult: String = parserCreator.translate(type, name: "MyTypeName")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             "func parseMyTypeName(jsonValue: Any?) throws -> MyTypeName {",
             "    return nil",
             "}"
@@ -253,12 +263,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .list(.unknown)
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "MyTypeName")
-        XCTAssertEqual("typealias MyTypeNameItem = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias MyTypeNameItem = Void // TODO Specify type here. We couldn't infer it from json", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "MyTypeName")
+        let parserResult: String = parserCreator.translate(type, name: "MyTypeName")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             "func parseMyTypeName(jsonValue: Any?) throws -> MyTypeName {",
             "    return []",
             "}"
@@ -269,12 +280,13 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .optional(.text)
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "MyTypeName")
-        XCTAssertEqual("typealias MyTypeName = String?", modelResult)
+        let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
+        XCTAssertEqual("// \(modelCreator.fileName)\ntypealias MyTypeName = String?", modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "MyTypeName")
+        let parserResult: String = parserCreator.translate(type, name: "MyTypeName")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftOptionalParser,
@@ -289,24 +301,26 @@ class SwiftTranslatorTest: XCTestCase {
     
     func testListOfEmptyObject() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.list(.object([])), name: "TestObjectList")
-        XCTAssertEqual("struct TestObjectListItem {\n}", modelResult)
+        let modelResult: String = modelCreator.translate(.list(.object([])), name: "TestObjectList")
+        XCTAssertEqual("// \(modelCreator.fileName)\nstruct TestObjectListItem {\n}", modelResult)
     }
     
     func testObjectWithSingleTextField() {
         let type: FieldType = .object([.init(name: "text", type: .text)])
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TestObject")
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(modelCreator.fileName)",
             "struct TestObject {",
             "    let text: String",
             "}"
         ), modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "TestObject")
+        let parserResult: String = parserCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftStringParser,
@@ -330,16 +344,18 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TestObject")
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(modelCreator.fileName)",
             "struct TestObject {",
             "    let texts: [String]",
             "}"
         ), modelResult)
 
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "TestObject")
+        let parserResult: String = parserCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftArrayParser,
@@ -363,11 +379,12 @@ class SwiftTranslatorTest: XCTestCase {
     
     func testObjectWithTwoSimpleFields() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.object([
+        let modelResult: String = modelCreator.translate(.object([
             .init(name: "number", type: .number(.double)),
             .init(name: "texts", type: .list(.text))
         ]), name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(modelCreator.fileName)",
             "struct TestObject {",
             "    let number: Double",
             "    let texts: [String]",
@@ -377,10 +394,11 @@ class SwiftTranslatorTest: XCTestCase {
 
     func testObjectWithOneFieldWithSubDeclaration() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.object([
+        let modelResult: String = modelCreator.translate(.object([
             .init(name: "subObject", type: .object([]))
             ]), name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(modelCreator.fileName)",
             "struct TestObject {",
             "    struct SubObject {",
             "    }",
@@ -393,16 +411,18 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .enum([.text])
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TestObject")
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(modelCreator.fileName)",
             "enum TestObject {",
             "    case text(String)",
             "}"
         ), modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "TestObject")
+        let parserResult: String = parserCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftStringParser,
@@ -427,8 +447,9 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .enum([.text, .number(.int)])
         
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(type, name: "TestObject")
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(modelCreator.fileName)",
             "enum TestObject {",
             "    case number(Int)",
             "    case text(String)",
@@ -436,8 +457,9 @@ class SwiftTranslatorTest: XCTestCase {
         ), modelResult)
         
         let parserCreator = SwiftJsonParsingTranslator()
-        let parserResult = parserCreator.translate(type, name: "TestObject")
+        let parserResult: String = parserCreator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(parserCreator.fileName)",
             swiftErrorType,
             "",
             swiftIntParser,
@@ -464,8 +486,9 @@ class SwiftTranslatorTest: XCTestCase {
 
     func testEnumWithOneSubDeclarationCase() {
         let modelCreator = SwiftModelCreator()
-        let modelResult = modelCreator.translate(.enum([.object([])]), name: "TestObject")
+        let modelResult: String = modelCreator.translate(.enum([.object([])]), name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(modelCreator.fileName)",
             "enum TestObject {",
             "    struct TestObjectObject {",
             "    }",
@@ -479,8 +502,8 @@ class SwiftTranslatorTest: XCTestCase {
         
         var modelCreator = SwiftModelCreator()
         modelCreator.typeVisibility = .publicVisibility
-        let modelResult = modelCreator.translate(type, name: "TestObject")
-        let expected = "public struct TestObject {\n}"
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        let expected = "// \(modelCreator.fileName)\npublic struct TestObject {\n}"
         XCTAssertEqual(expected, modelResult)
     }
     
@@ -489,8 +512,8 @@ class SwiftTranslatorTest: XCTestCase {
         
         var modelCreator = SwiftModelCreator()
         modelCreator.typeVisibility = .publicVisibility
-        let modelResult = modelCreator.translate(type, name: "SimpleText")
-        let expected = "public typealias SimpleText = String"
+        let modelResult: String = modelCreator.translate(type, name: "SimpleText")
+        let expected = "// \(modelCreator.fileName)\npublic typealias SimpleText = String"
         XCTAssertEqual(expected, modelResult)
     }
     
@@ -499,8 +522,8 @@ class SwiftTranslatorTest: XCTestCase {
         
         var modelCreator = SwiftModelCreator()
         modelCreator.typeVisibility = .publicVisibility
-        let modelResult = modelCreator.translate(type, name: "TestObject")
-        let expected = "public enum TestObject {\n}"
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        let expected = "// \(modelCreator.fileName)\npublic enum TestObject {\n}"
         XCTAssertEqual(expected, modelResult)
     }
 
@@ -509,8 +532,8 @@ class SwiftTranslatorTest: XCTestCase {
         
         var modelCreator = SwiftModelCreator()
         modelCreator.objectType = .classType
-        let modelResult = modelCreator.translate(type, name: "TestObject")
-        let expected = "class TestObject {\n}"
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        let expected = "// \(modelCreator.fileName)\nclass TestObject {\n}"
         XCTAssertEqual(expected, modelResult)
     }
     
@@ -519,8 +542,9 @@ class SwiftTranslatorTest: XCTestCase {
         
         var modelCreator = SwiftModelCreator()
         modelCreator.fieldVisibility = .publicVisibility
-        let modelResult = modelCreator.translate(type, name: "TestObject")
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
+            "// \(modelCreator.fileName)",
             "struct TestObject {",
             "    public let text: String",
             "}"
@@ -533,8 +557,9 @@ class SwiftTranslatorTest: XCTestCase {
         
         var modelCreator = SwiftModelCreator()
         modelCreator.mutableFields = true
-        let modelResult = modelCreator.translate(type, name: "TestObject")
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
         let expected = String(lines:
+            "// \(modelCreator.fileName)",
             "struct TestObject {",
             "    var text: String",
             "}"
@@ -547,8 +572,9 @@ class SwiftTranslatorTest: XCTestCase {
         
         var modelCreator = SwiftModelCreator()
         modelCreator.listType = .contiguousArray
-        let modelResult = modelCreator.translate(type, name: "TestObject")
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
         let expectedModel = String(lines:
+            "// \(modelCreator.fileName)",
             "struct TestObject {",
             "    let texts: ContiguousArray<String>",
             "}"
@@ -557,8 +583,9 @@ class SwiftTranslatorTest: XCTestCase {
         
         var mappingCreator = SwiftJsonParsingTranslator()
         mappingCreator.listType = .contiguousArray
-        let parserResult = mappingCreator.translate(type, name: "TestObject")
+        let parserResult: String = mappingCreator.translate(type, name: "TestObject")
         let expectedParser = String(lines:
+            "// \(mappingCreator.fileName)",
             swiftErrorType,
             "",
             swiftContiguousArrayParser,
@@ -585,11 +612,12 @@ class SwiftTranslatorTest: XCTestCase {
         let type: FieldType = .object([])
         
         let translator = SwiftTranslator()
-        let result = translator.translate(type, name: "TestObject")
+        let result: String = translator.translate(type, name: "TestObject")
         XCTAssertEqual(String(lines:
+            "// \(translator.modelFileName)",
             "struct TestObject {",
             "}",
-            "",
+            "// \(translator.mappingFileName)",
             swiftErrorType,
             "",
             "extension TestObject {",

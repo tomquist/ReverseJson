@@ -6,8 +6,10 @@ import ReverseJsonObjc
 @testable import ReverseJsonCommandLine
 
 struct DummyTranslator: ModelTranslator {
-    func translate(_ type: FieldType, name: String) -> String {
-        return "\(name): \(type)"
+    let fileName: String
+    
+    func translate(_ type: FieldType, name: String) -> [TranslatorOutput] {
+        return [TranslatorOutput(name: fileName, content: "\(name): \(type)")]
     }
 }
 
@@ -15,7 +17,10 @@ class ReverseJsonTest: XCTestCase {
     
     static var allTests: [(String, (ReverseJsonTest) -> () throws -> Void)] {
         return [
-            ("testDefault", testDefault),
+            ("testConsoleOutput", testConsoleOutput),
+            ("testNonExistingOutputDir", testNonExistingOutputDir),
+            ("testExistingOutputButNotADir", testExistingOutputButNotADir),
+            ("testFileOutput", testFileOutput),
             ("testHasUsage", testHasUsage),
             ("testNoArguments", testNoArguments),
             ("testWrongArgumentCount", testWrongArgumentCount),
@@ -35,10 +40,63 @@ class ReverseJsonTest: XCTestCase {
         return URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("Inputs").appendingPathComponent(name).path
     }
     
-    func testDefault() {
+    func testConsoleOutput() {
         let modelGenerator = ModelGenerator()
-        let reverseJson = ReverseJson(json: "Test", modelName: "Name", modelGenerator: modelGenerator, translator: DummyTranslator())
-        XCTAssertEqual(try? reverseJson.main(), "Name: \(modelGenerator.decode(.string("Test")))")
+        let reverseJson = ReverseJson(json: "Test", modelName: "Name", modelGenerator: modelGenerator, translator: DummyTranslator(fileName: "fileName"), writeToConsole: true, outputDirectory: "")
+        XCTAssertEqual(try? reverseJson.main(), "// fileName\nName: \(modelGenerator.decode(.string("Test")))")
+    }
+    
+    func testNonExistingOutputDir() {
+        let fileName = "ReverseJsonTestExistingFile"
+        let outUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName, isDirectory: false)
+        if FileManager.default.fileExists(atPath: outUrl.path, isDirectory: nil) {
+            try? FileManager.default.removeItem(at: outUrl)
+        }
+        try? "".data(using: .utf8)?.write(to: outUrl)
+        defer {
+            try? FileManager.default.removeItem(at: outUrl)
+        }
+        let modelGenerator = ModelGenerator()
+        let reverseJson = ReverseJson(json: "Test", modelName: "Name", modelGenerator: modelGenerator, translator: DummyTranslator(fileName: fileName), writeToConsole: false, outputDirectory: outUrl.path)
+        do {
+            let _ = try reverseJson.main()
+        } catch ReverseJsonError.outputPathIsNoDirectory(let dir) {
+            XCTAssertEqual(dir, outUrl.path)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testExistingOutputButNotADir() {
+        let outUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("ReverseJsonTestNonExistingDir", isDirectory: true)
+        if FileManager.default.fileExists(atPath: outUrl.path, isDirectory: nil) {
+            try? FileManager.default.removeItem(at: outUrl)
+        }
+        let modelGenerator = ModelGenerator()
+        let reverseJson = ReverseJson(json: "Test", modelName: "Name", modelGenerator: modelGenerator, translator: DummyTranslator(fileName: "fileName"), writeToConsole: false, outputDirectory: outUrl.path)
+        do {
+            let _ = try reverseJson.main()
+        } catch ReverseJsonError.outputDirectoryDoesNotExist(let dir) {
+            XCTAssertEqual(dir, outUrl.path)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
+    
+    func testFileOutput() {
+        let outUrl = URL(fileURLWithPath: NSTemporaryDirectory())
+        let fileName = "ReverseJsonTestDummyOutput"
+        defer {
+            let outFile = outUrl.appendingPathComponent(fileName)
+            try? FileManager.default.removeItem(at: outFile)
+        }
+        let modelGenerator = ModelGenerator()
+        let reverseJson = ReverseJson(json: "Test", modelName: "Name", modelGenerator: modelGenerator, translator: DummyTranslator(fileName: fileName), writeToConsole: false, outputDirectory: outUrl.path)
+        do {
+            let _ = try reverseJson.main()
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
     
     func testHasUsage() {
@@ -158,6 +216,32 @@ class ReverseJsonTest: XCTestCase {
             let dict = reverseJson.json as? [String: Any]
             XCTAssertNotNil(dict)
             XCTAssertEqual(dict?["height"] as? Int, 10)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func testVerbose() {
+        do {
+            let reverseJson0 = try ReverseJson(args: ["ReverseJson", "swift", "Test", resourcePath("valid.json")])
+            let reverseJson1 = try ReverseJson(args: ["ReverseJson", "swift", "Test", resourcePath("valid.json"), "-v"])
+            let reverseJson2 = try ReverseJson(args: ["ReverseJson", "swift", "Test", resourcePath("valid.json"), "--verbose"])
+            XCTAssertFalse(reverseJson0.writeToConsole)
+            XCTAssertTrue(reverseJson1.writeToConsole)
+            XCTAssertTrue(reverseJson2.writeToConsole)
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func testOutDir() {
+        do {
+            let reverseJson0 = try ReverseJson(args: ["ReverseJson", "swift", "Test", resourcePath("valid.json")])
+            let reverseJson1 = try ReverseJson(args: ["ReverseJson", "swift", "Test", resourcePath("valid.json"), "-o", "bla"])
+            let reverseJson2 = try ReverseJson(args: ["ReverseJson", "swift", "Test", resourcePath("valid.json"), "--out", "bla"])
+            XCTAssertEqual("", reverseJson0.outputDirectory)
+            XCTAssertEqual("bla", reverseJson1.outputDirectory)
+            XCTAssertEqual("bla", reverseJson2.outputDirectory)
         } catch {
             XCTFail()
         }

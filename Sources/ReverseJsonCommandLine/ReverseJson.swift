@@ -6,6 +6,8 @@ import ReverseJsonFoundation
 
 public enum ReverseJsonError: Error {
     case wrongArgumentCount
+    case outputDirectoryDoesNotExist(String)
+    case outputPathIsNoDirectory(String)
     case unsupportedLanguage(String)
     case unableToRead(file: String, Error)
     case unableToParseFile(error: Error)
@@ -17,47 +19,16 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
     public var json: Any
     public var modelName: String
     public var modelGenerator: ModelGenerator
+    public var writeToConsole: Bool
+    public var outputDirectory: String
     
-    public init(json: Any, modelName: String, modelGenerator: ModelGenerator, translator: ModelTranslator) {
+    public init(json: Any, modelName: String, modelGenerator: ModelGenerator, translator: ModelTranslator, writeToConsole: Bool, outputDirectory: String) {
         self.json = json
         self.modelName = modelName
         self.modelGenerator = modelGenerator
         self.translator = translator
-    }
-    
-    public init(args: [String]) throws {
-        guard args.count >= 4 else {
-            throw ReverseJsonError.wrongArgumentCount
-        }
-        let language = args[1]
-        modelName = args[2]
-        let file = args[3]
-        let remainingArgs = args.suffix(from: 4).map {$0}
-        typealias CommandLineArgumentsConvertibleTranslator = (ModelTranslator & CommandLineArgumentsConvertible)
-        var translatorType: CommandLineArgumentsConvertibleTranslator.Type
-        switch language {
-        case "swift":
-            translatorType = SwiftTranslator.self
-        case "objc":
-            translatorType = ObjcModelCreator.self
-        default:
-            throw ReverseJsonError.unsupportedLanguage(language)
-        }
-        let data: Data
-        do {
-            data = try Data(contentsOf: URL(fileURLWithPath: file))
-        } catch {
-            throw ReverseJsonError.unableToRead(file: file, error)
-        }
-
-        do {
-            json = try JSONSerialization.jsonObject(with: data, options: [])
-        } catch {
-            throw ReverseJsonError.unableToParseFile(error: error)
-        }
-        
-        modelGenerator = ModelGenerator(args: remainingArgs)
-        translator = try translatorType.init(args: remainingArgs)
+        self.writeToConsole = writeToConsole
+        self.outputDirectory = outputDirectory
     }
     
     public static func usage(command: String = CommandLine.arguments[0]) -> String {
@@ -67,6 +38,8 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
             "Usage: \(exec) (swift|objc) NAME FILE <options>",
             "e.g. \(exec) swift User testModel.json <options>",
             "Options:",
+            "   -v,  --verbose          Print result instead of creating files",
+            "   -o,  --out <dir>        Output directory",
             "   -c,  --class            (Swift) Use classes instead of structs for objects",
             "   -ca, --contiguousarray  (Swift) Use ContiguousArray for lists",
             "   -pt, --publictypes      (Swift) Make type declarations public instead of internal",
@@ -83,7 +56,27 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
     public func main() throws -> String {
         let model = try FoundationJSONTransformer().transform(json)
         let rootType = modelGenerator.decode(model)
-        return translator.translate(rootType, name: modelName)
+        if writeToConsole {
+            return translator.translate(rootType, name: modelName)
+        }
+        
+        // File output
+        let files: [TranslatorOutput] = translator.translate(rootType, name: modelName)
+        let baseUrl = URL(fileURLWithPath: outputDirectory, isDirectory: true)
+        var isDir: ObjCBool = false
+        if !FileManager.default.fileExists(atPath: baseUrl.path, isDirectory: &isDir) {
+            throw ReverseJsonError.outputDirectoryDoesNotExist(outputDirectory)
+        }
+        if !isDir.boolValue {
+            throw ReverseJsonError.outputPathIsNoDirectory(outputDirectory)
+        }
+        var output = ""
+        try files.forEach { file in
+            let fileUrl = baseUrl.appendingPathComponent(file.name, isDirectory: false)
+            output += "Writing \(fileUrl.path)\n"
+            try file.content.data(using: .utf8)?.write(to: fileUrl)
+        }
+        return output + "Wrote \(files.count) files"
     }
     
 }
