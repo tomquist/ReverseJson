@@ -68,6 +68,10 @@ extension String {
         "associatedtype", "class", "deinit", "enum", "extension", "func", "import", "init", "inout", "internal", "let", "operator", "private", "protocol", "public", "static", "struct", "subscript", "typealias", "var", "break", "case", "continue", "default", "defer", "do", "else", "fallthrough", "for", "guard", "if", "in", "repeat", "return", "switch", "where", "while", "as", "Any", "catch", "dynamicType", "false", "is", "nil", "rethrows", "super", "self", "Self", "throw", "throws", "true", "try", "associativity", "convenience", "dynamic", "didSet", "final", "get", "infix", "indirect", "lazy", "left", "mutating", "none", "nonmutating", "optional", "override", "postfix", "precedence", "prefix", "Protocol", "required", "right", "set", "Type", "unowned", "weak", "willSet"
     ]
     
+    static let objcKeywords: Set<String> = [
+        "auto", "break", "case", "char", "const", "continue", "default", "do", "double", "else", "enum", "extern", "float", "for", "goto", "if", "inline", "int", "long", "register", "restrict", "return", "short", "signed", "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned", "void", "volatile", "while", "_Bool", "_Complex", "_Imaginery"
+    ]
+    
     public var swiftKeywordEscaped: String {
         if String.swiftKeywords.contains(self) {
             return "`\(self)`"
@@ -92,6 +96,13 @@ extension String {
         } else {
             return "_"
         }
+    }
+    
+    public var asValidObjcIdentifier: String {
+        guard !String.objcKeywords.contains(self) else {
+            return "_\(self)"
+        }
+        return self
     }
 }
 

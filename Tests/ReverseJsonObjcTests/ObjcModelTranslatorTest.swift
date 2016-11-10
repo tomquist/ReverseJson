@@ -21,6 +21,7 @@ class ObjcModelTranslatorTest: XCTestCase {
             ("testObjectWithFieldContainingOptionalListOfText", testObjectWithFieldContainingOptionalListOfText),
             ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
             ("testObjectWithSingleTextField", testObjectWithSingleTextField),
+            ("testObjectWithSingleReservedTextField", testObjectWithSingleReservedTextField),
             ("testSimpleDouble", testSimpleDouble),
             ("testSimpleFloat", testSimpleFloat),
             ("testSimpleInt", testSimpleInt),
@@ -216,6 +217,43 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     
+    func testObjectWithSingleReservedTextField() {
+        let type: FieldType = .object([.init(name: "signed", type: .text)])
+        
+        let modelCreator = ObjcModelCreator()
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+          "// TestObject.h",
+          "#import <Foundation/Foundation.h>",
+          "NS_ASSUME_NONNULL_BEGIN",
+          "@interface TestObject : NSObject",
+          "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
+          "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+          "@property (nonatomic, copy, readonly) NSString *_signed;",
+          "@end",
+          "NS_ASSUME_NONNULL_END",
+          "// TestObject.m",
+          "#import \"TestObject.h\"",
+          "@implementation TestObject",
+          "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
+          "    self = [super init];",
+          "    if (self) {",
+          "        __signed = [dict[@\"signed\"] isKindOfClass:[NSString class]] ? dict[@\"signed\"] : @\"\";",
+          "    }",
+          "    return self;",
+          "}",
+          "- (instancetype)initWithJsonValue:(id)jsonValue {",
+          "    if ([jsonValue isKindOfClass:[NSDictionary class]]) {",
+          "        self = [self initWithJsonDictionary:jsonValue];",
+          "    } else {",
+          "        self = nil;",
+          "    }",
+          "    return self;",
+          "}",
+          "@end"
+        ), modelResult)
+    }
+    
     func testObjectWithFieldContainingListOfText() {
         let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
         
@@ -331,7 +369,7 @@ class ObjcModelTranslatorTest: XCTestCase {
             "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
             "@property (nonatomic, strong, readonly) NSArray<NSArray<NSString *> *> *listOfListsOfText;",
             "@property (nonatomic, strong, readonly) NSArray<NSNumber/*NSInteger*/ *> *numbers;",
-            "@property (nonatomic, assign, readonly) NSInteger int;",
+            "@property (nonatomic, assign, readonly) NSInteger _int;",
             "@property (nonatomic, strong, readonly, nullable) NSString *optionalText;",
             "@end",
             "NS_ASSUME_NONNULL_END",
@@ -379,7 +417,7 @@ class ObjcModelTranslatorTest: XCTestCase {
             "            }",
             "            [values copy] ?: @[];",
             "        });",
-            "        _int = [dict[@\"int\"] isKindOfClass:[NSNumber class]] ? [dict[@\"int\"] integerValue] : 0;",
+            "        __int = [dict[@\"int\"] isKindOfClass:[NSNumber class]] ? [dict[@\"int\"] integerValue] : 0;",
             "        _optionalText = [dict[@\"optionalText\"] isKindOfClass:[NSString class]] ? dict[@\"optionalText\"] : nil;",
             "    }",
             "    return self;",

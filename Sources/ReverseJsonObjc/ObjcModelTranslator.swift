@@ -57,7 +57,7 @@ public struct ObjcModelCreator: ModelTranslator {
                     modifiers.append("nullable")
                 }
                 let modifierList = String(joined: modifiers, separator: ", ")
-                let variableName = type.enumCaseName.pascalCased()
+                let variableName = type.enumCaseName.pascalCased().asValidObjcIdentifier
                 let propertyName: String
                 if fieldFullTypeName.hasSuffix("*") {
                     propertyName = variableName
@@ -123,7 +123,7 @@ public struct ObjcModelCreator: ModelTranslator {
                     modifiers.append("nullable")
                 }
                 let modifierList = String(joined: modifiers, separator: ", ")
-                let variableName = field.name.pascalCased()
+                let variableName = field.name.pascalCased().asValidObjcIdentifier
                 let propertyName: String
                 if fieldFullTypeName.hasSuffix("*") {
                     propertyName = variableName

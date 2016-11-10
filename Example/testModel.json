@@ -9,7 +9,7 @@
       "field" : "value"
     },
     {
-      "otherField" : 10
+      "signed" : 10
     },
     1.2
   ],
