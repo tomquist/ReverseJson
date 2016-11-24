@@ -99,11 +99,8 @@ extension String {
     }
     
     public var asValidObjcIdentifier: String {
-        guard self != "signed" else {
-            return "is\(self.firstCapitalized())"
-        }
-        guard !String.objcKeywords.contains(self) else {
-            return "_\(self)"
+        guard !String.objcKeywords.contains(self) && self != "signed" && !self.hasPrefix("new") && !self.hasPrefix("copy") && !self.hasPrefix("init") else {
+            return "$\(self)"
         }
         return self
     }
