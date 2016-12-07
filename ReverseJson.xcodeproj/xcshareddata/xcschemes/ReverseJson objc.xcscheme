@@ -175,7 +175,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "objc User ${SRCROOT}/Example/testModel.json -v"
+            argument = "objc User ${SRCROOT}/Example/testModel.json -v -r"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

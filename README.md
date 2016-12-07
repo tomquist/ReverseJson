@@ -248,6 +248,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface User : NSObject
 - (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
 - (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+- (NSDictionary<NSString *, id<NSObject>> *)toJson;
 @property (nonatomic, assign, readonly) BOOL internal;
 @property (nonatomic, assign, readonly) BOOL isPrivate;
 @property (nonatomic, strong, readonly) NSArray<NSNumber/*NSInteger*/ *> *numbers;
@@ -263,6 +264,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UserLocationsItem : NSObject
 - (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
 - (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+- (NSDictionary<NSString *, id<NSObject>> *)toJson;
 @property (nonatomic, strong, readonly, nullable) UserLocationsItemAddress *address;
 @property (nonatomic, assign, readonly) double lat;
 @property (nonatomic, assign, readonly) double lon;
@@ -274,6 +276,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UserLocationsItemAddress : NSObject
 - (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;
 - (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
+- (NSDictionary<NSString *, id<NSObject>> *)toJson;
 @property (nonatomic, copy, readonly) NSString *city;
 @property (nonatomic, copy, readonly) NSString *street;
 @end
@@ -283,8 +286,9 @@ NS_ASSUME_NONNULL_END
 NS_ASSUME_NONNULL_BEGIN
 @interface UserMixedItem : NSObject
 - (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;
-@property (nonatomic, assign, readonly) NSInteger number;
-@property (nonatomic, copy, readonly) NSString *text;
+- (id<NSObject>)toJson;
+@property (nonatomic, copy, readonly, nullable) NSNumber/*NSInteger*/ *number;
+@property (nonatomic, strong, readonly, nullable) NSString *text;
 @end
 NS_ASSUME_NONNULL_END
 // User.m
@@ -348,6 +352,61 @@ NS_ASSUME_NONNULL_END
     }
     return self;
 }
+- (NSDictionary<NSString *, id<NSObject>> *)toJson {
+    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:6];
+    ret[@"internal"] = @(_internal);
+    ret[@"is_private"] = @(_isPrivate);
+    ret[@"numbers"] = ({
+        NSMutableArray<id<NSObject>> *values = nil;
+        NSArray *array = _numbers;
+        if (array) {
+            values = [NSMutableArray arrayWithCapacity:array.count];
+            for (id item in array) {
+                if (item == [NSNull null]) {
+                    [values addObject:item];
+                } else {
+                    id json = item;
+                    [values addObject:json ?: (id)[NSNull null]];
+                }
+            }
+        }
+        [values copy] ?: @[];
+    });
+    ret[@"locations"] = ({
+        NSMutableArray<id<NSObject>> *values = nil;
+        NSArray *array = _locations;
+        if (array) {
+            values = [NSMutableArray arrayWithCapacity:array.count];
+            for (id item in array) {
+                if (item == [NSNull null]) {
+                    [values addObject:item];
+                } else {
+                    id json = [item toJson];
+                    [values addObject:json ?: (id)[NSNull null]];
+                }
+            }
+        }
+        [values copy] ?: @[];
+    });
+    ret[@"mixed"] = ({
+        NSMutableArray<id<NSObject>> *values = nil;
+        NSArray *array = _mixed;
+        if (array) {
+            values = [NSMutableArray arrayWithCapacity:array.count];
+            for (id item in array) {
+                if (item == [NSNull null]) {
+                    [values addObject:item];
+                } else {
+                    id json = [item toJson];
+                    [values addObject:json ?: (id)[NSNull null]];
+                }
+            }
+        }
+        [values copy] ?: @[];
+    });
+    ret[@"name"] = _name;
+    return [ret copy];
+}
 @end
 // UserLocationsItem.m
 #import "UserLocationsItem.h"
@@ -370,6 +429,13 @@ NS_ASSUME_NONNULL_END
     }
     return self;
 }
+- (NSDictionary<NSString *, id<NSObject>> *)toJson {
+    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:3];
+    ret[@"address"] = [_address toJson];
+    ret[@"lat"] = @(_lat);
+    ret[@"lon"] = @(_lon);
+    return [ret copy];
+}
 @end
 // UserLocationsItemAddress.m
 #import "UserLocationsItemAddress.h"
@@ -390,6 +456,12 @@ NS_ASSUME_NONNULL_END
     }
     return self;
 }
+- (NSDictionary<NSString *, id<NSObject>> *)toJson {
+    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:2];
+    ret[@"city"] = _city;
+    ret[@"street"] = _street;
+    return [ret copy];
+}
 @end
 // UserMixedItem.m
 #import "UserMixedItem.h"
@@ -397,10 +469,18 @@ NS_ASSUME_NONNULL_END
 - (instancetype)initWithJsonValue:(id)jsonValue {
     self = [super init];
     if (self) {
-        _number = [jsonValue isKindOfClass:[NSNumber class]] ? [jsonValue integerValue] : 0;
-        _text = [jsonValue isKindOfClass:[NSString class]] ? jsonValue : @"";
+        _number = [jsonValue isKindOfClass:[NSNumber class]] ? jsonValue : nil;
+        _text = [jsonValue isKindOfClass:[NSString class]] ? jsonValue : nil;
     }
     return self;
+}
+- (id<NSObject>)toJson {
+    if (_number) {
+        return _number;
+    } else if (_text) {
+        return _text;
+    }
+    return nil;
 }
 @end
 ```
