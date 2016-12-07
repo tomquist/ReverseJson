@@ -91,6 +91,7 @@ extension ObjcModelCreator: CommandLineArgumentsConvertible {
         self.init()
         atomic = args.consume(flag: "-a") || args.consume(flag: "--atomic")
         readonly = !(args.consume(flag: "-m") || args.contains("--mutable"))
+        createToJson = args.consume(flag: "-r") || args.contains("--reversemapping")
         if let prefix = (args.consume(value: "-p") ?? args.consume(value: "--prefix")) {
             typePrefix = prefix
         }

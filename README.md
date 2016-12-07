@@ -46,6 +46,7 @@ Options:
                            let in Swift and 'readwrite' instead of 'readonly' in Objective-C)
    -a,  --atomic           (Objective-C) Make properties 'atomic'
    -p, --prefix <prefix>   (Objective-C) Class-prefix to use for type declarations
+   -r, --reversemapping    (Objective-C) Create method for reverse mapping (toJson)
 ```
 
 ### To create a Swift data model:

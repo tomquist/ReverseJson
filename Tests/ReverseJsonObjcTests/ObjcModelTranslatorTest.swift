@@ -217,6 +217,50 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     
+    func testObjectWithSingleTextFieldAndReverseMapper() {
+        let type: FieldType = .object([.init(name: "text", type: .text)])
+        
+        var modelCreator = ObjcModelCreator()
+        modelCreator.createToJson = true
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+            "// TestObject.h",
+            "#import <Foundation/Foundation.h>",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface TestObject : NSObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
+            "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson;",
+            "@property (nonatomic, copy, readonly) NSString *text;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// TestObject.m",
+            "#import \"TestObject.h\"",
+            "@implementation TestObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
+            "    self = [super init];",
+            "    if (self) {",
+            "        _text = [dict[@\"text\"] isKindOfClass:[NSString class]] ? dict[@\"text\"] : @\"\";",
+            "    }",
+            "    return self;",
+            "}",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    if ([jsonValue isKindOfClass:[NSDictionary class]]) {",
+            "        self = [self initWithJsonDictionary:jsonValue];",
+            "    } else {",
+            "        self = nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson {",
+            "    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:1];",
+            "    ret[@\"text\"] = _text;",
+            "    return [ret copy];",
+            "}",
+            "@end"
+        ), modelResult)
+    }
+    
     func testObjectWithSingleReservedTextField() {
         let type: FieldType = .object([.init(name: "signed", type: .text)])
         
@@ -298,6 +342,77 @@ class ObjcModelTranslatorTest: XCTestCase {
             "        self = nil;",
             "    }",
             "    return self;",
+            "}",
+            "@end"
+        ), modelResult)
+    }
+    
+    func testObjectWithFieldContainingListOfTextWithReverseMapper() {
+        let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
+        
+        var modelCreator = ObjcModelCreator()
+        modelCreator.createToJson = true
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+            "// TestObject.h",
+            "#import <Foundation/Foundation.h>",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface TestObject : NSObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
+            "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson;",
+            "@property (nonatomic, strong, readonly) NSArray<NSString *> *texts;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// TestObject.m",
+            "#import \"TestObject.h\"",
+            "@implementation TestObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
+            "    self = [super init];",
+            "    if (self) {",
+            "        _texts = ({",
+            "            id value = dict[@\"texts\"];",
+            "            NSMutableArray<NSString *> *values = nil;",
+            "            if ([value isKindOfClass:[NSArray class]]) {",
+            "                NSArray *array = value;",
+            "                values = [NSMutableArray arrayWithCapacity:array.count];",
+            "                for (id item in array) {",
+            "                    NSString *parsedItem = [item isKindOfClass:[NSString class]] ? item : @\"\";",
+            "                    [values addObject:parsedItem ?: (id)[NSNull null]];",
+            "                }",
+            "            }",
+            "            [values copy] ?: @[];",
+            "        });",
+            "    }",
+            "    return self;",
+            "}",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    if ([jsonValue isKindOfClass:[NSDictionary class]]) {",
+            "        self = [self initWithJsonDictionary:jsonValue];",
+            "    } else {",
+            "        self = nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson {",
+            "    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:1];",
+            "    ret[@\"texts\"] = ({",
+            "        NSMutableArray<id<NSObject>> *values = nil;",
+            "        NSArray *array = _texts;",
+            "        if (array) {",
+            "            values = [NSMutableArray arrayWithCapacity:array.count];",
+            "            for (id item in array) {",
+            "                if (item == [NSNull null]) {",
+            "                    [values addObject:item];",
+            "                } else {",
+            "                    id json = item;",
+            "                    [values addObject:json ?: (id)[NSNull null]];",
+            "                }",
+            "            }",
+            "        }",
+            "        [values copy] ?: @[];",
+            "    });",
+            "    return [ret copy];",
             "}",
             "@end"
         ), modelResult)
@@ -527,6 +642,42 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     
+    func testEnumWithOneCaseAndReverseMapping() {
+        let type: FieldType = .enum([.text])
+        
+        var modelCreator = ObjcModelCreator()
+        modelCreator.createToJson = true
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+            "// TestObject.h",
+            "#import <Foundation/Foundation.h>",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface TestObject : NSObject",
+            "- (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "- (id<NSObject>)toJson;",
+            "@property (nonatomic, copy, readonly) NSString *text;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// TestObject.m",
+            "#import \"TestObject.h\"",
+            "@implementation TestObject",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    self = [super init];",
+            "    if (self) {",
+            "        _text = [jsonValue isKindOfClass:[NSString class]] ? jsonValue : @\"\";",
+            "    }",
+            "    return self;",
+            "}",
+            "- (id<NSObject>)toJson {",
+            "    if (_text) {",
+            "        return _text;",
+            "    }",
+            "    return nil;",
+            "}",
+            "@end"
+        ), modelResult)
+    }
+    
     func testEnumWithTwoCases() {
         let type: FieldType = .enum([
             .optional(.object([])),
@@ -542,7 +693,7 @@ class ObjcModelTranslatorTest: XCTestCase {
             "NS_ASSUME_NONNULL_BEGIN",
             "@interface TestObject : NSObject",
             "- (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
-            "@property (nonatomic, assign, readonly) NSInteger number;",
+            "@property (nonatomic, copy, readonly, nullable) NSNumber/*NSInteger*/ *number;",
             "@property (nonatomic, strong, readonly, nullable) TestObjectObject *object;",
             "@end",
             "NS_ASSUME_NONNULL_END",
@@ -561,7 +712,7 @@ class ObjcModelTranslatorTest: XCTestCase {
             "- (instancetype)initWithJsonValue:(id)jsonValue {",
             "    self = [super init];",
             "    if (self) {",
-            "        _number = [jsonValue isKindOfClass:[NSNumber class]] ? [jsonValue integerValue] : 0;",
+            "        _number = [jsonValue isKindOfClass:[NSNumber class]] ? jsonValue : nil;",
             "        _object = [[TestObjectObject alloc] initWithJsonValue:jsonValue];",
             "    }",
             "    return self;",
@@ -587,7 +738,83 @@ class ObjcModelTranslatorTest: XCTestCase {
             "@end"
         ), modelResult)
     }
-    
+
+    func testEnumWithTwoCasesAndReverseMapping() {
+        let type: FieldType = .enum([
+            .optional(.object([])),
+            .number(.int)
+        ])
+        
+        var modelCreator = ObjcModelCreator()
+        modelCreator.createToJson = true
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+            "// TestObject.h",
+            "#import <Foundation/Foundation.h>",
+            "@class TestObjectObject;",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface TestObject : NSObject",
+            "- (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "- (id<NSObject>)toJson;",
+            "@property (nonatomic, copy, readonly, nullable) NSNumber/*NSInteger*/ *number;",
+            "@property (nonatomic, strong, readonly, nullable) TestObjectObject *object;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// TestObjectObject.h",
+            "#import <Foundation/Foundation.h>",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface TestObjectObject : NSObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
+            "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// TestObject.m",
+            "#import \"TestObject.h\"",
+            "#import \"TestObjectObject.h\"",
+            "@implementation TestObject",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    self = [super init];",
+            "    if (self) {",
+            "        _number = [jsonValue isKindOfClass:[NSNumber class]] ? jsonValue : nil;",
+            "        _object = [[TestObjectObject alloc] initWithJsonValue:jsonValue];",
+            "    }",
+            "    return self;",
+            "}",
+            "- (id<NSObject>)toJson {",
+            "    if (_number) {",
+            "        return _number;",
+            "    } else if (_object) {",
+            "        return [_object toJson];",
+            "    }",
+            "    return nil;",
+            "}",
+            "@end",
+            "// TestObjectObject.m",
+            "#import \"TestObjectObject.h\"",
+            "@implementation TestObjectObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
+            "    self = [super init];",
+            "    if (self) {",
+            "    }",
+            "    return self;",
+            "}",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    if ([jsonValue isKindOfClass:[NSDictionary class]]) {",
+            "        self = [self initWithJsonDictionary:jsonValue];",
+            "    } else {",
+            "        self = nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson {",
+            "    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:0];",
+            "    return [ret copy];",
+            "}",
+            "@end"
+        ), modelResult)
+    }
+
     func testAtomicFieldsFlag() {
         let type: FieldType = .object([.init(name: "text", type: .text)])
         
