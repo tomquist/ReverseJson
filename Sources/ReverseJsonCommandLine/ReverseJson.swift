@@ -2,7 +2,9 @@ import Foundation
 import ReverseJsonCore
 import ReverseJsonSwift
 import ReverseJsonObjc
-import ReverseJsonFoundation
+import ReverseJsonModelExport
+import CoreJSON
+import CoreJSONFoundation
 
 public enum ReverseJsonError: Error {
     case wrongArgumentCount
@@ -41,7 +43,7 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
         let pathComponents = command.characters.split(separator: "/")
         let exec = pathComponents.last.map(String.init)!
         return [
-            "Usage: \(exec) (swift|objc) NAME FILE <options>",
+            "Usage: \(exec) (swift|objc|export) NAME FILE <options>",
             "e.g. \(exec) swift User testModel.json <options>",
             "Options:",
             "   -v,  --verbose          Print result instead of creating files",
@@ -60,8 +62,13 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
     }
     
     public func main() throws -> String {
-        let model = try FoundationJSONTransformer().transform(json)
-        let rootType = modelGenerator.decode(model)
+        let model = try JSON(foundation: json)
+        let rootType: FieldType
+        if ModelExportTranslator.isSchema(model) {
+            rootType = try FieldType(json: model)
+        } else {
+            rootType = modelGenerator.decode(model)
+        }
         if writeToConsole {
             return translator.translate(rootType, name: modelName)
         }

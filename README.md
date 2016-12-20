@@ -11,6 +11,7 @@ Generate data model code and JSON-parser code from JSON-files. Currently you can
 - Detects variadic types within arrays, even in sub structures
 - Detects nullability attributes, e.g. when a single occurrence of a property is null or a property is missing, the property is declared as Optional/Nullable
 - Generates parsing instructions for Swift and Objective-C 
+- Converts any JSON data-structure into a simple schema which then can be modified/adjusted and be used to generate Swift/Objective-C code
 
 ## Usage
 
@@ -32,7 +33,7 @@ By default, you'll find the executable in ```.build/release/ReverseJson```
 ### General usage:
 
 ```
-Usage: ReverseJson (swift|objc) NAME FILE <options>
+Usage: ReverseJson (swift|objc|export) NAME FILE <options>
 e.g. ReverseJson swift User testModel.json <options>
 Options:
    -v,  --verbose          Print result instead of creating files
@@ -483,4 +484,143 @@ NS_ASSUME_NONNULL_END
     return nil;
 }
 @end
+```
+
+## ReverseJson Schema
+Sometimes the inferred model requires some small adjustments, e.g. a field which has been inferred as non-optional should be optional.
+Therefore ReverseJson allows to export a simple schema which then can be adjusted and be used to generate Swift or Objective-C code:
+
+### Export ReverseJson schema
+
+    ./ReverseJson export User testModel.json
+
+The example from above produces the following schema:
+```json
+{
+  "type" : "object",
+  "$schema" : "https:\/\/github.com\/tomquist\/ReverseJson\/tree\/1.2.0",
+  "properties" : {
+    "mixed" : {
+      "type" : "list",
+      "content" : {
+        "type" : "any",
+        "of" : [
+          "int",
+          "text"
+        ]
+      }
+    },
+    "numbers" : {
+      "type" : "list",
+      "content" : "int"
+    },
+    "name" : "text",
+    "internal" : "bool",
+    "locations" : {
+      "type" : "list",
+      "content" : {
+        "type" : "object",
+        "properties" : {
+          "lat" : "double",
+          "lon" : "double",
+          "address" : {
+            "type" : "object",
+            "isOptional" : true,
+            "properties" : {
+              "street" : "text",
+              "city" : "text"
+            }
+          }
+        }
+      }
+    },
+    "is_private" : "bool"
+  }
+}
+```
+
+### Convert ReverseJson schema into Swift
+
+    ./ReverseJson swift User mySchema.json
+
+### General schema structure
+A schema is a simple type description which always has the following structure:
+```json
+{
+    "type": "<object|list|string|int|float|double|bool|any>",
+    "isOptional": true
+}
+```
+If there is only a "type" property, it is also possible to simply use the type identifier, e.g. the following expressions
+```json
+"string"
+```
+is identical to
+```json
+{
+    "type": "string"
+}
+```
+
+If the property "isOptional" is missing, the type is assumed to be non-optional. Instead of having a property "isOptional", it is also possible to just add a "?" as a suffix to the type name. E.g. this expression
+```json
+"string?"
+```
+is identical to
+```json
+{
+    "type": "string",
+    "isOptional": true
+}
+```
+
+### Objects
+Object have an additional property "properties" which is a JSON-object containing all properties, where the key is the property name and the value is a schema. Optionally you can add the "name" property to override the auto-generated name when converting the model to code. E.g.
+```json
+{
+    "type": "object",
+    "name": "MyObject",
+    "properties": {
+        "property1": {
+            "type": "string"
+        },
+        "property2": "int?"
+    }
+}
+```
+
+### Lists
+Lists describe their content-type using the "content" property. E.g.
+```json
+{
+    "type": "list",
+    "content": {
+        "type": "object",
+        "properties": {
+            "id": "int",
+            "name": "string",
+            "description": "string?"
+        }
+    }
+}
+```
+
+### Any
+The type "any" allows to support multiple value types at the same place. To describe which types are allows, use the "of" property. Optionally you can add the "name" property to override the auto-generated name when converting the model to code. E.g.
+```json
+{
+    "type": "any",
+    "name": "MyObject",
+    "of": [
+        {
+            "type": "object",
+            "properties": {
+                "id": "text",
+                "name": "text",
+                "description": "text?"
+            }
+        },
+        "int"
+    ]
+}
 ```

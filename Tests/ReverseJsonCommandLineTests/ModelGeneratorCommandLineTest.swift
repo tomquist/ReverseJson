@@ -5,12 +5,6 @@ import ReverseJsonCore
 
 class ModelGeneratorCommandLineTest: XCTestCase {
     
-    static var allTests: [(String, (ModelGeneratorCommandLineTest) -> () throws -> Void)] {
-        return [
-            ("testAllFieldsOptionalFlag", testAllFieldsOptionalFlag),
-        ]
-    }
-    
     func testAllFieldsOptionalFlag() {
         let generator1 = try! ModelGenerator(args: ["-n"])
         let generator2 = try! ModelGenerator(args: ["--nullable"])
@@ -21,3 +15,13 @@ class ModelGeneratorCommandLineTest: XCTestCase {
     }
 
 }
+
+#if os(Linux)
+extension ModelGeneratorCommandLineTest {
+    static var allTests: [(String, (ModelGeneratorCommandLineTest) -> () throws -> Void)] {
+        return [
+            ("testAllFieldsOptionalFlag", testAllFieldsOptionalFlag),
+        ]
+    }
+}
+#endif

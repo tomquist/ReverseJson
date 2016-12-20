@@ -6,14 +6,6 @@ import ReverseJsonObjc
 
 class ObjcModelCreatorCommandLineTest: XCTestCase {
     
-    static var allTests: [(String, (ObjcModelCreatorCommandLineTest) -> () throws -> Void)] {
-        return [
-            ("testAtomicFieldsFlag", testAtomicFieldsFlag),
-            ("testMutableFieldsFlag", testMutableFieldsFlag),
-            ("testPrefixOption", testPrefixOption),
-        ]
-    }
-    
     func testAtomicFieldsFlag() {
         let modelCreator1 = try! ObjcModelCreator(args: ["-a"])
         let modelCreator2 = try! ObjcModelCreator(args: ["--atomic"])
@@ -51,3 +43,16 @@ class ObjcModelCreatorCommandLineTest: XCTestCase {
     }
     
 }
+
+
+#if os(Linux)
+extension ObjcModelCreatorCommandLineTest {
+    static var allTests: [(String, (ObjcModelCreatorCommandLineTest) -> () throws -> Void)] {
+        return [
+            ("testAtomicFieldsFlag", testAtomicFieldsFlag),
+            ("testMutableFieldsFlag", testMutableFieldsFlag),
+            ("testPrefixOption", testPrefixOption),
+        ]
+    }
+}
+#endif

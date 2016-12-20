@@ -2,6 +2,7 @@ import Foundation
 import ReverseJsonCore
 import ReverseJsonSwift
 import ReverseJsonObjc
+import ReverseJsonModelExport
 
 public protocol CommandLineArgumentsConvertible {
     init(consumableArgs args: inout [String]) throws
@@ -50,6 +51,8 @@ extension ReverseJson {
             translatorType = SwiftTranslator.self
         case "objc":
             translatorType = ObjcModelCreator.self
+        case "export":
+            translatorType = ModelExportTranslator.self
         default:
             throw ReverseJsonError.unsupportedLanguage(language)
         }
@@ -98,9 +101,16 @@ extension ObjcModelCreator: CommandLineArgumentsConvertible {
     }
 }
 
+extension ModelExportTranslator: CommandLineArgumentsConvertible {
+    public init(consumableArgs args: inout [String]) throws {
+        self.init()
+    }
+}
+
 extension ModelGenerator: CommandLineArgumentsConvertible {
     public init(consumableArgs args: inout [String]) {
         self.init()
         allFieldsOptional = args.consume(flag: "-n") || args.consume(flag: "--nullable")
     }
 }
+

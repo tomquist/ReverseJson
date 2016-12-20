@@ -1,965 +1,3388 @@
 // !$*UTF8*$!
 {
-    archiveVersion = 1;
-    classes = {};
-    objectVersion = 46;
-    rootObject = __RootObject_;
-    objects = {
-        __RootObject_ = {
-            isa = PBXProject;
-            attributes = {LastUpgradeCheck = 9999;};
-            buildConfigurationList = ___RootConfs_;
-            compatibilityVersion = 'Xcode 3.2';
-            developmentRegion = English;
-            hasScannedForEncodings = 0;
-            knownRegions = (en);
-            mainGroup = ___RootGroup_;
-            productRefGroup = ____Products_;
-            projectDirPath = '';
-            projectRoot = '';
-            targets = (______Target_ReverseJson, ______Target_ReverseJsonCommandLine, ______Target_ReverseJsonCore, ______Target_ReverseJsonFoundation, ______Target_ReverseJsonObjc, ______Target_ReverseJsonSwift, ______Target_ReverseJsonCommandLineTests, ______Target_ReverseJsonCoreTests, ______Target_ReverseJsonFoundationTests, ______Target_ReverseJsonObjcTests, ______Target_ReverseJsonSwiftTests);
-        };
-        '__PBXFileRef_Package.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'Package.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Example' = {
-            isa = PBXFileReference;
-            lastKnownFileType = folder;
-            name = 'Example';
-            path = 'Example';
-            sourceTree = '<group>';
-        };
-        ___RootGroup_ = {
-            isa = PBXGroup;
-            children = ('__PBXFileRef_Package.swift', _____Configs_, _____Sources_, '__PBXFileRef_Example', Dependencies_, _______Tests_, ____Products_);
-            sourceTree = '<group>';
-        };
-        _______Group_ReverseJson = {
-            isa = PBXGroup;
-            name = 'ReverseJson';
-            path = 'Sources/ReverseJson';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Sources/ReverseJson/main.swift');
-        };
-        '__PBXFileRef_Sources/ReverseJson/main.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'main.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJson = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJson;
-            buildPhases = (CompilePhase_ReverseJson, ___LinkPhase_ReverseJson);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonCommandLine);
-            name = 'ReverseJson';
-            productName = ReverseJson;
-            productReference = _____Product_ReverseJson;
-            productType = 'com.apple.product-type.tool';
-        };
-        _____Product_ReverseJson = {
-            isa = PBXFileReference;
-            explicitFileType = 'compiled.mach-o.executable';
-            path = 'ReverseJson';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJson = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Sources/ReverseJson/main.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Sources/ReverseJson/main.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJson/main.swift';
-        };
-        ___LinkPhase_ReverseJson = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJson, _LinkFileRef_ReverseJsonObjc_via_ReverseJson, _LinkFileRef_ReverseJsonSwift_via_ReverseJson, _LinkFileRef_ReverseJsonFoundation_via_ReverseJson, _LinkFileRef_ReverseJsonCommandLine_via_ReverseJson);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJson = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _LinkFileRef_ReverseJsonObjc_via_ReverseJson = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonObjc;
-        };
-        _LinkFileRef_ReverseJsonSwift_via_ReverseJson = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonSwift;
-        };
-        _LinkFileRef_ReverseJsonFoundation_via_ReverseJson = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonFoundation;
-        };
-        _LinkFileRef_ReverseJsonCommandLine_via_ReverseJson = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCommandLine;
-        };
-        _______Confs_ReverseJson = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJson, _ReleaseConf_ReverseJson);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJson = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; SWIFT_FORCE_STATIC_LINK_STDLIB = 'NO'; SWIFT_FORCE_DYNAMIC_LINK_STDLIB = 'YES'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJson = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; SWIFT_FORCE_STATIC_LINK_STDLIB = 'NO'; SWIFT_FORCE_DYNAMIC_LINK_STDLIB = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Release;
-        };
-        __Dependency_ReverseJson = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJson;
-        };
-        _______Group_ReverseJsonCommandLine = {
-            isa = PBXGroup;
-            name = 'ReverseJsonCommandLine';
-            path = 'Sources/ReverseJsonCommandLine';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Sources/ReverseJsonCommandLine/CommandLineArgumentsConvertible.swift', '__PBXFileRef_Sources/ReverseJsonCommandLine/ReverseJson.swift');
-        };
-        '__PBXFileRef_Sources/ReverseJsonCommandLine/CommandLineArgumentsConvertible.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'CommandLineArgumentsConvertible.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Sources/ReverseJsonCommandLine/ReverseJson.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ReverseJson.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonCommandLine = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonCommandLine;
-            buildPhases = (CompilePhase_ReverseJsonCommandLine, ___LinkPhase_ReverseJsonCommandLine);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonCore, __Dependency_ReverseJsonObjc, __Dependency_ReverseJsonSwift, __Dependency_ReverseJsonFoundation);
-            name = 'ReverseJsonCommandLine';
-            productName = ReverseJsonCommandLine;
-            productReference = _____Product_ReverseJsonCommandLine;
-            productType = 'com.apple.product-type.framework';
-        };
-        _____Product_ReverseJsonCommandLine = {
-            isa = PBXFileReference;
-            explicitFileType = 'wrapper.framework';
-            path = 'ReverseJsonCommandLine.framework';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonCommandLine = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Sources/ReverseJsonCommandLine/CommandLineArgumentsConvertible.swift', '__src_cc_ref_Sources/ReverseJsonCommandLine/ReverseJson.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Sources/ReverseJsonCommandLine/CommandLineArgumentsConvertible.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonCommandLine/CommandLineArgumentsConvertible.swift';
-        };
-        '__src_cc_ref_Sources/ReverseJsonCommandLine/ReverseJson.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonCommandLine/ReverseJson.swift';
-        };
-        ___LinkPhase_ReverseJsonCommandLine = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonCommandLine, _LinkFileRef_ReverseJsonObjc_via_ReverseJsonCommandLine, _LinkFileRef_ReverseJsonSwift_via_ReverseJsonCommandLine, _LinkFileRef_ReverseJsonFoundation_via_ReverseJsonCommandLine);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonCommandLine = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _LinkFileRef_ReverseJsonObjc_via_ReverseJsonCommandLine = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonObjc;
-        };
-        _LinkFileRef_ReverseJsonSwift_via_ReverseJsonCommandLine = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonSwift;
-        };
-        _LinkFileRef_ReverseJsonFoundation_via_ReverseJsonCommandLine = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonFoundation;
-        };
-        _______Confs_ReverseJsonCommandLine = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonCommandLine, _ReleaseConf_ReverseJsonCommandLine);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonCommandLine = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCommandLine_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonCommandLine'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonCommandLine = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCommandLine_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonCommandLine'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonCommandLine = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonCommandLine;
-        };
-        _______Group_ReverseJsonCore = {
-            isa = PBXGroup;
-            name = 'ReverseJsonCore';
-            path = 'Sources/ReverseJsonCore';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Sources/ReverseJsonCore/JSON.swift', '__PBXFileRef_Sources/ReverseJsonCore/ModelGenerator.swift', '__PBXFileRef_Sources/ReverseJsonCore/ModelTranslator.swift', '__PBXFileRef_Sources/ReverseJsonCore/Utils.swift');
-        };
-        '__PBXFileRef_Sources/ReverseJsonCore/JSON.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'JSON.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Sources/ReverseJsonCore/ModelGenerator.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ModelGenerator.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Sources/ReverseJsonCore/ModelTranslator.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ModelTranslator.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Sources/ReverseJsonCore/Utils.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'Utils.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonCore = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonCore;
-            buildPhases = (CompilePhase_ReverseJsonCore, ___LinkPhase_ReverseJsonCore);
-            buildRules = ();
-            dependencies = ();
-            name = 'ReverseJsonCore';
-            productName = ReverseJsonCore;
-            productReference = _____Product_ReverseJsonCore;
-            productType = 'com.apple.product-type.framework';
-        };
-        _____Product_ReverseJsonCore = {
-            isa = PBXFileReference;
-            explicitFileType = 'wrapper.framework';
-            path = 'ReverseJsonCore.framework';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonCore = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Sources/ReverseJsonCore/JSON.swift', '__src_cc_ref_Sources/ReverseJsonCore/ModelGenerator.swift', '__src_cc_ref_Sources/ReverseJsonCore/ModelTranslator.swift', '__src_cc_ref_Sources/ReverseJsonCore/Utils.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Sources/ReverseJsonCore/JSON.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonCore/JSON.swift';
-        };
-        '__src_cc_ref_Sources/ReverseJsonCore/ModelGenerator.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonCore/ModelGenerator.swift';
-        };
-        '__src_cc_ref_Sources/ReverseJsonCore/ModelTranslator.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonCore/ModelTranslator.swift';
-        };
-        '__src_cc_ref_Sources/ReverseJsonCore/Utils.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonCore/Utils.swift';
-        };
-        ___LinkPhase_ReverseJsonCore = {
-            isa = PBXFrameworksBuildPhase;
-            files = ();
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _______Confs_ReverseJsonCore = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonCore, _ReleaseConf_ReverseJsonCore);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonCore = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCore_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonCore'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonCore = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCore_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonCore'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonCore = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonCore;
-        };
-        _______Group_ReverseJsonFoundation = {
-            isa = PBXGroup;
-            name = 'ReverseJsonFoundation';
-            path = 'Sources/ReverseJsonFoundation';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Sources/ReverseJsonFoundation/FoundationTransformer.swift');
-        };
-        '__PBXFileRef_Sources/ReverseJsonFoundation/FoundationTransformer.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'FoundationTransformer.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonFoundation = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonFoundation;
-            buildPhases = (CompilePhase_ReverseJsonFoundation, ___LinkPhase_ReverseJsonFoundation);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonCore);
-            name = 'ReverseJsonFoundation';
-            productName = ReverseJsonFoundation;
-            productReference = _____Product_ReverseJsonFoundation;
-            productType = 'com.apple.product-type.framework';
-        };
-        _____Product_ReverseJsonFoundation = {
-            isa = PBXFileReference;
-            explicitFileType = 'wrapper.framework';
-            path = 'ReverseJsonFoundation.framework';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonFoundation = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Sources/ReverseJsonFoundation/FoundationTransformer.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Sources/ReverseJsonFoundation/FoundationTransformer.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonFoundation/FoundationTransformer.swift';
-        };
-        ___LinkPhase_ReverseJsonFoundation = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonFoundation);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonFoundation = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _______Confs_ReverseJsonFoundation = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonFoundation, _ReleaseConf_ReverseJsonFoundation);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonFoundation = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonFoundation_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonFoundation'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonFoundation = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonFoundation_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonFoundation'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonFoundation = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonFoundation;
-        };
-        _______Group_ReverseJsonObjc = {
-            isa = PBXGroup;
-            name = 'ReverseJsonObjc';
-            path = 'Sources/ReverseJsonObjc';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Sources/ReverseJsonObjc/ObjcModelTranslator.swift');
-        };
-        '__PBXFileRef_Sources/ReverseJsonObjc/ObjcModelTranslator.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ObjcModelTranslator.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonObjc = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonObjc;
-            buildPhases = (CompilePhase_ReverseJsonObjc, ___LinkPhase_ReverseJsonObjc);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonCore);
-            name = 'ReverseJsonObjc';
-            productName = ReverseJsonObjc;
-            productReference = _____Product_ReverseJsonObjc;
-            productType = 'com.apple.product-type.framework';
-        };
-        _____Product_ReverseJsonObjc = {
-            isa = PBXFileReference;
-            explicitFileType = 'wrapper.framework';
-            path = 'ReverseJsonObjc.framework';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonObjc = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Sources/ReverseJsonObjc/ObjcModelTranslator.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Sources/ReverseJsonObjc/ObjcModelTranslator.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonObjc/ObjcModelTranslator.swift';
-        };
-        ___LinkPhase_ReverseJsonObjc = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonObjc);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonObjc = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _______Confs_ReverseJsonObjc = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonObjc, _ReleaseConf_ReverseJsonObjc);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonObjc = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonObjc_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonObjc'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonObjc = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonObjc_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonObjc'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonObjc = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonObjc;
-        };
-        _______Group_ReverseJsonSwift = {
-            isa = PBXGroup;
-            name = 'ReverseJsonSwift';
-            path = 'Sources/ReverseJsonSwift';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Sources/ReverseJsonSwift/SwiftModelTranslator.swift');
-        };
-        '__PBXFileRef_Sources/ReverseJsonSwift/SwiftModelTranslator.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'SwiftModelTranslator.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonSwift = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonSwift;
-            buildPhases = (CompilePhase_ReverseJsonSwift, ___LinkPhase_ReverseJsonSwift);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonCore);
-            name = 'ReverseJsonSwift';
-            productName = ReverseJsonSwift;
-            productReference = _____Product_ReverseJsonSwift;
-            productType = 'com.apple.product-type.framework';
-        };
-        _____Product_ReverseJsonSwift = {
-            isa = PBXFileReference;
-            explicitFileType = 'wrapper.framework';
-            path = 'ReverseJsonSwift.framework';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonSwift = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Sources/ReverseJsonSwift/SwiftModelTranslator.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Sources/ReverseJsonSwift/SwiftModelTranslator.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Sources/ReverseJsonSwift/SwiftModelTranslator.swift';
-        };
-        ___LinkPhase_ReverseJsonSwift = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonSwift);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonSwift = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _______Confs_ReverseJsonSwift = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonSwift, _ReleaseConf_ReverseJsonSwift);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonSwift = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonSwift_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonSwift'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonSwift = {
-            isa = XCBuildConfiguration;
-            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonSwift_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; PRODUCT_BUNDLE_IDENTIFIER = 'ReverseJsonSwift'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonSwift = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonSwift;
-        };
-        _______Group_ReverseJsonCommandLineTests = {
-            isa = PBXGroup;
-            name = 'ReverseJsonCommandLineTests';
-            path = 'Tests/ReverseJsonCommandLineTests';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Tests/ReverseJsonCommandLineTests/ModelGeneratorCommandLineTest.swift', '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ObjcModelCreatorCommandLineTest.swift', '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ReverseJsonTest.swift', '__PBXFileRef_Tests/ReverseJsonCommandLineTests/SwiftTranslatorCommandLineTest.swift');
-        };
-        '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ModelGeneratorCommandLineTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ModelGeneratorCommandLineTest.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ObjcModelCreatorCommandLineTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ObjcModelCreatorCommandLineTest.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ReverseJsonTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ReverseJsonTest.swift';
-            sourceTree = '<group>';
-        };
-        '__PBXFileRef_Tests/ReverseJsonCommandLineTests/SwiftTranslatorCommandLineTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'SwiftTranslatorCommandLineTest.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonCommandLineTests = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonCommandLineTests;
-            buildPhases = (CompilePhase_ReverseJsonCommandLineTests, ___LinkPhase_ReverseJsonCommandLineTests);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonCommandLine);
-            name = 'ReverseJsonCommandLineTests';
-            productName = ReverseJsonCommandLineTests;
-            productReference = _____Product_ReverseJsonCommandLineTests;
-            productType = 'com.apple.product-type.bundle.unit-test';
-        };
-        _____Product_ReverseJsonCommandLineTests = {
-            isa = PBXFileReference;
-            explicitFileType = 'compiled.mach-o.wrapper.cfbundle';
-            path = 'ReverseJsonCommandLineTests.xctest';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonCommandLineTests = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Tests/ReverseJsonCommandLineTests/ModelGeneratorCommandLineTest.swift', '__src_cc_ref_Tests/ReverseJsonCommandLineTests/ObjcModelCreatorCommandLineTest.swift', '__src_cc_ref_Tests/ReverseJsonCommandLineTests/ReverseJsonTest.swift', '__src_cc_ref_Tests/ReverseJsonCommandLineTests/SwiftTranslatorCommandLineTest.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Tests/ReverseJsonCommandLineTests/ModelGeneratorCommandLineTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ModelGeneratorCommandLineTest.swift';
-        };
-        '__src_cc_ref_Tests/ReverseJsonCommandLineTests/ObjcModelCreatorCommandLineTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ObjcModelCreatorCommandLineTest.swift';
-        };
-        '__src_cc_ref_Tests/ReverseJsonCommandLineTests/ReverseJsonTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonCommandLineTests/ReverseJsonTest.swift';
-        };
-        '__src_cc_ref_Tests/ReverseJsonCommandLineTests/SwiftTranslatorCommandLineTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonCommandLineTests/SwiftTranslatorCommandLineTest.swift';
-        };
-        ___LinkPhase_ReverseJsonCommandLineTests = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonCommandLineTests, _LinkFileRef_ReverseJsonObjc_via_ReverseJsonCommandLineTests, _LinkFileRef_ReverseJsonSwift_via_ReverseJsonCommandLineTests, _LinkFileRef_ReverseJsonFoundation_via_ReverseJsonCommandLineTests, _LinkFileRef_ReverseJsonCommandLine_via_ReverseJsonCommandLineTests);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonCommandLineTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _LinkFileRef_ReverseJsonObjc_via_ReverseJsonCommandLineTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonObjc;
-        };
-        _LinkFileRef_ReverseJsonSwift_via_ReverseJsonCommandLineTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonSwift;
-        };
-        _LinkFileRef_ReverseJsonFoundation_via_ReverseJsonCommandLineTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonFoundation;
-        };
-        _LinkFileRef_ReverseJsonCommandLine_via_ReverseJsonCommandLineTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCommandLine;
-        };
-        _______Confs_ReverseJsonCommandLineTests = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonCommandLineTests, _ReleaseConf_ReverseJsonCommandLineTests);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonCommandLineTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCommandLineTests_Info.plist'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonCommandLineTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCommandLineTests_Info.plist'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonCommandLineTests = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonCommandLineTests;
-        };
-        _______Group_ReverseJsonCoreTests = {
-            isa = PBXGroup;
-            name = 'ReverseJsonCoreTests';
-            path = 'Tests/ReverseJsonCoreTests';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Tests/ReverseJsonCoreTests/ModelGeneratorTest.swift');
-        };
-        '__PBXFileRef_Tests/ReverseJsonCoreTests/ModelGeneratorTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ModelGeneratorTest.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonCoreTests = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonCoreTests;
-            buildPhases = (CompilePhase_ReverseJsonCoreTests, ___LinkPhase_ReverseJsonCoreTests);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonCore);
-            name = 'ReverseJsonCoreTests';
-            productName = ReverseJsonCoreTests;
-            productReference = _____Product_ReverseJsonCoreTests;
-            productType = 'com.apple.product-type.bundle.unit-test';
-        };
-        _____Product_ReverseJsonCoreTests = {
-            isa = PBXFileReference;
-            explicitFileType = 'compiled.mach-o.wrapper.cfbundle';
-            path = 'ReverseJsonCoreTests.xctest';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonCoreTests = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Tests/ReverseJsonCoreTests/ModelGeneratorTest.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Tests/ReverseJsonCoreTests/ModelGeneratorTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonCoreTests/ModelGeneratorTest.swift';
-        };
-        ___LinkPhase_ReverseJsonCoreTests = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonCoreTests);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonCoreTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _______Confs_ReverseJsonCoreTests = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonCoreTests, _ReleaseConf_ReverseJsonCoreTests);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonCoreTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCoreTests_Info.plist'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonCoreTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonCoreTests_Info.plist'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonCoreTests = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonCoreTests;
-        };
-        _______Group_ReverseJsonFoundationTests = {
-            isa = PBXGroup;
-            name = 'ReverseJsonFoundationTests';
-            path = 'Tests/ReverseJsonFoundationTests';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Tests/ReverseJsonFoundationTests/FoundationTransformerTest.swift');
-        };
-        '__PBXFileRef_Tests/ReverseJsonFoundationTests/FoundationTransformerTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'FoundationTransformerTest.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonFoundationTests = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonFoundationTests;
-            buildPhases = (CompilePhase_ReverseJsonFoundationTests, ___LinkPhase_ReverseJsonFoundationTests);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonFoundation);
-            name = 'ReverseJsonFoundationTests';
-            productName = ReverseJsonFoundationTests;
-            productReference = _____Product_ReverseJsonFoundationTests;
-            productType = 'com.apple.product-type.bundle.unit-test';
-        };
-        _____Product_ReverseJsonFoundationTests = {
-            isa = PBXFileReference;
-            explicitFileType = 'compiled.mach-o.wrapper.cfbundle';
-            path = 'ReverseJsonFoundationTests.xctest';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonFoundationTests = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Tests/ReverseJsonFoundationTests/FoundationTransformerTest.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Tests/ReverseJsonFoundationTests/FoundationTransformerTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonFoundationTests/FoundationTransformerTest.swift';
-        };
-        ___LinkPhase_ReverseJsonFoundationTests = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonFoundationTests, _LinkFileRef_ReverseJsonFoundation_via_ReverseJsonFoundationTests);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonFoundationTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _LinkFileRef_ReverseJsonFoundation_via_ReverseJsonFoundationTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonFoundation;
-        };
-        _______Confs_ReverseJsonFoundationTests = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonFoundationTests, _ReleaseConf_ReverseJsonFoundationTests);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonFoundationTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonFoundationTests_Info.plist'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonFoundationTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonFoundationTests_Info.plist'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonFoundationTests = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonFoundationTests;
-        };
-        _______Group_ReverseJsonObjcTests = {
-            isa = PBXGroup;
-            name = 'ReverseJsonObjcTests';
-            path = 'Tests/ReverseJsonObjcTests';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Tests/ReverseJsonObjcTests/ObjcModelTranslatorTest.swift');
-        };
-        '__PBXFileRef_Tests/ReverseJsonObjcTests/ObjcModelTranslatorTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'ObjcModelTranslatorTest.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonObjcTests = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonObjcTests;
-            buildPhases = (CompilePhase_ReverseJsonObjcTests, ___LinkPhase_ReverseJsonObjcTests);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonObjc);
-            name = 'ReverseJsonObjcTests';
-            productName = ReverseJsonObjcTests;
-            productReference = _____Product_ReverseJsonObjcTests;
-            productType = 'com.apple.product-type.bundle.unit-test';
-        };
-        _____Product_ReverseJsonObjcTests = {
-            isa = PBXFileReference;
-            explicitFileType = 'compiled.mach-o.wrapper.cfbundle';
-            path = 'ReverseJsonObjcTests.xctest';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonObjcTests = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Tests/ReverseJsonObjcTests/ObjcModelTranslatorTest.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Tests/ReverseJsonObjcTests/ObjcModelTranslatorTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonObjcTests/ObjcModelTranslatorTest.swift';
-        };
-        ___LinkPhase_ReverseJsonObjcTests = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonObjcTests, _LinkFileRef_ReverseJsonObjc_via_ReverseJsonObjcTests);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonObjcTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _LinkFileRef_ReverseJsonObjc_via_ReverseJsonObjcTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonObjc;
-        };
-        _______Confs_ReverseJsonObjcTests = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonObjcTests, _ReleaseConf_ReverseJsonObjcTests);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonObjcTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonObjcTests_Info.plist'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonObjcTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonObjcTests_Info.plist'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonObjcTests = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonObjcTests;
-        };
-        _______Group_ReverseJsonSwiftTests = {
-            isa = PBXGroup;
-            name = 'ReverseJsonSwiftTests';
-            path = 'Tests/ReverseJsonSwiftTests';
-            sourceTree = '<group>';
-            children = ('__PBXFileRef_Tests/ReverseJsonSwiftTests/SwiftTranslatorTest.swift');
-        };
-        '__PBXFileRef_Tests/ReverseJsonSwiftTests/SwiftTranslatorTest.swift' = {
-            isa = PBXFileReference;
-            lastKnownFileType = sourcecode.swift;
-            path = 'SwiftTranslatorTest.swift';
-            sourceTree = '<group>';
-        };
-        ______Target_ReverseJsonSwiftTests = {
-            isa = PBXNativeTarget;
-            buildConfigurationList = _______Confs_ReverseJsonSwiftTests;
-            buildPhases = (CompilePhase_ReverseJsonSwiftTests, ___LinkPhase_ReverseJsonSwiftTests);
-            buildRules = ();
-            dependencies = (__Dependency_ReverseJsonSwift);
-            name = 'ReverseJsonSwiftTests';
-            productName = ReverseJsonSwiftTests;
-            productReference = _____Product_ReverseJsonSwiftTests;
-            productType = 'com.apple.product-type.bundle.unit-test';
-        };
-        _____Product_ReverseJsonSwiftTests = {
-            isa = PBXFileReference;
-            explicitFileType = 'compiled.mach-o.wrapper.cfbundle';
-            path = 'ReverseJsonSwiftTests.xctest';
-            sourceTree = BUILT_PRODUCTS_DIR;
-        };
-        CompilePhase_ReverseJsonSwiftTests = {
-            isa = PBXSourcesBuildPhase;
-            files = ('__src_cc_ref_Tests/ReverseJsonSwiftTests/SwiftTranslatorTest.swift');
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        '__src_cc_ref_Tests/ReverseJsonSwiftTests/SwiftTranslatorTest.swift' = {
-            isa = PBXBuildFile;
-            fileRef = '__PBXFileRef_Tests/ReverseJsonSwiftTests/SwiftTranslatorTest.swift';
-        };
-        ___LinkPhase_ReverseJsonSwiftTests = {
-            isa = PBXFrameworksBuildPhase;
-            files = (_LinkFileRef_ReverseJsonCore_via_ReverseJsonSwiftTests, _LinkFileRef_ReverseJsonSwift_via_ReverseJsonSwiftTests);
-            runOnlyForDeploymentPostprocessing = 0;
-        };
-        _LinkFileRef_ReverseJsonCore_via_ReverseJsonSwiftTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonCore;
-        };
-        _LinkFileRef_ReverseJsonSwift_via_ReverseJsonSwiftTests = {
-            isa = PBXBuildFile;
-            fileRef = _____Product_ReverseJsonSwift;
-        };
-        _______Confs_ReverseJsonSwiftTests = {
-            isa = XCConfigurationList;
-            buildConfigurations = (___DebugConf_ReverseJsonSwiftTests, _ReleaseConf_ReverseJsonSwiftTests);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-        ___DebugConf_ReverseJsonSwiftTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonSwiftTests_Info.plist'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Debug;
-        };
-        _ReleaseConf_ReverseJsonSwiftTests = {
-            isa = XCBuildConfiguration;
-            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'ReverseJson.xcodeproj/ReverseJsonSwiftTests_Info.plist'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
-            name = Release;
-        };
-        __Dependency_ReverseJsonSwiftTests = {
-            isa = PBXTargetDependency;
-            target = ______Target_ReverseJsonSwiftTests;
-        };
-        '__PBXFileRef_ReverseJson.xcodeproj/Configs/Project.xcconfig' = {
-            isa = PBXFileReference;
-            lastKnownFileType = text.xcconfig;
-            path = 'ReverseJson.xcodeproj/Configs/Project.xcconfig';
-            sourceTree = '<group>';
-        };
-        _____Configs_ = {
-            isa = PBXGroup;
-            children = ('__PBXFileRef_ReverseJson.xcodeproj/Configs/Project.xcconfig');
-            name = Configs;
-            sourceTree = '<group>';
-        };
-        _____Sources_ = {
-            isa = PBXGroup;
-            children = (_______Group_ReverseJson, _______Group_ReverseJsonCommandLine, _______Group_ReverseJsonCore, _______Group_ReverseJsonFoundation, _______Group_ReverseJsonObjc, _______Group_ReverseJsonSwift);
-            name = Sources;
-            sourceTree = '<group>';
-        };
-        _______Tests_ = {
-            isa = PBXGroup;
-            children = (_______Group_ReverseJsonCommandLineTests, _______Group_ReverseJsonCoreTests, _______Group_ReverseJsonFoundationTests, _______Group_ReverseJsonObjcTests, _______Group_ReverseJsonSwiftTests);
-            name = Tests;
-            sourceTree = '<group>';
-        };
-       TestProducts_ = {
-            isa = PBXGroup;
-            children = (_____Product_ReverseJsonCommandLineTests, _____Product_ReverseJsonCoreTests, _____Product_ReverseJsonFoundationTests, _____Product_ReverseJsonObjcTests, _____Product_ReverseJsonSwiftTests);
-            name = Tests;
-            sourceTree = '<group>';
-        };
-        ____Products_ = {
-            isa = PBXGroup;
-            children = (TestProducts_, _____Product_ReverseJson, _____Product_ReverseJsonCommandLine, _____Product_ReverseJsonCore, _____Product_ReverseJsonFoundation, _____Product_ReverseJsonObjc, _____Product_ReverseJsonSwift);
-            name = Products;
-            sourceTree = '<group>';
-        };
-        _______Debug_ = {
-            isa = XCBuildConfiguration;
-            baseConfigurationReference = '__PBXFileRef_ReverseJson.xcodeproj/Configs/Project.xcconfig';
-            buildSettings = {};
-            name = Debug;
-        };
-        _____Release_ = {
-            isa = XCBuildConfiguration;
-            baseConfigurationReference = '__PBXFileRef_ReverseJson.xcodeproj/Configs/Project.xcconfig';
-            buildSettings = {};
-            name = Release;
-        };
-        ___RootConfs_ = {
-            isa = XCConfigurationList;
-            buildConfigurations = (_______Debug_, _____Release_);
-            defaultConfigurationIsVisible = 0;
-            defaultConfigurationName = Debug;
-        };
-    };
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		OBJ_100 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_107 /* JSONLiterals.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* JSONLiterals.swift */; };
+		OBJ_109 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_116 /* JSONPointer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* JSONPointer.swift */; };
+		OBJ_118 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_125 /* JSONSubscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_20 /* JSONSubscript.swift */; };
+		OBJ_127 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_134 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* main.swift */; };
+		OBJ_136 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_137 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_138 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_139 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_140 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_141 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_142 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_143 /* ReverseJsonObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_68 /* ReverseJsonObjc.framework */; };
+		OBJ_144 /* ReverseJsonModelExport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* ReverseJsonModelExport.framework */; };
+		OBJ_145 /* ReverseJsonSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_70 /* ReverseJsonSwift.framework */; };
+		OBJ_146 /* ReverseJsonCommandLine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_65 /* ReverseJsonCommandLine.framework */; };
+		OBJ_167 /* CommandLineArgumentsConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* CommandLineArgumentsConvertible.swift */; };
+		OBJ_168 /* ReverseJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_25 /* ReverseJson.swift */; };
+		OBJ_170 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_171 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_172 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_173 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_174 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_175 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_176 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_177 /* ReverseJsonObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_68 /* ReverseJsonObjc.framework */; };
+		OBJ_178 /* ReverseJsonModelExport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* ReverseJsonModelExport.framework */; };
+		OBJ_179 /* ReverseJsonSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_70 /* ReverseJsonSwift.framework */; };
+		OBJ_194 /* ModelGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* ModelGenerator.swift */; };
+		OBJ_195 /* ModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* ModelTranslator.swift */; };
+		OBJ_196 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_29 /* Utils.swift */; };
+		OBJ_198 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_199 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_200 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_201 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_202 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_203 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_214 /* ModelExportTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_31 /* ModelExportTranslator.swift */; };
+		OBJ_216 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_217 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_218 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_219 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_220 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_221 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_222 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_234 /* ObjcModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_33 /* ObjcModelTranslator.swift */; };
+		OBJ_236 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_237 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_238 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_239 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_240 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_241 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_242 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_255 /* SwaggerReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* SwaggerReader.swift */; };
+		OBJ_257 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_258 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_259 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_260 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_261 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_262 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_263 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_275 /* SwiftModelTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_37 /* SwiftModelTranslator.swift */; };
+		OBJ_277 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_278 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_279 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_280 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_281 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_282 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_283 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_296 /* ModelGeneratorCommandLineTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_40 /* ModelGeneratorCommandLineTest.swift */; };
+		OBJ_297 /* ObjcModelCreatorCommandLineTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_41 /* ObjcModelCreatorCommandLineTest.swift */; };
+		OBJ_298 /* ReverseJsonTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_42 /* ReverseJsonTest.swift */; };
+		OBJ_299 /* SwiftTranslatorCommandLineTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_43 /* SwiftTranslatorCommandLineTest.swift */; };
+		OBJ_301 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_302 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_303 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_304 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_305 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_306 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_307 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_308 /* ReverseJsonObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_68 /* ReverseJsonObjc.framework */; };
+		OBJ_309 /* ReverseJsonModelExport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* ReverseJsonModelExport.framework */; };
+		OBJ_310 /* ReverseJsonSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_70 /* ReverseJsonSwift.framework */; };
+		OBJ_311 /* ReverseJsonCommandLine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_65 /* ReverseJsonCommandLine.framework */; };
+		OBJ_328 /* ModelGeneratorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_45 /* ModelGeneratorTest.swift */; };
+		OBJ_330 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_331 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_332 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_333 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_334 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_335 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_336 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_349 /* JsonToModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_47 /* JsonToModelTest.swift */; };
+		OBJ_350 /* ModelExportTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* ModelExportTranslatorTest.swift */; };
+		OBJ_351 /* ModelToJsonTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* ModelToJsonTest.swift */; };
+		OBJ_353 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_354 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_355 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_356 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_357 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_358 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_359 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_360 /* ReverseJsonModelExport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* ReverseJsonModelExport.framework */; };
+		OBJ_374 /* ObjcModelTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_51 /* ObjcModelTranslatorTest.swift */; };
+		OBJ_376 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_377 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_378 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_379 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_380 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_381 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_382 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_383 /* ReverseJsonObjc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_68 /* ReverseJsonObjc.framework */; };
+		OBJ_397 /* SwiftTranslatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_53 /* SwiftTranslatorTest.swift */; };
+		OBJ_399 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_400 /* CoreJSONConvenience.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_59 /* CoreJSONConvenience.framework */; };
+		OBJ_401 /* CoreJSONFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_60 /* CoreJSONFoundation.framework */; };
+		OBJ_402 /* CoreJSONLiterals.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_61 /* CoreJSONLiterals.framework */; };
+		OBJ_403 /* CoreJSONPointer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* CoreJSONPointer.framework */; };
+		OBJ_404 /* CoreJSONSubscript.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* CoreJSONSubscript.framework */; };
+		OBJ_405 /* ReverseJsonCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* ReverseJsonCore.framework */; };
+		OBJ_406 /* ReverseJsonSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_70 /* ReverseJsonSwift.framework */; };
+		OBJ_81 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* JSON.swift */; };
+		OBJ_88 /* JSONConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* JSONConvenience.swift */; };
+		OBJ_90 /* CoreJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_58 /* CoreJSON.framework */; };
+		OBJ_97 /* FromFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* FromFoundation.swift */; };
+		OBJ_98 /* ToFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* ToFoundation.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		428E42881E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42891E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E428A1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E428B1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E428C1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E428D1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E428E1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E428F1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42901E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42911E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42921E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42931E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42941E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42951E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42961E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42971E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42981E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42991E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E429A1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_156;
+			remoteInfo = ReverseJsonObjc;
+		};
+		428E429B1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E429C1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E429D1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E429E1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E429F1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42A01E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42A11E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42A21E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_158;
+			remoteInfo = ReverseJsonModelExport;
+		};
+		428E42A31E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42A41E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42A51E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42A61E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42A71E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42A81E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42A91E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42AA1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_160;
+			remoteInfo = ReverseJsonSwift;
+		};
+		428E42AB1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42AC1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42AD1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42AE1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42AF1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42B01E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42B11E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42B21E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_162;
+			remoteInfo = ReverseJsonCommandLine;
+		};
+		428E42B31E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42B41E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42B51E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42B61E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42B71E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42B81E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42B91E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42BA1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_156;
+			remoteInfo = ReverseJsonObjc;
+		};
+		428E42BB1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_158;
+			remoteInfo = ReverseJsonModelExport;
+		};
+		428E42BC1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_160;
+			remoteInfo = ReverseJsonSwift;
+		};
+		428E42BD1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42BE1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42BF1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42C01E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42C11E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42C21E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42C31E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42C41E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42C51E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42C61E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42C71E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42C81E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42C91E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42CA1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42CB1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_156;
+			remoteInfo = ReverseJsonObjc;
+		};
+		428E42CC1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_158;
+			remoteInfo = ReverseJsonModelExport;
+		};
+		428E42CD1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_160;
+			remoteInfo = ReverseJsonSwift;
+		};
+		428E42CE1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_162;
+			remoteInfo = ReverseJsonCommandLine;
+		};
+		428E42CF1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42D01E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42D11E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42D21E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42D31E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42D41E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42D51E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42D61E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42D71E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42D81E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42D91E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42DA1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42DB1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42DC1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42DD1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_158;
+			remoteInfo = ReverseJsonModelExport;
+		};
+		428E42DE1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42DF1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42E01E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42E11E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42E21E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42E31E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42E41E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42E51E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_156;
+			remoteInfo = ReverseJsonObjc;
+		};
+		428E42E61E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_76;
+			remoteInfo = CoreJSON;
+		};
+		428E42E71E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_83;
+			remoteInfo = CoreJSONConvenience;
+		};
+		428E42E81E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_92;
+			remoteInfo = CoreJSONFoundation;
+		};
+		428E42E91E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_102;
+			remoteInfo = CoreJSONLiterals;
+		};
+		428E42EA1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_111;
+			remoteInfo = CoreJSONPointer;
+		};
+		428E42EB1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_120;
+			remoteInfo = CoreJSONSubscript;
+		};
+		428E42EC1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_154;
+			remoteInfo = ReverseJsonCore;
+		};
+		428E42ED1E08A1130045E6BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = OBJ_160;
+			remoteInfo = ReverseJsonSwift;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		OBJ_11 /* JSONConvenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConvenience.swift; sourceTree = "<group>"; };
+		OBJ_13 /* FromFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FromFoundation.swift; sourceTree = "<group>"; };
+		OBJ_14 /* ToFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToFoundation.swift; sourceTree = "<group>"; };
+		OBJ_16 /* JSONLiterals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONLiterals.swift; sourceTree = "<group>"; };
+		OBJ_18 /* JSONPointer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPointer.swift; sourceTree = "<group>"; };
+		OBJ_20 /* JSONSubscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSubscript.swift; sourceTree = "<group>"; };
+		OBJ_22 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		OBJ_24 /* CommandLineArgumentsConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineArgumentsConvertible.swift; sourceTree = "<group>"; };
+		OBJ_25 /* ReverseJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseJson.swift; sourceTree = "<group>"; };
+		OBJ_27 /* ModelGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelGenerator.swift; sourceTree = "<group>"; };
+		OBJ_28 /* ModelTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTranslator.swift; sourceTree = "<group>"; };
+		OBJ_29 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		OBJ_31 /* ModelExportTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExportTranslator.swift; sourceTree = "<group>"; };
+		OBJ_33 /* ObjcModelTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslator.swift; sourceTree = "<group>"; };
+		OBJ_35 /* SwaggerReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwaggerReader.swift; sourceTree = "<group>"; };
+		OBJ_37 /* SwiftModelTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftModelTranslator.swift; sourceTree = "<group>"; };
+		OBJ_40 /* ModelGeneratorCommandLineTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelGeneratorCommandLineTest.swift; sourceTree = "<group>"; };
+		OBJ_41 /* ObjcModelCreatorCommandLineTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjcModelCreatorCommandLineTest.swift; sourceTree = "<group>"; };
+		OBJ_42 /* ReverseJsonTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseJsonTest.swift; sourceTree = "<group>"; };
+		OBJ_43 /* SwiftTranslatorCommandLineTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTranslatorCommandLineTest.swift; sourceTree = "<group>"; };
+		OBJ_45 /* ModelGeneratorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelGeneratorTest.swift; sourceTree = "<group>"; };
+		OBJ_47 /* JsonToModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonToModelTest.swift; sourceTree = "<group>"; };
+		OBJ_48 /* ModelExportTranslatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelExportTranslatorTest.swift; sourceTree = "<group>"; };
+		OBJ_49 /* ModelToJsonTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelToJsonTest.swift; sourceTree = "<group>"; };
+		OBJ_51 /* ObjcModelTranslatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjcModelTranslatorTest.swift; sourceTree = "<group>"; };
+		OBJ_53 /* SwiftTranslatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftTranslatorTest.swift; sourceTree = "<group>"; };
+		OBJ_54 /* Example */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Example; sourceTree = SOURCE_ROOT; };
+		OBJ_55 /* ReverseJsonLibTests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ReverseJsonLibTests; sourceTree = SOURCE_ROOT; };
+		OBJ_56 /* ReverseJsonTests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ReverseJsonTests; sourceTree = SOURCE_ROOT; };
+		OBJ_58 /* CoreJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_59 /* CoreJSONConvenience.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreJSONConvenience.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		OBJ_60 /* CoreJSONFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreJSONFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_61 /* CoreJSONLiterals.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreJSONLiterals.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_62 /* CoreJSONPointer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreJSONPointer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_63 /* CoreJSONSubscript.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreJSONSubscript.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_64 /* ReverseJson */ = {isa = PBXFileReference; lastKnownFileType = text; path = ReverseJson; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_65 /* ReverseJsonCommandLine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ReverseJsonCommandLine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_66 /* ReverseJsonCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ReverseJsonCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_67 /* ReverseJsonModelExport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ReverseJsonModelExport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_68 /* ReverseJsonObjc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ReverseJsonObjc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_69 /* ReverseJsonSwagger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ReverseJsonSwagger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_70 /* ReverseJsonSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ReverseJsonSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_71 /* ReverseJsonCommandLineTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ReverseJsonCommandLineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_72 /* ReverseJsonCoreTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ReverseJsonCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_73 /* ReverseJsonModelExportTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ReverseJsonModelExportTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_74 /* ReverseJsonObjcTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ReverseJsonObjcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_75 /* ReverseJsonSwiftTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ReverseJsonSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		OBJ_9 /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		OBJ_108 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_109 /* CoreJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_117 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_118 /* CoreJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_126 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_127 /* CoreJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_135 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_136 /* CoreJSON.framework in Frameworks */,
+				OBJ_137 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_138 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_139 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_140 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_141 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_142 /* ReverseJsonCore.framework in Frameworks */,
+				OBJ_143 /* ReverseJsonObjc.framework in Frameworks */,
+				OBJ_144 /* ReverseJsonModelExport.framework in Frameworks */,
+				OBJ_145 /* ReverseJsonSwift.framework in Frameworks */,
+				OBJ_146 /* ReverseJsonCommandLine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_169 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_170 /* CoreJSON.framework in Frameworks */,
+				OBJ_171 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_172 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_173 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_174 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_175 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_176 /* ReverseJsonCore.framework in Frameworks */,
+				OBJ_177 /* ReverseJsonObjc.framework in Frameworks */,
+				OBJ_178 /* ReverseJsonModelExport.framework in Frameworks */,
+				OBJ_179 /* ReverseJsonSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_197 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_198 /* CoreJSON.framework in Frameworks */,
+				OBJ_199 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_200 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_201 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_202 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_203 /* CoreJSONSubscript.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_215 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_216 /* CoreJSON.framework in Frameworks */,
+				OBJ_217 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_218 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_219 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_220 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_221 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_222 /* ReverseJsonCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_235 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_236 /* CoreJSON.framework in Frameworks */,
+				OBJ_237 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_238 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_239 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_240 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_241 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_242 /* ReverseJsonCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_256 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_257 /* CoreJSON.framework in Frameworks */,
+				OBJ_258 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_259 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_260 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_261 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_262 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_263 /* ReverseJsonCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_276 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_277 /* CoreJSON.framework in Frameworks */,
+				OBJ_278 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_279 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_280 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_281 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_282 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_283 /* ReverseJsonCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_300 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_301 /* CoreJSON.framework in Frameworks */,
+				OBJ_302 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_303 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_304 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_305 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_306 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_307 /* ReverseJsonCore.framework in Frameworks */,
+				OBJ_308 /* ReverseJsonObjc.framework in Frameworks */,
+				OBJ_309 /* ReverseJsonModelExport.framework in Frameworks */,
+				OBJ_310 /* ReverseJsonSwift.framework in Frameworks */,
+				OBJ_311 /* ReverseJsonCommandLine.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_329 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_330 /* CoreJSON.framework in Frameworks */,
+				OBJ_331 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_332 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_333 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_334 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_335 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_336 /* ReverseJsonCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_352 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_353 /* CoreJSON.framework in Frameworks */,
+				OBJ_354 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_355 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_356 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_357 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_358 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_359 /* ReverseJsonCore.framework in Frameworks */,
+				OBJ_360 /* ReverseJsonModelExport.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_375 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_376 /* CoreJSON.framework in Frameworks */,
+				OBJ_377 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_378 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_379 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_380 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_381 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_382 /* ReverseJsonCore.framework in Frameworks */,
+				OBJ_383 /* ReverseJsonObjc.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_398 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_399 /* CoreJSON.framework in Frameworks */,
+				OBJ_400 /* CoreJSONConvenience.framework in Frameworks */,
+				OBJ_401 /* CoreJSONFoundation.framework in Frameworks */,
+				OBJ_402 /* CoreJSONLiterals.framework in Frameworks */,
+				OBJ_403 /* CoreJSONPointer.framework in Frameworks */,
+				OBJ_404 /* CoreJSONSubscript.framework in Frameworks */,
+				OBJ_405 /* ReverseJsonCore.framework in Frameworks */,
+				OBJ_406 /* ReverseJsonSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_89 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_90 /* CoreJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_100 /* CoreJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		OBJ_10 /* CoreJSONConvenience */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_11 /* JSONConvenience.swift */,
+			);
+			name = CoreJSONConvenience;
+			path = "Packages/CoreJSON-1.0.0/Sources/CoreJSONConvenience";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_12 /* CoreJSONFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_13 /* FromFoundation.swift */,
+				OBJ_14 /* ToFoundation.swift */,
+			);
+			name = CoreJSONFoundation;
+			path = "Packages/CoreJSON-1.0.0/Sources/CoreJSONFoundation";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_15 /* CoreJSONLiterals */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_16 /* JSONLiterals.swift */,
+			);
+			name = CoreJSONLiterals;
+			path = "Packages/CoreJSON-1.0.0/Sources/CoreJSONLiterals";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_17 /* CoreJSONPointer */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_18 /* JSONPointer.swift */,
+			);
+			name = CoreJSONPointer;
+			path = "Packages/CoreJSON-1.0.0/Sources/CoreJSONPointer";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_19 /* CoreJSONSubscript */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_20 /* JSONSubscript.swift */,
+			);
+			name = CoreJSONSubscript;
+			path = "Packages/CoreJSON-1.0.0/Sources/CoreJSONSubscript";
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_21 /* ReverseJson */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_22 /* main.swift */,
+			);
+			name = ReverseJson;
+			path = Sources/ReverseJson;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_23 /* ReverseJsonCommandLine */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_24 /* CommandLineArgumentsConvertible.swift */,
+				OBJ_25 /* ReverseJson.swift */,
+			);
+			name = ReverseJsonCommandLine;
+			path = Sources/ReverseJsonCommandLine;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_26 /* ReverseJsonCore */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_27 /* ModelGenerator.swift */,
+				OBJ_28 /* ModelTranslator.swift */,
+				OBJ_29 /* Utils.swift */,
+			);
+			name = ReverseJsonCore;
+			path = Sources/ReverseJsonCore;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_30 /* ReverseJsonModelExport */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_31 /* ModelExportTranslator.swift */,
+			);
+			name = ReverseJsonModelExport;
+			path = Sources/ReverseJsonModelExport;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_32 /* ReverseJsonObjc */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_33 /* ObjcModelTranslator.swift */,
+			);
+			name = ReverseJsonObjc;
+			path = Sources/ReverseJsonObjc;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_34 /* ReverseJsonSwagger */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_35 /* SwaggerReader.swift */,
+			);
+			name = ReverseJsonSwagger;
+			path = Sources/ReverseJsonSwagger;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_36 /* ReverseJsonSwift */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_37 /* SwiftModelTranslator.swift */,
+			);
+			name = ReverseJsonSwift;
+			path = Sources/ReverseJsonSwift;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_38 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_39 /* ReverseJsonCommandLineTests */,
+				OBJ_44 /* ReverseJsonCoreTests */,
+				OBJ_46 /* ReverseJsonModelExportTests */,
+				OBJ_50 /* ReverseJsonObjcTests */,
+				OBJ_52 /* ReverseJsonSwiftTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		OBJ_39 /* ReverseJsonCommandLineTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_40 /* ModelGeneratorCommandLineTest.swift */,
+				OBJ_41 /* ObjcModelCreatorCommandLineTest.swift */,
+				OBJ_42 /* ReverseJsonTest.swift */,
+				OBJ_43 /* SwiftTranslatorCommandLineTest.swift */,
+			);
+			name = ReverseJsonCommandLineTests;
+			path = Tests/ReverseJsonCommandLineTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_44 /* ReverseJsonCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_45 /* ModelGeneratorTest.swift */,
+			);
+			name = ReverseJsonCoreTests;
+			path = Tests/ReverseJsonCoreTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_46 /* ReverseJsonModelExportTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_47 /* JsonToModelTest.swift */,
+				OBJ_48 /* ModelExportTranslatorTest.swift */,
+				OBJ_49 /* ModelToJsonTest.swift */,
+			);
+			name = ReverseJsonModelExportTests;
+			path = Tests/ReverseJsonModelExportTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_5 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_6 /* Package.swift */,
+				OBJ_7 /* Sources */,
+				OBJ_38 /* Tests */,
+				OBJ_54 /* Example */,
+				OBJ_55 /* ReverseJsonLibTests */,
+				OBJ_56 /* ReverseJsonTests */,
+				OBJ_57 /* Products */,
+			);
+			name = "";
+			sourceTree = "<group>";
+		};
+		OBJ_50 /* ReverseJsonObjcTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_51 /* ObjcModelTranslatorTest.swift */,
+			);
+			name = ReverseJsonObjcTests;
+			path = Tests/ReverseJsonObjcTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_52 /* ReverseJsonSwiftTests */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_53 /* SwiftTranslatorTest.swift */,
+			);
+			name = ReverseJsonSwiftTests;
+			path = Tests/ReverseJsonSwiftTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		OBJ_57 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_58 /* CoreJSON.framework */,
+				OBJ_59 /* CoreJSONConvenience.framework */,
+				OBJ_60 /* CoreJSONFoundation.framework */,
+				OBJ_61 /* CoreJSONLiterals.framework */,
+				OBJ_62 /* CoreJSONPointer.framework */,
+				OBJ_63 /* CoreJSONSubscript.framework */,
+				OBJ_64 /* ReverseJson */,
+				OBJ_65 /* ReverseJsonCommandLine.framework */,
+				OBJ_66 /* ReverseJsonCore.framework */,
+				OBJ_67 /* ReverseJsonModelExport.framework */,
+				OBJ_68 /* ReverseJsonObjc.framework */,
+				OBJ_69 /* ReverseJsonSwagger.framework */,
+				OBJ_70 /* ReverseJsonSwift.framework */,
+				OBJ_71 /* ReverseJsonCommandLineTests.xctest */,
+				OBJ_72 /* ReverseJsonCoreTests.xctest */,
+				OBJ_73 /* ReverseJsonModelExportTests.xctest */,
+				OBJ_74 /* ReverseJsonObjcTests.xctest */,
+				OBJ_75 /* ReverseJsonSwiftTests.xctest */,
+			);
+			name = Products;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		OBJ_7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_8 /* CoreJSON */,
+				OBJ_10 /* CoreJSONConvenience */,
+				OBJ_12 /* CoreJSONFoundation */,
+				OBJ_15 /* CoreJSONLiterals */,
+				OBJ_17 /* CoreJSONPointer */,
+				OBJ_19 /* CoreJSONSubscript */,
+				OBJ_21 /* ReverseJson */,
+				OBJ_23 /* ReverseJsonCommandLine */,
+				OBJ_26 /* ReverseJsonCore */,
+				OBJ_30 /* ReverseJsonModelExport */,
+				OBJ_32 /* ReverseJsonObjc */,
+				OBJ_34 /* ReverseJsonSwagger */,
+				OBJ_36 /* ReverseJsonSwift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		OBJ_8 /* CoreJSON */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_9 /* JSON.swift */,
+			);
+			name = CoreJSON;
+			path = "Packages/CoreJSON-1.0.0/Sources/CoreJSON";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		OBJ_102 /* CoreJSONLiterals */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_103 /* Build configuration list for PBXNativeTarget "CoreJSONLiterals" */;
+			buildPhases = (
+				OBJ_106 /* Sources */,
+				OBJ_108 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_110 /* PBXTargetDependency */,
+			);
+			name = CoreJSONLiterals;
+			productName = CoreJSONLiterals;
+			productReference = OBJ_61 /* CoreJSONLiterals.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_111 /* CoreJSONPointer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_112 /* Build configuration list for PBXNativeTarget "CoreJSONPointer" */;
+			buildPhases = (
+				OBJ_115 /* Sources */,
+				OBJ_117 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_119 /* PBXTargetDependency */,
+			);
+			name = CoreJSONPointer;
+			productName = CoreJSONPointer;
+			productReference = OBJ_62 /* CoreJSONPointer.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_120 /* CoreJSONSubscript */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_121 /* Build configuration list for PBXNativeTarget "CoreJSONSubscript" */;
+			buildPhases = (
+				OBJ_124 /* Sources */,
+				OBJ_126 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_128 /* PBXTargetDependency */,
+			);
+			name = CoreJSONSubscript;
+			productName = CoreJSONSubscript;
+			productReference = OBJ_63 /* CoreJSONSubscript.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_129 /* ReverseJson */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_130 /* Build configuration list for PBXNativeTarget "ReverseJson" */;
+			buildPhases = (
+				OBJ_133 /* Sources */,
+				OBJ_135 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_147 /* PBXTargetDependency */,
+				OBJ_148 /* PBXTargetDependency */,
+				OBJ_149 /* PBXTargetDependency */,
+				OBJ_150 /* PBXTargetDependency */,
+				OBJ_151 /* PBXTargetDependency */,
+				OBJ_152 /* PBXTargetDependency */,
+				OBJ_153 /* PBXTargetDependency */,
+				OBJ_155 /* PBXTargetDependency */,
+				OBJ_157 /* PBXTargetDependency */,
+				OBJ_159 /* PBXTargetDependency */,
+				OBJ_161 /* PBXTargetDependency */,
+			);
+			name = ReverseJson;
+			productName = ReverseJson;
+			productReference = OBJ_64 /* ReverseJson */;
+			productType = "com.apple.product-type.tool";
+		};
+		OBJ_154 /* ReverseJsonCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_190 /* Build configuration list for PBXNativeTarget "ReverseJsonCore" */;
+			buildPhases = (
+				OBJ_193 /* Sources */,
+				OBJ_197 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_204 /* PBXTargetDependency */,
+				OBJ_205 /* PBXTargetDependency */,
+				OBJ_206 /* PBXTargetDependency */,
+				OBJ_207 /* PBXTargetDependency */,
+				OBJ_208 /* PBXTargetDependency */,
+				OBJ_209 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonCore;
+			productName = ReverseJsonCore;
+			productReference = OBJ_66 /* ReverseJsonCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_156 /* ReverseJsonObjc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_230 /* Build configuration list for PBXNativeTarget "ReverseJsonObjc" */;
+			buildPhases = (
+				OBJ_233 /* Sources */,
+				OBJ_235 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_243 /* PBXTargetDependency */,
+				OBJ_244 /* PBXTargetDependency */,
+				OBJ_245 /* PBXTargetDependency */,
+				OBJ_246 /* PBXTargetDependency */,
+				OBJ_247 /* PBXTargetDependency */,
+				OBJ_248 /* PBXTargetDependency */,
+				OBJ_249 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonObjc;
+			productName = ReverseJsonObjc;
+			productReference = OBJ_68 /* ReverseJsonObjc.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_158 /* ReverseJsonModelExport */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_210 /* Build configuration list for PBXNativeTarget "ReverseJsonModelExport" */;
+			buildPhases = (
+				OBJ_213 /* Sources */,
+				OBJ_215 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_223 /* PBXTargetDependency */,
+				OBJ_224 /* PBXTargetDependency */,
+				OBJ_225 /* PBXTargetDependency */,
+				OBJ_226 /* PBXTargetDependency */,
+				OBJ_227 /* PBXTargetDependency */,
+				OBJ_228 /* PBXTargetDependency */,
+				OBJ_229 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonModelExport;
+			productName = ReverseJsonModelExport;
+			productReference = OBJ_67 /* ReverseJsonModelExport.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_160 /* ReverseJsonSwift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_271 /* Build configuration list for PBXNativeTarget "ReverseJsonSwift" */;
+			buildPhases = (
+				OBJ_274 /* Sources */,
+				OBJ_276 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_284 /* PBXTargetDependency */,
+				OBJ_285 /* PBXTargetDependency */,
+				OBJ_286 /* PBXTargetDependency */,
+				OBJ_287 /* PBXTargetDependency */,
+				OBJ_288 /* PBXTargetDependency */,
+				OBJ_289 /* PBXTargetDependency */,
+				OBJ_290 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonSwift;
+			productName = ReverseJsonSwift;
+			productReference = OBJ_70 /* ReverseJsonSwift.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_162 /* ReverseJsonCommandLine */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_163 /* Build configuration list for PBXNativeTarget "ReverseJsonCommandLine" */;
+			buildPhases = (
+				OBJ_166 /* Sources */,
+				OBJ_169 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_180 /* PBXTargetDependency */,
+				OBJ_181 /* PBXTargetDependency */,
+				OBJ_182 /* PBXTargetDependency */,
+				OBJ_183 /* PBXTargetDependency */,
+				OBJ_184 /* PBXTargetDependency */,
+				OBJ_185 /* PBXTargetDependency */,
+				OBJ_186 /* PBXTargetDependency */,
+				OBJ_187 /* PBXTargetDependency */,
+				OBJ_188 /* PBXTargetDependency */,
+				OBJ_189 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonCommandLine;
+			productName = ReverseJsonCommandLine;
+			productReference = OBJ_65 /* ReverseJsonCommandLine.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_250 /* ReverseJsonSwagger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_251 /* Build configuration list for PBXNativeTarget "ReverseJsonSwagger" */;
+			buildPhases = (
+				OBJ_254 /* Sources */,
+				OBJ_256 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_264 /* PBXTargetDependency */,
+				OBJ_265 /* PBXTargetDependency */,
+				OBJ_266 /* PBXTargetDependency */,
+				OBJ_267 /* PBXTargetDependency */,
+				OBJ_268 /* PBXTargetDependency */,
+				OBJ_269 /* PBXTargetDependency */,
+				OBJ_270 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonSwagger;
+			productName = ReverseJsonSwagger;
+			productReference = OBJ_69 /* ReverseJsonSwagger.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_291 /* ReverseJsonCommandLineTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_292 /* Build configuration list for PBXNativeTarget "ReverseJsonCommandLineTests" */;
+			buildPhases = (
+				OBJ_295 /* Sources */,
+				OBJ_300 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_312 /* PBXTargetDependency */,
+				OBJ_313 /* PBXTargetDependency */,
+				OBJ_314 /* PBXTargetDependency */,
+				OBJ_315 /* PBXTargetDependency */,
+				OBJ_316 /* PBXTargetDependency */,
+				OBJ_317 /* PBXTargetDependency */,
+				OBJ_318 /* PBXTargetDependency */,
+				OBJ_319 /* PBXTargetDependency */,
+				OBJ_320 /* PBXTargetDependency */,
+				OBJ_321 /* PBXTargetDependency */,
+				OBJ_322 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonCommandLineTests;
+			productName = ReverseJsonCommandLineTests;
+			productReference = OBJ_71 /* ReverseJsonCommandLineTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		OBJ_323 /* ReverseJsonCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_324 /* Build configuration list for PBXNativeTarget "ReverseJsonCoreTests" */;
+			buildPhases = (
+				OBJ_327 /* Sources */,
+				OBJ_329 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_337 /* PBXTargetDependency */,
+				OBJ_338 /* PBXTargetDependency */,
+				OBJ_339 /* PBXTargetDependency */,
+				OBJ_340 /* PBXTargetDependency */,
+				OBJ_341 /* PBXTargetDependency */,
+				OBJ_342 /* PBXTargetDependency */,
+				OBJ_343 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonCoreTests;
+			productName = ReverseJsonCoreTests;
+			productReference = OBJ_72 /* ReverseJsonCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		OBJ_344 /* ReverseJsonModelExportTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_345 /* Build configuration list for PBXNativeTarget "ReverseJsonModelExportTests" */;
+			buildPhases = (
+				OBJ_348 /* Sources */,
+				OBJ_352 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_361 /* PBXTargetDependency */,
+				OBJ_362 /* PBXTargetDependency */,
+				OBJ_363 /* PBXTargetDependency */,
+				OBJ_364 /* PBXTargetDependency */,
+				OBJ_365 /* PBXTargetDependency */,
+				OBJ_366 /* PBXTargetDependency */,
+				OBJ_367 /* PBXTargetDependency */,
+				OBJ_368 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonModelExportTests;
+			productName = ReverseJsonModelExportTests;
+			productReference = OBJ_73 /* ReverseJsonModelExportTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		OBJ_369 /* ReverseJsonObjcTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_370 /* Build configuration list for PBXNativeTarget "ReverseJsonObjcTests" */;
+			buildPhases = (
+				OBJ_373 /* Sources */,
+				OBJ_375 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_384 /* PBXTargetDependency */,
+				OBJ_385 /* PBXTargetDependency */,
+				OBJ_386 /* PBXTargetDependency */,
+				OBJ_387 /* PBXTargetDependency */,
+				OBJ_388 /* PBXTargetDependency */,
+				OBJ_389 /* PBXTargetDependency */,
+				OBJ_390 /* PBXTargetDependency */,
+				OBJ_391 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonObjcTests;
+			productName = ReverseJsonObjcTests;
+			productReference = OBJ_74 /* ReverseJsonObjcTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		OBJ_392 /* ReverseJsonSwiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_393 /* Build configuration list for PBXNativeTarget "ReverseJsonSwiftTests" */;
+			buildPhases = (
+				OBJ_396 /* Sources */,
+				OBJ_398 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_407 /* PBXTargetDependency */,
+				OBJ_408 /* PBXTargetDependency */,
+				OBJ_409 /* PBXTargetDependency */,
+				OBJ_410 /* PBXTargetDependency */,
+				OBJ_411 /* PBXTargetDependency */,
+				OBJ_412 /* PBXTargetDependency */,
+				OBJ_413 /* PBXTargetDependency */,
+				OBJ_414 /* PBXTargetDependency */,
+			);
+			name = ReverseJsonSwiftTests;
+			productName = ReverseJsonSwiftTests;
+			productReference = OBJ_75 /* ReverseJsonSwiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		OBJ_76 /* CoreJSON */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_77 /* Build configuration list for PBXNativeTarget "CoreJSON" */;
+			buildPhases = (
+				OBJ_80 /* Sources */,
+				OBJ_82 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CoreJSON;
+			productName = CoreJSON;
+			productReference = OBJ_58 /* CoreJSON.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_83 /* CoreJSONConvenience */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_84 /* Build configuration list for PBXNativeTarget "CoreJSONConvenience" */;
+			buildPhases = (
+				OBJ_87 /* Sources */,
+				OBJ_89 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_91 /* PBXTargetDependency */,
+			);
+			name = CoreJSONConvenience;
+			productName = CoreJSONConvenience;
+			productReference = OBJ_59 /* CoreJSONConvenience.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		OBJ_92 /* CoreJSONFoundation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = OBJ_93 /* Build configuration list for PBXNativeTarget "CoreJSONFoundation" */;
+			buildPhases = (
+				OBJ_96 /* Sources */,
+				OBJ_99 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				OBJ_101 /* PBXTargetDependency */,
+			);
+			name = CoreJSONFoundation;
+			productName = CoreJSONFoundation;
+			productReference = OBJ_60 /* CoreJSONFoundation.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		OBJ_1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 9999;
+			};
+			buildConfigurationList = OBJ_2 /* Build configuration list for PBXProject "ReverseJson" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = OBJ_5 /*  */;
+			productRefGroup = OBJ_57 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				OBJ_76 /* CoreJSON */,
+				OBJ_83 /* CoreJSONConvenience */,
+				OBJ_92 /* CoreJSONFoundation */,
+				OBJ_102 /* CoreJSONLiterals */,
+				OBJ_111 /* CoreJSONPointer */,
+				OBJ_120 /* CoreJSONSubscript */,
+				OBJ_129 /* ReverseJson */,
+				OBJ_162 /* ReverseJsonCommandLine */,
+				OBJ_154 /* ReverseJsonCore */,
+				OBJ_158 /* ReverseJsonModelExport */,
+				OBJ_156 /* ReverseJsonObjc */,
+				OBJ_250 /* ReverseJsonSwagger */,
+				OBJ_160 /* ReverseJsonSwift */,
+				OBJ_291 /* ReverseJsonCommandLineTests */,
+				OBJ_323 /* ReverseJsonCoreTests */,
+				OBJ_344 /* ReverseJsonModelExportTests */,
+				OBJ_369 /* ReverseJsonObjcTests */,
+				OBJ_392 /* ReverseJsonSwiftTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		OBJ_106 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_107 /* JSONLiterals.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_115 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_116 /* JSONPointer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_124 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_125 /* JSONSubscript.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_133 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_134 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_166 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_167 /* CommandLineArgumentsConvertible.swift in Sources */,
+				OBJ_168 /* ReverseJson.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_193 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_194 /* ModelGenerator.swift in Sources */,
+				OBJ_195 /* ModelTranslator.swift in Sources */,
+				OBJ_196 /* Utils.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_213 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_214 /* ModelExportTranslator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_233 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_234 /* ObjcModelTranslator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_254 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_255 /* SwaggerReader.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_274 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_275 /* SwiftModelTranslator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_295 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_296 /* ModelGeneratorCommandLineTest.swift in Sources */,
+				OBJ_297 /* ObjcModelCreatorCommandLineTest.swift in Sources */,
+				OBJ_298 /* ReverseJsonTest.swift in Sources */,
+				OBJ_299 /* SwiftTranslatorCommandLineTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_327 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_328 /* ModelGeneratorTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_348 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_349 /* JsonToModelTest.swift in Sources */,
+				OBJ_350 /* ModelExportTranslatorTest.swift in Sources */,
+				OBJ_351 /* ModelToJsonTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_373 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_374 /* ObjcModelTranslatorTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_396 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_397 /* SwiftTranslatorTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_80 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_81 /* JSON.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_87 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_88 /* JSONConvenience.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		OBJ_96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 0;
+			files = (
+				OBJ_97 /* FromFoundation.swift in Sources */,
+				OBJ_98 /* ToFoundation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		OBJ_101 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42891E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_110 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E428A1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_119 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E428B1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_128 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E428C1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_147 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E428D1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_148 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E428E1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_149 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E428F1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_150 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42901E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_151 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42911E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_152 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42921E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_153 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42931E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_155 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_156 /* ReverseJsonObjc */;
+			targetProxy = 428E429A1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_157 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_158 /* ReverseJsonModelExport */;
+			targetProxy = 428E42A21E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_159 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_160 /* ReverseJsonSwift */;
+			targetProxy = 428E42AA1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_161 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_162 /* ReverseJsonCommandLine */;
+			targetProxy = 428E42B21E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_180 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42B31E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_181 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42B41E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_182 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42B51E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_183 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42B61E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_184 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42B71E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_185 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42B81E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_186 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42B91E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_187 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_156 /* ReverseJsonObjc */;
+			targetProxy = 428E42BA1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_188 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_158 /* ReverseJsonModelExport */;
+			targetProxy = 428E42BB1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_189 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_160 /* ReverseJsonSwift */;
+			targetProxy = 428E42BC1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_204 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42941E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_205 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42951E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_206 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42961E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_207 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42971E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_208 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42981E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_209 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42991E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_223 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42A31E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_224 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42A41E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_225 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42A51E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_226 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42A61E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_227 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42A71E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_228 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42A81E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_229 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42A91E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_243 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E429B1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_244 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E429C1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_245 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E429D1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_246 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E429E1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_247 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E429F1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_248 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42A01E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_249 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42A11E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_264 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42BD1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_265 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42BE1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_266 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42BF1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_267 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42C01E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_268 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42C11E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_269 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42C21E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_270 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42C31E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_284 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42AB1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_285 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42AC1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_286 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42AD1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_287 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42AE1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_288 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42AF1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_289 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42B01E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_290 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42B11E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_312 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42C41E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_313 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42C51E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_314 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42C61E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_315 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42C71E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_316 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42C81E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_317 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42C91E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_318 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42CA1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_319 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_156 /* ReverseJsonObjc */;
+			targetProxy = 428E42CB1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_320 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_158 /* ReverseJsonModelExport */;
+			targetProxy = 428E42CC1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_321 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_160 /* ReverseJsonSwift */;
+			targetProxy = 428E42CD1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_322 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_162 /* ReverseJsonCommandLine */;
+			targetProxy = 428E42CE1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_337 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42CF1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_338 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42D01E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_339 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42D11E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_340 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42D21E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_341 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42D31E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_342 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42D41E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_343 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42D51E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_361 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42D61E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_362 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42D71E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_363 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42D81E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_364 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42D91E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_365 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42DA1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_366 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42DB1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_367 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42DC1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_368 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_158 /* ReverseJsonModelExport */;
+			targetProxy = 428E42DD1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_384 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42DE1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_385 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42DF1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_386 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42E01E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_387 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42E11E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_388 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42E21E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_389 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42E31E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_390 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42E41E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_391 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_156 /* ReverseJsonObjc */;
+			targetProxy = 428E42E51E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_407 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42E61E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_408 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_83 /* CoreJSONConvenience */;
+			targetProxy = 428E42E71E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_409 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_92 /* CoreJSONFoundation */;
+			targetProxy = 428E42E81E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_410 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_102 /* CoreJSONLiterals */;
+			targetProxy = 428E42E91E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_411 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_111 /* CoreJSONPointer */;
+			targetProxy = 428E42EA1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_412 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_120 /* CoreJSONSubscript */;
+			targetProxy = 428E42EB1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_413 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_154 /* ReverseJsonCore */;
+			targetProxy = 428E42EC1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_414 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_160 /* ReverseJsonSwift */;
+			targetProxy = 428E42ED1E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+		OBJ_91 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = OBJ_76 /* CoreJSON */;
+			targetProxy = 428E42881E08A1130045E6BB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		OBJ_104 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONLiterals_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONLiterals;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONLiterals;
+			};
+			name = Debug;
+		};
+		OBJ_105 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONLiterals_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONLiterals;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONLiterals;
+			};
+			name = Release;
+		};
+		OBJ_113 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONPointer_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONPointer;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONPointer;
+			};
+			name = Debug;
+		};
+		OBJ_114 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONPointer_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONPointer;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONPointer;
+			};
+			name = Release;
+		};
+		OBJ_122 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONSubscript_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONSubscript;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONSubscript;
+			};
+			name = Debug;
+		};
+		OBJ_123 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONSubscript_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONSubscript;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONSubscript;
+			};
+			name = Release;
+		};
+		OBJ_131 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJson_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJson;
+			};
+			name = Debug;
+		};
+		OBJ_132 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJson_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx @executable_path";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_FORCE_DYNAMIC_LINK_STDLIB = YES;
+				SWIFT_FORCE_STATIC_LINK_STDLIB = NO;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJson;
+			};
+			name = Release;
+		};
+		OBJ_164 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCommandLine_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonCommandLine;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCommandLine;
+			};
+			name = Debug;
+		};
+		OBJ_165 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCommandLine_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonCommandLine;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCommandLine;
+			};
+			name = Release;
+		};
+		OBJ_191 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCore_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonCore;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCore;
+			};
+			name = Debug;
+		};
+		OBJ_192 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCore_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonCore;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCore;
+			};
+			name = Release;
+		};
+		OBJ_211 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonModelExport_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonModelExport;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonModelExport;
+			};
+			name = Debug;
+		};
+		OBJ_212 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonModelExport_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonModelExport;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonModelExport;
+			};
+			name = Release;
+		};
+		OBJ_231 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonObjc_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonObjc;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonObjc;
+			};
+			name = Debug;
+		};
+		OBJ_232 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonObjc_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonObjc;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonObjc;
+			};
+			name = Release;
+		};
+		OBJ_252 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonSwagger_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonSwagger;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonSwagger;
+			};
+			name = Debug;
+		};
+		OBJ_253 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonSwagger_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonSwagger;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonSwagger;
+			};
+			name = Release;
+		};
+		OBJ_272 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonSwift_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonSwift;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonSwift;
+			};
+			name = Debug;
+		};
+		OBJ_273 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonSwift_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = ReverseJsonSwift;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonSwift;
+			};
+			name = Release;
+		};
+		OBJ_293 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCommandLineTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCommandLineTests;
+			};
+			name = Debug;
+		};
+		OBJ_294 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCommandLineTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCommandLineTests;
+			};
+			name = Release;
+		};
+		OBJ_3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HEADERMAP = NO;
+			};
+			name = Debug;
+		};
+		OBJ_325 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCoreTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCoreTests;
+			};
+			name = Debug;
+		};
+		OBJ_326 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonCoreTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonCoreTests;
+			};
+			name = Release;
+		};
+		OBJ_346 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonModelExportTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonModelExportTests;
+			};
+			name = Debug;
+		};
+		OBJ_347 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonModelExportTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonModelExportTests;
+			};
+			name = Release;
+		};
+		OBJ_371 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonObjcTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonObjcTests;
+			};
+			name = Debug;
+		};
+		OBJ_372 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonObjcTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonObjcTests;
+			};
+			name = Release;
+		};
+		OBJ_394 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonSwiftTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonSwiftTests;
+			};
+			name = Debug;
+		};
+		OBJ_395 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/ReverseJsonSwiftTests_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = ReverseJsonSwiftTests;
+			};
+			name = Release;
+		};
+		OBJ_4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_OPTIMIZATION_LEVEL = s;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "-DXcode";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator appletvos appletvsimulator watchos watchsimulator";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				USE_HEADERMAP = NO;
+			};
+			name = Release;
+		};
+		OBJ_78 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSON_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSON;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSON;
+			};
+			name = Debug;
+		};
+		OBJ_79 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSON_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSON;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSON;
+			};
+			name = Release;
+		};
+		OBJ_85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONConvenience_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONConvenience;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONConvenience;
+			};
+			name = Debug;
+		};
+		OBJ_86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONConvenience_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONConvenience;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONConvenience;
+			};
+			name = Release;
+		};
+		OBJ_94 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONFoundation_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONFoundation;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONFoundation;
+			};
+			name = Debug;
+		};
+		OBJ_95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = ReverseJson.xcodeproj/CoreJSONFoundation_Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
+				OTHER_LDFLAGS = "$(inherited)";
+				OTHER_SWIFT_FLAGS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = CoreJSONFoundation;
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = SWIFT_PACKAGE;
+				SWIFT_VERSION = 3.0;
+				TARGET_NAME = CoreJSONFoundation;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		OBJ_103 /* Build configuration list for PBXNativeTarget "CoreJSONLiterals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_104 /* Debug */,
+				OBJ_105 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_112 /* Build configuration list for PBXNativeTarget "CoreJSONPointer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_113 /* Debug */,
+				OBJ_114 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_121 /* Build configuration list for PBXNativeTarget "CoreJSONSubscript" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_122 /* Debug */,
+				OBJ_123 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_130 /* Build configuration list for PBXNativeTarget "ReverseJson" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_131 /* Debug */,
+				OBJ_132 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_163 /* Build configuration list for PBXNativeTarget "ReverseJsonCommandLine" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_164 /* Debug */,
+				OBJ_165 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_190 /* Build configuration list for PBXNativeTarget "ReverseJsonCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_191 /* Debug */,
+				OBJ_192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_2 /* Build configuration list for PBXProject "ReverseJson" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_3 /* Debug */,
+				OBJ_4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_210 /* Build configuration list for PBXNativeTarget "ReverseJsonModelExport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_211 /* Debug */,
+				OBJ_212 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_230 /* Build configuration list for PBXNativeTarget "ReverseJsonObjc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_231 /* Debug */,
+				OBJ_232 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_251 /* Build configuration list for PBXNativeTarget "ReverseJsonSwagger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_252 /* Debug */,
+				OBJ_253 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_271 /* Build configuration list for PBXNativeTarget "ReverseJsonSwift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_272 /* Debug */,
+				OBJ_273 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_292 /* Build configuration list for PBXNativeTarget "ReverseJsonCommandLineTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_293 /* Debug */,
+				OBJ_294 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_324 /* Build configuration list for PBXNativeTarget "ReverseJsonCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_325 /* Debug */,
+				OBJ_326 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_345 /* Build configuration list for PBXNativeTarget "ReverseJsonModelExportTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_346 /* Debug */,
+				OBJ_347 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_370 /* Build configuration list for PBXNativeTarget "ReverseJsonObjcTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_371 /* Debug */,
+				OBJ_372 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_393 /* Build configuration list for PBXNativeTarget "ReverseJsonSwiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_394 /* Debug */,
+				OBJ_395 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_77 /* Build configuration list for PBXNativeTarget "CoreJSON" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_78 /* Debug */,
+				OBJ_79 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_84 /* Build configuration list for PBXNativeTarget "CoreJSONConvenience" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_85 /* Debug */,
+				OBJ_86 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		OBJ_93 /* Build configuration list for PBXNativeTarget "CoreJSONFoundation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				OBJ_94 /* Debug */,
+				OBJ_95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = OBJ_1 /* Project object */;
 }

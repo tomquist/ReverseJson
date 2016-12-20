@@ -5,40 +5,6 @@ import ReverseJsonCore
 
 class SwiftTranslatorTest: XCTestCase {
     
-    static var allTests: [(String, (SwiftTranslatorTest) -> () throws -> Void)] {
-        return [
-            ("testBoolDouble", testBoolDouble),
-            ("testClassFlag", testClassFlag),
-            ("testContiguousArrayFlag", testContiguousArrayFlag),
-            ("testEmptyEnum", testEmptyEnum),
-            ("testEmptyObject", testEmptyObject),
-            ("testEnumWithOneCase", testEnumWithOneCase),
-            ("testEnumWithOneSubDeclarationCase", testEnumWithOneSubDeclarationCase),
-            ("testEnumWithTwoCases", testEnumWithTwoCases),
-            ("testListOfEmptyObject", testListOfEmptyObject),
-            ("testListOfTextList", testListOfTextList),
-            ("testListOfUnknown", testListOfUnknown),
-            ("testMutableFieldsFlag", testMutableFieldsFlag),
-            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
-            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
-            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
-            ("testObjectWithTwoSimpleFields", testObjectWithTwoSimpleFields),
-            ("testOptionalText", testOptionalText),
-            ("testOptionalUnknown", testOptionalUnknown),
-            ("testPublicFieldsFlag", testPublicFieldsFlag),
-            ("testPublicTypeFlagWithEnum", testPublicTypeFlagWithEnum),
-            ("testPublicTypeFlagWithObject", testPublicTypeFlagWithObject),
-            ("testPublicTypeFlagWithTypealias", testPublicTypeFlagWithTypealias),
-            ("testSimpleDouble", testSimpleDouble),
-            ("testSimpleFloat", testSimpleFloat),
-            ("testSimpleInt", testSimpleInt),
-            ("testSimpleString", testSimpleString),
-            ("testTextList", testTextList),
-            ("testTranslatorCombination", testTranslatorCombination),
-            ("testUnknownType", testUnknownType),
-        ]
-    }
-    
     func testSimpleString() {
         let type: FieldType = .text
 
@@ -145,7 +111,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testEmptyObject() {
-        let type: FieldType = .object([])
+        let type: FieldType = .unnamedObject([])
 
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -173,7 +139,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testEmptyEnum() {
-        let type: FieldType = .enum([])
+        let type: FieldType = .unnamedEnum([])
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -226,7 +192,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
 
     func testUnknownType() {
-        let type: FieldType = .unknown
+        let type: FieldType = .unnamedUnknown
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
@@ -243,7 +209,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testOptionalUnknown() {
-        let type: FieldType = .optional(.unknown)
+        let type: FieldType = .optional(.unnamedUnknown)
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
@@ -260,7 +226,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testListOfUnknown() {
-        let type: FieldType = .list(.unknown)
+        let type: FieldType = .list(.unnamedUnknown)
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
@@ -301,12 +267,12 @@ class SwiftTranslatorTest: XCTestCase {
     
     func testListOfEmptyObject() {
         let modelCreator = SwiftModelCreator()
-        let modelResult: String = modelCreator.translate(.list(.object([])), name: "TestObjectList")
+        let modelResult: String = modelCreator.translate(.list(.unnamedObject([])), name: "TestObjectList")
         XCTAssertEqual("// \(modelCreator.fileName)\nstruct TestObjectListItem {\n}", modelResult)
     }
     
     func testObjectWithSingleTextField() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -341,7 +307,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testObjectWithFieldContainingListOfText() {
-        let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
+        let type: FieldType = .unnamedObject([.init(name: "texts", type: .list(.text))])
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -379,7 +345,7 @@ class SwiftTranslatorTest: XCTestCase {
     
     func testObjectWithTwoSimpleFields() {
         let modelCreator = SwiftModelCreator()
-        let modelResult: String = modelCreator.translate(.object([
+        let modelResult: String = modelCreator.translate(.unnamedObject([
             .init(name: "number", type: .number(.double)),
             .init(name: "texts", type: .list(.text))
         ]), name: "TestObject")
@@ -394,8 +360,8 @@ class SwiftTranslatorTest: XCTestCase {
 
     func testObjectWithOneFieldWithSubDeclaration() {
         let modelCreator = SwiftModelCreator()
-        let modelResult: String = modelCreator.translate(.object([
-            .init(name: "subObject", type: .object([]))
+        let modelResult: String = modelCreator.translate(.unnamedObject([
+            .init(name: "subObject", type: .unnamedObject([]))
             ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "// \(modelCreator.fileName)",
@@ -408,7 +374,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
 
     func testEnumWithOneCase() {
-        let type: FieldType = .enum([.text])
+        let type: FieldType = .unnamedEnum([.text])
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -444,7 +410,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testEnumWithTwoCases() {
-        let type: FieldType = .enum([.text, .number(.int)])
+        let type: FieldType = .unnamedEnum([.text, .number(.int)])
         
         let modelCreator = SwiftModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -486,7 +452,7 @@ class SwiftTranslatorTest: XCTestCase {
 
     func testEnumWithOneSubDeclarationCase() {
         let modelCreator = SwiftModelCreator()
-        let modelResult: String = modelCreator.translate(.enum([.object([])]), name: "TestObject")
+        let modelResult: String = modelCreator.translate(.unnamedEnum([.unnamedObject([])]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "// \(modelCreator.fileName)",
             "enum TestObject {",
@@ -498,7 +464,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testPublicTypeFlagWithObject() {
-        let type: FieldType = .object([])
+        let type: FieldType = .unnamedObject([])
         
         var modelCreator = SwiftModelCreator()
         modelCreator.typeVisibility = .publicVisibility
@@ -518,7 +484,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testPublicTypeFlagWithEnum() {
-        let type: FieldType = .enum([])
+        let type: FieldType = .unnamedEnum([])
         
         var modelCreator = SwiftModelCreator()
         modelCreator.typeVisibility = .publicVisibility
@@ -528,7 +494,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
 
     func testClassFlag() {
-        let type: FieldType = .object([])
+        let type: FieldType = .unnamedObject([])
         
         var modelCreator = SwiftModelCreator()
         modelCreator.objectType = .classType
@@ -538,7 +504,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testPublicFieldsFlag() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         var modelCreator = SwiftModelCreator()
         modelCreator.fieldVisibility = .publicVisibility
@@ -553,7 +519,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testMutableFieldsFlag() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         var modelCreator = SwiftModelCreator()
         modelCreator.mutableFields = true
@@ -568,7 +534,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testContiguousArrayFlag() {
-        let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
+        let type: FieldType = .unnamedObject([.init(name: "texts", type: .list(.text))])
         
         var modelCreator = SwiftModelCreator()
         modelCreator.listType = .contiguousArray
@@ -609,7 +575,7 @@ class SwiftTranslatorTest: XCTestCase {
     }
     
     func testTranslatorCombination() {
-        let type: FieldType = .object([])
+        let type: FieldType = .unnamedObject([])
         
         let translator = SwiftTranslator()
         let result: String = translator.translate(type, name: "TestObject")
@@ -634,5 +600,42 @@ class SwiftTranslatorTest: XCTestCase {
             "}"
         ), result)
     }
-    
 }
+
+#if os(Linux)
+extension SwiftTranslatorTest {
+    static var allTests: [(String, (SwiftTranslatorTest) -> () throws -> Void)] {
+        return [
+            ("testBoolDouble", testBoolDouble),
+            ("testClassFlag", testClassFlag),
+            ("testContiguousArrayFlag", testContiguousArrayFlag),
+            ("testEmptyEnum", testEmptyEnum),
+            ("testEmptyObject", testEmptyObject),
+            ("testEnumWithOneCase", testEnumWithOneCase),
+            ("testEnumWithOneSubDeclarationCase", testEnumWithOneSubDeclarationCase),
+            ("testEnumWithTwoCases", testEnumWithTwoCases),
+            ("testListOfEmptyObject", testListOfEmptyObject),
+            ("testListOfTextList", testListOfTextList),
+            ("testListOfUnknown", testListOfUnknown),
+            ("testMutableFieldsFlag", testMutableFieldsFlag),
+            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
+            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
+            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
+            ("testObjectWithTwoSimpleFields", testObjectWithTwoSimpleFields),
+            ("testOptionalText", testOptionalText),
+            ("testOptionalUnknown", testOptionalUnknown),
+            ("testPublicFieldsFlag", testPublicFieldsFlag),
+            ("testPublicTypeFlagWithEnum", testPublicTypeFlagWithEnum),
+            ("testPublicTypeFlagWithObject", testPublicTypeFlagWithObject),
+            ("testPublicTypeFlagWithTypealias", testPublicTypeFlagWithTypealias),
+            ("testSimpleDouble", testSimpleDouble),
+            ("testSimpleFloat", testSimpleFloat),
+            ("testSimpleInt", testSimpleInt),
+            ("testSimpleString", testSimpleString),
+            ("testTextList", testTextList),
+            ("testTranslatorCombination", testTranslatorCombination),
+            ("testUnknownType", testUnknownType),
+        ]
+    }
+}
+#endif

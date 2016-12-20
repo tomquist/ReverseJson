@@ -1,50 +1,11 @@
 
 import XCTest
 import Foundation
+import CoreJSON
+import CoreJSONLiterals
 @testable import ReverseJsonCore
 
 class ModelGeneratorTest: XCTestCase {
-    
-    static var allTests: [(String, (ModelGeneratorTest) -> () throws -> Void)] {
-        return [
-            ("testArrayObjectWithArrayFieldOfIntsStringsAndDoubles", testArrayObjectWithArrayFieldOfIntsStringsAndDoubles),
-            ("testArrayObjectWithArrayFieldOfUnknownTypeAndStrings", testArrayObjectWithArrayFieldOfUnknownTypeAndStrings),
-            ("testArrayObjectWithMixedFieldOfMixedArraysAndInt", testArrayObjectWithMixedFieldOfMixedArraysAndInt),
-            ("testArrayOfEmptyObject", testArrayOfEmptyObject),
-            ("testArrayOfEmptyOptionalObject", testArrayOfEmptyOptionalObject),
-            ("testArrayOfMixedBoolAndDouble", testArrayOfMixedBoolAndDouble),
-            ("testArrayOfMixedBoolIntAndDouble", testArrayOfMixedBoolIntAndDouble),
-            ("testArrayOfMixedIntAndFloat", testArrayOfMixedIntAndFloat),
-            ("testArrayOfMixedIntFloatAndDouble", testArrayOfMixedIntFloatAndDouble),
-            ("testArrayOfObjectsWithMissingField", testArrayOfObjectsWithMissingField),
-            ("testArrayOfObjectsWithMixedTypesAndOptional", testArrayOfObjectsWithMixedTypesAndOptional),
-            ("testBool", testBool),
-            ("testDouble", testDouble),
-            ("testEmptyArray", testEmptyArray),
-            ("testEmptyObject", testEmptyObject),
-            ("testEqualNumberTypes", testEqualNumberTypes),
-            ("testEqualTypeEnum", testEqualTypeEnum),
-            ("testEqualTypeList", testEqualTypeList),
-            ("testEqualTypeNumber", testEqualTypeNumber),
-            ("testEqualTypeObject", testEqualTypeObject),
-            ("testEqualTypeOptional", testEqualTypeOptional),
-            ("testEqualTypeText", testEqualTypeText),
-            ("testEqualTypeUnknown", testEqualTypeUnknown),
-            ("testFloat", testFloat),
-            ("testInt", testInt),
-            ("testUInt", testUInt),
-            ("testIntArray", testIntArray),
-            ("testNullArray", testNullArray),
-            ("testOptionalStringArray", testOptionalStringArray),
-            ("testSingleFieldObject", testSingleFieldObject),
-            ("testString", testString),
-            ("testStringArray", testStringArray),
-            ("testThreeFieldsObject", testThreeFieldsObject),
-            ("testTransformAllFieldsToOptional", testTransformAllFieldsToOptional),
-            ("testTransformAllFieldsToOptionalWithToplevelList", testTransformAllFieldsToOptionalWithToplevelList),
-            ("testTransformAllFieldsToOptionalWithToplevelEnum", testTransformAllFieldsToOptionalWithToplevelEnum)
-        ]
-    }
     
     var parser = ModelGenerator()
     
@@ -56,8 +17,8 @@ class ModelGeneratorTest: XCTestCase {
     }
     
     func testEqualTypeUnknown() {
-        XCTAsserEqualFieldType(.unknown, .unknown)
-        XCTAsserNotEqualFieldType(.unknown, .number(.int))
+        XCTAsserEqualFieldType(.unnamedUnknown, .unnamedUnknown)
+        XCTAsserNotEqualFieldType(.unnamedUnknown, .number(.int))
     }
     
     func testEqualTypeText() {
@@ -94,57 +55,57 @@ class ModelGeneratorTest: XCTestCase {
     }
     
     func testEqualTypeObject() {
-        XCTAsserEqualFieldType(.object([]), .object([]))
-        XCTAsserEqualFieldType(.object([.init(name: "object", type: .text)]), .object([.init(name: "object", type: .text)]))
-        XCTAsserEqualFieldType(.object([
+        XCTAsserEqualFieldType(.unnamedObject([]), .unnamedObject([]))
+        XCTAsserEqualFieldType(.unnamedObject([.init(name: "object", type: .text)]), .unnamedObject([.init(name: "object", type: .text)]))
+        XCTAsserEqualFieldType(.unnamedObject([
             .init(name: "object", type: .text),
             .init(name: "int", type: .number(.int)),
-        ]), .object([
+        ]), .unnamedObject([
             .init(name: "int", type: .number(.int)),
             .init(name: "object", type: .text),
         ]))
-        XCTAsserNotEqualFieldType(.object([
+        XCTAsserNotEqualFieldType(.unnamedObject([
             .init(name: "object", type: .text),
             .init(name: "int", type: .number(.int)),
-        ]), .object([
+        ]), .unnamedObject([
             .init(name: "int", type: .text),
             .init(name: "object", type: .text),
         ]))
-        XCTAsserNotEqualFieldType(.object([
+        XCTAsserNotEqualFieldType(.unnamedObject([
             .init(name: "object", type: .text),
             .init(name: "integer", type: .number(.int)),
-        ]), .object([
+        ]), .unnamedObject([
             .init(name: "int", type: .number(.int)),
             .init(name: "object", type: .text),
         ]))
-        XCTAsserNotEqualFieldType(.object([
+        XCTAsserNotEqualFieldType(.unnamedObject([
             .init(name: "object", type: .text),
-        ]), .object([
+        ]), .unnamedObject([
             .init(name: "int", type: .number(.int)),
             .init(name: "object", type: .text),
         ]))
-        XCTAsserNotEqualFieldType(.object([.init(name: "object", type: .text)]), .object([.init(name: "text", type: .text)]))
-        XCTAsserNotEqualFieldType(.object([.init(name: "object", type: .text)]), .text)
+        XCTAsserNotEqualFieldType(.unnamedObject([.init(name: "object", type: .text)]), .unnamedObject([.init(name: "text", type: .text)]))
+        XCTAsserNotEqualFieldType(.unnamedObject([.init(name: "object", type: .text)]), .text)
     }
     
     func testEqualTypeEnum() {
-        XCTAsserEqualFieldType(.`enum`([]), .enum([]))
-        XCTAsserEqualFieldType(.enum([.text]), .enum([.text]))
-        XCTAsserEqualFieldType(.enum([
+        XCTAsserEqualFieldType(.unnamedEnum([]), .unnamedEnum([]))
+        XCTAsserEqualFieldType(.unnamedEnum([.text]), .unnamedEnum([.text]))
+        XCTAsserEqualFieldType(.unnamedEnum([
             .text,
             .number(.int),
-        ]), .enum([
+        ]), .unnamedEnum([
             .number(.int),
             .text,
         ]))
-        XCTAsserNotEqualFieldType(.enum([
+        XCTAsserNotEqualFieldType(.unnamedEnum([
             .text,
             .number(.int),
-        ]), .enum([
+        ]), .unnamedEnum([
             .text
         ]))
-        XCTAsserNotEqualFieldType(.enum([.text]), .enum([.number(.int)]))
-        XCTAsserNotEqualFieldType(.enum([.text]), .text)
+        XCTAsserNotEqualFieldType(.unnamedEnum([.text]), .unnamedEnum([.number(.int)]))
+        XCTAsserNotEqualFieldType(.unnamedEnum([.text]), .text)
     }
     
     func testString() throws {
@@ -186,12 +147,12 @@ class ModelGeneratorTest: XCTestCase {
     
     func testEmptyObject() throws {
         let type = parser.decode([:])
-        XCTAssertEqual(type, FieldType.object([]))
+        XCTAssertEqual(type, FieldType.unnamedObject([]))
     }
     
     func testEmptyArray() throws {
         let type = parser.decode([])
-        XCTAssertEqual(type, FieldType.list(.unknown))
+        XCTAssertEqual(type, FieldType.list(.unnamedUnknown))
     }
 
     func testStringArray() throws {
@@ -222,14 +183,14 @@ class ModelGeneratorTest: XCTestCase {
         let type = parser.decode([
             nil
         ])
-        XCTAssertEqual(type, FieldType.list(.optional(.unknown)))
+        XCTAssertEqual(type, FieldType.list(.optional(.unnamedUnknown)))
     }
 
     func testSingleFieldObject() throws {
         let type = parser.decode([
             "string": "Test"
         ])
-        XCTAssertEqual(type, FieldType.object([ObjectField(name: "string", type: .text)]))
+        XCTAssertEqual(type, FieldType.unnamedObject([ObjectField(name: "string", type: .text)]))
     }
     
     func testThreeFieldsObject() throws {
@@ -238,10 +199,10 @@ class ModelGeneratorTest: XCTestCase {
             "integer": 123,
             "object": [:]
         ])
-        let expectedType: FieldType = .object([
+        let expectedType: FieldType = .unnamedObject([
             .init(name: "string", type: .text),
             .init(name: "integer", type: .number(.int)),
-            .init(name: "object", type: .object([]))
+            .init(name: "object", type: .unnamedObject([]))
         ])
         XCTAssertEqual(type, expectedType)
     }
@@ -251,7 +212,7 @@ class ModelGeneratorTest: XCTestCase {
             [:],
             [:]
         ])
-        XCTAssertEqual(type, FieldType.list(.object([])))
+        XCTAssertEqual(type, FieldType.list(.unnamedObject([])))
     }
     
     func testArrayOfEmptyOptionalObject() throws {
@@ -259,7 +220,7 @@ class ModelGeneratorTest: XCTestCase {
             [:],
             nil
         ])
-        XCTAssertEqual(type, FieldType.list(.optional(.object([]))))
+        XCTAssertEqual(type, FieldType.list(.optional(.unnamedObject([]))))
     }
     
     func testArrayOfMixedIntFloatAndDouble() throws {
@@ -288,7 +249,7 @@ class ModelGeneratorTest: XCTestCase {
             true
         ])
         let expectedResult: FieldType = .list(
-            .enum([
+            .unnamedEnum([
                 .number(.bool),
                 .number(.double)
             ])
@@ -303,7 +264,7 @@ class ModelGeneratorTest: XCTestCase {
             10
         ])
         let expectedResult: FieldType = .list(
-            .enum([
+            .unnamedEnum([
                 .number(.bool),
                 .number(.double)
             ])
@@ -317,7 +278,7 @@ class ModelGeneratorTest: XCTestCase {
             ["string": "Test"]
         ])
         let expectedResult: FieldType = .list(
-            .object([
+            .unnamedObject([
                 .init(name: "string", type: .optional(.text))
             ])
         )
@@ -337,9 +298,9 @@ class ModelGeneratorTest: XCTestCase {
             ["mixed": .number(.double(10))]
         ])
         let expectedResult: FieldType = .list(
-            .object([
+            .unnamedObject([
                 .init(name: "mixed", type: .optional(
-                    .enum([
+                    .unnamedEnum([
                         .text,
                         .number(.double)
                     ])
@@ -355,7 +316,7 @@ class ModelGeneratorTest: XCTestCase {
             ["mixed": ["String"]]
         ])
         let expectedResult: FieldType = .list(
-            .object([
+            .unnamedObject([
                 .init(name: "mixed", type: .list(.text))
             ])
         )
@@ -369,9 +330,9 @@ class ModelGeneratorTest: XCTestCase {
             ["mixed": [.number(.double(10))]]
         ])
         let expectedResult: FieldType = .list(
-            .object([
+            .unnamedObject([
                 .init(name: "mixed", type: .list(
-                    .enum([
+                    .unnamedEnum([
                         .number(.double),
                         .text
                     ])
@@ -389,11 +350,11 @@ class ModelGeneratorTest: XCTestCase {
             ["mixed": [nil]]
         ])
         let expectedResult: FieldType = .list(
-            .object([
-                .init(name: "mixed", type: .enum([
+            .unnamedObject([
+                .init(name: "mixed", type: .unnamedEnum([
                     .list(
                         .optional(
-                            .enum([
+                            .unnamedEnum([
                                 .text,
                                 .number(.double)
                             ])
@@ -408,55 +369,55 @@ class ModelGeneratorTest: XCTestCase {
     
     
     func testTransformAllFieldsToOptional() {
-        let type: FieldType = .object([
-            .init(name: "innerObject", type: .object([
+        let type: FieldType = .unnamedObject([
+            .init(name: "innerObject", type: .unnamedObject([
                 .init(name: "innerText", type: .text),
             ])),
             .init(name: "list", type: .list(
-                    .object([
+                    .unnamedObject([
                         .init(name: "insideList", type: .text)
                     ])
                 )
             ),
             .init(name: "text", type: .text),
             .init(name: "number", type: .number(.int)),
-            .init(name: "enum", type: .enum([
-                    .object([
+            .init(name: "enum", type: .unnamedEnum([
+                    .unnamedObject([
                         .init(name: "textInEnum", type: .text)
                     ]),
                     .number(.float)
                 ])
             ),
-            .init(name: "unknown", type: .unknown),
+            .init(name: "unknown", type: .unnamedUnknown),
             .init(name: "optionalText", type: .optional(.text)),
-            .init(name: "optionalObject", type: .optional(.object([
+            .init(name: "optionalObject", type: .optional(.unnamedObject([
                 .init(name: "textInsideOptionalObject", type: .text)
             ])))
         ])
         
-        let expectedResult: FieldType = .object([
-            .init(name: "innerObject", type: .optional(.object([
+        let expectedResult: FieldType = .unnamedObject([
+            .init(name: "innerObject", type: .optional(.unnamedObject([
                 .init(name: "innerText", type: .optional(.text)),
             ]))),
             .init(name: "list", type: .optional(.list(
-                    .object([
+                    .unnamedObject([
                         .init(name: "insideList", type: .optional(.text))
                     ])
                 ))
             ),
             .init(name: "text", type: .optional(.text)),
             .init(name: "number", type: .optional(.number(.int))),
-            .init(name: "enum", type: .optional(.
-                enum([
-                    .object([
+            .init(name: "enum", type: .optional(
+                .unnamedEnum([
+                    .unnamedObject([
                         .init(name: "textInEnum", type: .optional(.text))
                     ]),
                     .number(.float)
                 ])
             )),
-            .init(name: "unknown", type: .optional(.unknown)),
+            .init(name: "unknown", type: .optional(.unnamedUnknown)),
             .init(name: "optionalText", type: .optional(.text)),
-            .init(name: "optionalObject", type: .optional(.object([
+            .init(name: "optionalObject", type: .optional(.unnamedObject([
                 .init(name: "textInsideOptionalObject", type: .optional(.text))
             ])))
         ])
@@ -474,10 +435,55 @@ class ModelGeneratorTest: XCTestCase {
     }
     
     func testTransformAllFieldsToOptionalWithToplevelEnum() {
-        let type: FieldType = .enum([.text, .number(.int)])
-        let expectedResult: FieldType = .enum([.text, .number(.int)])
+        let type: FieldType = .unnamedEnum([.text, .number(.int)])
+        let expectedResult: FieldType = .unnamedEnum([.text, .number(.int)])
         
         let transformedResult = ModelGenerator.transformAllFieldsToOptional(type)
         XCTAssertEqual(expectedResult, transformedResult)
     }
 }
+
+#if os(Linux)
+extension ModelGeneratorTest {
+    static var allTests: [(String, (ModelGeneratorTest) -> () throws -> Void)] {
+        return [
+            ("testArrayObjectWithArrayFieldOfIntsStringsAndDoubles", testArrayObjectWithArrayFieldOfIntsStringsAndDoubles),
+            ("testArrayObjectWithArrayFieldOfUnknownTypeAndStrings", testArrayObjectWithArrayFieldOfUnknownTypeAndStrings),
+            ("testArrayObjectWithMixedFieldOfMixedArraysAndInt", testArrayObjectWithMixedFieldOfMixedArraysAndInt),
+            ("testArrayOfEmptyObject", testArrayOfEmptyObject),
+            ("testArrayOfEmptyOptionalObject", testArrayOfEmptyOptionalObject),
+            ("testArrayOfMixedBoolAndDouble", testArrayOfMixedBoolAndDouble),
+            ("testArrayOfMixedBoolIntAndDouble", testArrayOfMixedBoolIntAndDouble),
+            ("testArrayOfMixedIntAndFloat", testArrayOfMixedIntAndFloat),
+            ("testArrayOfMixedIntFloatAndDouble", testArrayOfMixedIntFloatAndDouble),
+            ("testArrayOfObjectsWithMissingField", testArrayOfObjectsWithMissingField),
+            ("testArrayOfObjectsWithMixedTypesAndOptional", testArrayOfObjectsWithMixedTypesAndOptional),
+            ("testBool", testBool),
+            ("testDouble", testDouble),
+            ("testEmptyArray", testEmptyArray),
+            ("testEmptyObject", testEmptyObject),
+            ("testEqualNumberTypes", testEqualNumberTypes),
+            ("testEqualTypeEnum", testEqualTypeEnum),
+            ("testEqualTypeList", testEqualTypeList),
+            ("testEqualTypeNumber", testEqualTypeNumber),
+            ("testEqualTypeObject", testEqualTypeObject),
+            ("testEqualTypeOptional", testEqualTypeOptional),
+            ("testEqualTypeText", testEqualTypeText),
+            ("testEqualTypeUnknown", testEqualTypeUnknown),
+            ("testFloat", testFloat),
+            ("testInt", testInt),
+            ("testUInt", testUInt),
+            ("testIntArray", testIntArray),
+            ("testNullArray", testNullArray),
+            ("testOptionalStringArray", testOptionalStringArray),
+            ("testSingleFieldObject", testSingleFieldObject),
+            ("testString", testString),
+            ("testStringArray", testStringArray),
+            ("testThreeFieldsObject", testThreeFieldsObject),
+            ("testTransformAllFieldsToOptional", testTransformAllFieldsToOptional),
+            ("testTransformAllFieldsToOptionalWithToplevelList", testTransformAllFieldsToOptionalWithToplevelList),
+            ("testTransformAllFieldsToOptionalWithToplevelEnum", testTransformAllFieldsToOptionalWithToplevelEnum)
+        ]
+    }
+}
+#endif

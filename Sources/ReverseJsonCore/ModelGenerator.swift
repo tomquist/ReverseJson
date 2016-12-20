@@ -1,3 +1,4 @@
+import CoreJSON
 
 public struct ObjectField {
     public let name: String
@@ -16,13 +17,43 @@ public enum NumberType: String {
 }
 
 public indirect enum FieldType {
-    case object(Set<ObjectField>)
+    case object(name: String?, Set<ObjectField>)
     case list(FieldType)
     case text
     case number(NumberType)
-    case `enum`(Set<FieldType>)
-    case unknown
+    case `enum`(name: String?, Set<FieldType>)
+    case unknown(name: String?)
     case optional(FieldType)
+}
+
+extension FieldType {
+    public static func unnamedObject(_ fields: Set<ObjectField>) -> FieldType {
+        return .object(name: nil, fields)
+    }
+    public static func unnamedEnum(_ subTypes: Set<FieldType>) -> FieldType {
+        return .enum(name: nil, subTypes)
+    }
+    public static var unnamedUnknown: FieldType {
+        return .unknown(name: nil)
+    }
+}
+
+extension FieldType {
+    public var isOptional: Bool {
+        switch self {
+        case .optional: return true
+        default: return false
+        }
+    }
+    
+    public var unwrapOptional: FieldType {
+        switch self {
+        case let .optional(type):
+            return type.unwrapOptional
+        default:
+            return self
+        }
+    }
 }
 
 public struct ModelGenerator {
@@ -45,19 +76,21 @@ public struct ModelGenerator {
         case let .number(number):
             switch number {
             case .int: return .number(.int)
+            case .int64: return .number(.int)
             case .float: return .number(.float)
             case .uint: return .number(.int)
+            case .uint64: return .number(.int)
             case .double: return .number(.double)
             }
         case .bool: return .number(.bool)
-        case .null: return .optional(.unknown)
+        case .null: return .optional(.unnamedUnknown)
         case let .object(object):
             return decode(object)
         case let .array(array):
             if let subType = decode(array) {
                 return .list(subType)
             } else {
-                return .list(.unknown)
+                return .list(.unnamedUnknown)
             }
         }
     }
@@ -66,7 +99,7 @@ public struct ModelGenerator {
         let fields = dict.map { (name: String, value: JSON) in
             return ObjectField(name: name, type: internalDecode(value))
         }
-        return .object(Set(fields))
+        return .object(name: nil, Set(fields))
     }
     
     private func decode(_ list: [JSON]) -> FieldType? {
@@ -81,24 +114,24 @@ public struct ModelGenerator {
     
     private static func transformAllFieldsToOptionalImpl(_ rootField: FieldType) -> FieldType {
         switch rootField {
-        case let .object(fields):
+        case let .object(name, fields):
             let mappedFields = fields.map {
                 ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl($0.type))
             }
-            return .optional(.object(Set(mappedFields)))
+            return .optional(.object(name: name, Set(mappedFields)))
         case let .list(fieldType):
             return .optional(.list(transformAllFieldsToOptional(fieldType)))
         case .text:
             return .optional(.text)
         case let .number(numberType):
             return .optional(.number(numberType))
-        case let .enum(fields):
+        case let .enum(name, fields):
             let mappedFields = fields.map {
                 transformAllFieldsToOptional($0)
             }
-            return .optional(.enum(Set(mappedFields)))
+            return .optional(.enum(name: name, Set(mappedFields)))
         case .unknown:
-            return .optional(.unknown)
+            return .optional(.unnamedUnknown)
         case let .optional(fieldType):
             return .optional(transformAllFieldsToOptional(fieldType))
         }
@@ -106,16 +139,16 @@ public struct ModelGenerator {
     
     static func transformAllFieldsToOptional(_ rootField: FieldType) -> FieldType {
         switch rootField {
-        case let .object(fields):
+        case let .object(name, fields):
             let mappedFields = fields.map {
                 ObjectField(name: $0.name, type: transformAllFieldsToOptionalImpl($0.type))
             }
-            return .object(Set(mappedFields))
+            return .object(name: name, Set(mappedFields))
         case let .list(fieldType):
             return .list(transformAllFieldsToOptional(fieldType))
-        case let .enum(fields):
+        case let .enum(name, fields):
             let mappedFields = fields.map { transformAllFieldsToOptional($0) }
-            return .enum(Set(mappedFields))
+            return .enum(name: name, Set(mappedFields))
         default:
             return rootField
         }
@@ -142,12 +175,12 @@ extension FieldType: Hashable {
             return 31
         case let .optional(type):
             return 31 &+ type.hashValue
-        case let .object(fields):
-            return 31 &* 2 &+ fields.hashValue
+        case let .object(name, fields):
+            return 31 &* 2 &+ (name?.hashValue ?? 0) &+ fields.hashValue
         case let .list(type):
             return 31 &* 3 &+ type.hashValue
-        case let .enum(types):
-            return 31 &* 4 &+ types.hashValue
+        case let .enum(name, types):
+            return 31 &* 4 &+ (name?.hashValue ?? 0) &+ types.hashValue
         case let .number(numberType):
             return 31 &* 5 &+ numberType.hashValue
         }
@@ -155,20 +188,20 @@ extension FieldType: Hashable {
     
     public static func ==(lhs: FieldType, rhs: FieldType) -> Bool {
         switch (lhs, rhs) {
-        case let (.object(fields1), .object(fields2)):
-            return fields1 == fields2
+        case let (.object(name1, fields1), .object(name2, fields2)):
+            return fields1 == fields2 && name1 == name2
         case let (.list(type1), .list(type2)):
             return type1 == type2
         case (.text, .text):
             return true
         case let (.number(numberType1), .number(numberType2)):
             return numberType1 == numberType2
-        case (.unknown, .unknown):
-            return true
+        case let (.unknown(name1), .unknown(name2)):
+            return name1 == name2
         case let (.optional(type1), .optional(type2)):
             return type1 == type2
-        case let (.enum(types1), .enum(types2)):
-            return types1 == types2
+        case let (.enum(name1, types1), .enum(name2, types2)):
+            return types1 == types2 && name1 == name2
         default:
             return false
         }
@@ -233,7 +266,7 @@ extension FieldType {
         case let (.number(numberType1), .number(numberType2)) where numberType1.mergeWith(numberType2) != nil:
             let mergedNumberType = numberType1.mergeWith(numberType2)!
             return .number(mergedNumberType)
-        case let (.object(fields1), .object(fields2)):
+        case let (.object(name1, fields1), .object(name2, fields2)) where name1 == name2:
             var resultFields: Set<ObjectField> = []
             var remainingFields = fields2
             for f1 in fields1 {
@@ -259,13 +292,13 @@ extension FieldType {
                     resultFields.insert(ObjectField(name: field.name, type: .optional(field.type)))
                 }
             }
-            return .object(resultFields)
+            return .object(name: name1, resultFields)
         case let (.list(listType1), .list(listType2)):
             return .list(listType1.mergeWith(listType2))
-        case let (.enum(enumTypes), type), let (type, .enum(enumTypes)):
-            return .enum(mergeEnumTypes(enumTypes, otherType: type))
+        case let (.enum(name, enumTypes), type), let (type, .enum(name, enumTypes)):
+            return .enum(name: name, mergeEnumTypes(enumTypes, otherType: type))
         default:
-            return .enum([self, type])
+            return .enum(name: nil, [self, type])
         }
     }
 }

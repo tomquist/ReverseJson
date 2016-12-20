@@ -5,36 +5,6 @@ import ReverseJsonCore
 
 class ObjcModelTranslatorTest: XCTestCase {
     
-    static var allTests: [(String, (ObjcModelTranslatorTest) -> () throws -> Void)] {
-        return [
-            ("testAtomicFieldsFlag", testAtomicFieldsFlag),
-            ("testBoolDouble", testBoolDouble),
-            ("testEmptyEnum", testEmptyEnum),
-            ("testEmptyObject", testEmptyObject),
-            ("testEnumWithOneCase", testEnumWithOneCase),
-            ("testEnumWithOneCaseAndReverseMapping", testEnumWithOneCaseAndReverseMapping),
-            ("testEnumWithTwoCases", testEnumWithTwoCases),
-            ("testEnumWithTwoCasesAndReverseMapping", testEnumWithTwoCasesAndReverseMapping),
-            ("testListOfEmptyObject", testListOfEmptyObject),
-            ("testMutableFieldsFlag", testMutableFieldsFlag),
-            ("testPrefixOption", testPrefixOption),
-            ("testObjectWithDifferentFields", testObjectWithDifferentFields),
-            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
-            ("testObjectWithFieldContainingListOfTextWithReverseMapper", testObjectWithFieldContainingListOfTextWithReverseMapper),
-            ("testObjectWithFieldContainingOptionalListOfText", testObjectWithFieldContainingOptionalListOfText),
-            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
-            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
-            ("testObjectWithSingleTextFieldAndReverseMapper", testObjectWithSingleTextFieldAndReverseMapper),
-            ("testObjectWithSingleReservedTextField", testObjectWithSingleReservedTextField),
-            ("testSimpleDouble", testSimpleDouble),
-            ("testSimpleFloat", testSimpleFloat),
-            ("testSimpleInt", testSimpleInt),
-            ("testSimpleString", testSimpleString),
-            ("testTextList", testTextList),
-            ("testUnknownType", testUnknownType),
-        ]
-    }
-    
     func testSimpleString() {
         let type: FieldType = .text
         
@@ -76,7 +46,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEmptyObject() {
-        let type: FieldType = .object([])
+        let type: FieldType = .unnamedObject([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -110,8 +80,43 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     
+    func testNamedEmptyObject() {
+        let type: FieldType = .object(name: "CustomObjectName", [])
+        
+        let modelCreator = ObjcModelCreator()
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+            "// CustomObjectName.h",
+            "#import <Foundation/Foundation.h>",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface CustomObjectName : NSObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
+            "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// CustomObjectName.m",
+            "#import \"CustomObjectName.h\"",
+            "@implementation CustomObjectName",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
+            "    self = [super init];",
+            "    if (self) {",
+            "    }",
+            "    return self;",
+            "}",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    if ([jsonValue isKindOfClass:[NSDictionary class]]) {",
+            "        self = [self initWithJsonDictionary:jsonValue];",
+            "    } else {",
+            "        self = nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "@end"
+        ), modelResult)
+    }
+    
     func testEmptyEnum() {
-        let type: FieldType = .enum([])
+        let type: FieldType = .unnamedEnum([])
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -136,6 +141,32 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     
+    func testNamedEmptyEnum() {
+        let type: FieldType = .enum(name: "CustomObject", [])
+        
+        let modelCreator = ObjcModelCreator()
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+            "// CustomObject.h",
+            "#import <Foundation/Foundation.h>",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface CustomObject : NSObject",
+            "- (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// CustomObject.m",
+            "#import \"CustomObject.h\"",
+            "@implementation CustomObject",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    self = [super init];",
+            "    if (self) {",
+            "    }",
+            "    return self;",
+            "}",
+            "@end"
+        ), modelResult)
+    }
+    
     func testTextList() {
         let type: FieldType = .list(.text)
         
@@ -145,7 +176,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testUnknownType() {
-        let type: FieldType = .unknown
+        let type: FieldType = .unnamedUnknown
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "MyTypeName")
@@ -154,7 +185,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     
     func testListOfEmptyObject() {
         let modelCreator = ObjcModelCreator()
-        let modelResult: String = modelCreator.translate(.list(.object([])), name: "TestObjectList")
+        let modelResult: String = modelCreator.translate(.list(.unnamedObject([])), name: "TestObjectList")
         XCTAssertEqual(String(lines:
             "// TestObjectListItem.h",
             "#import <Foundation/Foundation.h>",
@@ -185,7 +216,7 @@ class ObjcModelTranslatorTest: XCTestCase {
         ), modelResult)
     }
     func testObjectWithSingleTextField() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -222,7 +253,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testObjectWithSingleTextFieldAndReverseMapper() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         var modelCreator = ObjcModelCreator()
         modelCreator.createToJson = true
@@ -266,7 +297,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testObjectWithSingleReservedTextField() {
-        let type: FieldType = .object([.init(name: "signed", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "signed", type: .text)])
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -303,7 +334,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testObjectWithFieldContainingListOfText() {
-        let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
+        let type: FieldType = .unnamedObject([.init(name: "texts", type: .list(.text))])
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -352,7 +383,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testObjectWithFieldContainingListOfTextWithReverseMapper() {
-        let type: FieldType = .object([.init(name: "texts", type: .list(.text))])
+        let type: FieldType = .unnamedObject([.init(name: "texts", type: .list(.text))])
         
         var modelCreator = ObjcModelCreator()
         modelCreator.createToJson = true
@@ -423,7 +454,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testObjectWithFieldContainingOptionalListOfText() {
-        let type: FieldType = .object([.init(name: "texts", type: .optional(.list(.text)))])
+        let type: FieldType = .unnamedObject([.init(name: "texts", type: .optional(.list(.text)))])
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -473,7 +504,7 @@ class ObjcModelTranslatorTest: XCTestCase {
 
     func testObjectWithDifferentFields() {
         let modelCreator = ObjcModelCreator()
-        let modelResult: String = modelCreator.translate(.object([
+        let modelResult: String = modelCreator.translate(.unnamedObject([
             .init(name: "listOfListsOfText", type: .list(.list(.text))),
             .init(name: "numbers", type: .list(.number(.int))),
             .init(name: "int", type: .number(.int)),
@@ -555,8 +586,8 @@ class ObjcModelTranslatorTest: XCTestCase {
     
     func testObjectWithOneFieldWithSubDeclaration() {
         let modelCreator = ObjcModelCreator()
-        let modelResult: String = modelCreator.translate(.object([
-            .init(name: "subObject", type: .object([]))
+        let modelResult: String = modelCreator.translate(.unnamedObject([
+            .init(name: "subObject", type: .unnamedObject([]))
             ]), name: "TestObject")
         XCTAssertEqual(String(lines:
             "// TestObject.h",
@@ -619,7 +650,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEnumWithOneCase() {
-        let type: FieldType = .enum([.text])
+        let type: FieldType = .unnamedEnum([.text])
         
         let modelCreator = ObjcModelCreator()
         let modelResult: String = modelCreator.translate(type, name: "TestObject")
@@ -647,7 +678,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEnumWithOneCaseAndReverseMapping() {
-        let type: FieldType = .enum([.text])
+        let type: FieldType = .unnamedEnum([.text])
         
         var modelCreator = ObjcModelCreator()
         modelCreator.createToJson = true
@@ -683,8 +714,8 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testEnumWithTwoCases() {
-        let type: FieldType = .enum([
-            .optional(.object([])),
+        let type: FieldType = .unnamedEnum([
+            .optional(.unnamedObject([])),
             .number(.int)
         ])
         
@@ -744,8 +775,8 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
 
     func testEnumWithTwoCasesAndReverseMapping() {
-        let type: FieldType = .enum([
-            .optional(.object([])),
+        let type: FieldType = .unnamedEnum([
+            .optional(.unnamedObject([])),
             .number(.int)
         ])
         
@@ -818,9 +849,85 @@ class ObjcModelTranslatorTest: XCTestCase {
             "@end"
         ), modelResult)
     }
+    
+    func testNamedEnumWithTwoCasesAndReverseMapping() {
+        let type: FieldType = .enum(name: "CustomEnumName", [
+            .optional(.object(name: "CustomObjectName", [])),
+            .number(.int)
+        ])
+        
+        var modelCreator = ObjcModelCreator()
+        modelCreator.createToJson = true
+        let modelResult: String = modelCreator.translate(type, name: "TestObject")
+        XCTAssertEqual(String(lines:
+            "// CustomEnumName.h",
+            "#import <Foundation/Foundation.h>",
+            "@class CustomObjectName;",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface CustomEnumName : NSObject",
+            "- (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "- (id<NSObject>)toJson;",
+            "@property (nonatomic, strong, readonly, nullable) CustomObjectName *customObjectName;",
+            "@property (nonatomic, copy, readonly, nullable) NSNumber/*NSInteger*/ *number;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// CustomObjectName.h",
+            "#import <Foundation/Foundation.h>",
+            "NS_ASSUME_NONNULL_BEGIN",
+            "@interface CustomObjectName : NSObject",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id<NSObject>> *)dictionary;",
+            "- (nullable instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson;",
+            "@end",
+            "NS_ASSUME_NONNULL_END",
+            "// CustomEnumName.m",
+            "#import \"CustomEnumName.h\"",
+            "#import \"CustomObjectName.h\"",
+            "@implementation CustomEnumName",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    self = [super init];",
+            "    if (self) {",
+            "        _customObjectName = [[CustomObjectName alloc] initWithJsonValue:jsonValue];",
+            "        _number = [jsonValue isKindOfClass:[NSNumber class]] ? jsonValue : nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "- (id<NSObject>)toJson {",
+            "    if (_customObjectName) {",
+            "        return [_customObjectName toJson];",
+            "    } else if (_number) {",
+            "        return _number;",
+            "    }",
+            "    return nil;",
+            "}",
+            "@end",
+            "// CustomObjectName.m",
+            "#import \"CustomObjectName.h\"",
+            "@implementation CustomObjectName",
+            "- (instancetype)initWithJsonDictionary:(NSDictionary<NSString *, id> *)dict {",
+            "    self = [super init];",
+            "    if (self) {",
+            "    }",
+            "    return self;",
+            "}",
+            "- (instancetype)initWithJsonValue:(id)jsonValue {",
+            "    if ([jsonValue isKindOfClass:[NSDictionary class]]) {",
+            "        self = [self initWithJsonDictionary:jsonValue];",
+            "    } else {",
+            "        self = nil;",
+            "    }",
+            "    return self;",
+            "}",
+            "- (NSDictionary<NSString *, id<NSObject>> *)toJson {",
+            "    NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:0];",
+            "    return [ret copy];",
+            "}",
+            "@end"
+        ), modelResult)
+    }
 
     func testAtomicFieldsFlag() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         var modelCreator = ObjcModelCreator()
         modelCreator.atomic = true
@@ -859,7 +966,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
     func testMutableFieldsFlag() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         var modelCreator = ObjcModelCreator()
         modelCreator.readonly = false
@@ -899,7 +1006,7 @@ class ObjcModelTranslatorTest: XCTestCase {
     
     
     func testPrefixOption() {
-        let type: FieldType = .object([.init(name: "text", type: .text)])
+        let type: FieldType = .unnamedObject([.init(name: "text", type: .text)])
         
         var modelCreator = ObjcModelCreator()
         modelCreator.typePrefix = "ABC"
@@ -938,3 +1045,40 @@ class ObjcModelTranslatorTest: XCTestCase {
     }
     
 }
+
+#if os(Linux)
+extension ObjcModelTranslatorTest {
+    static var allTests: [(String, (ObjcModelTranslatorTest) -> () throws -> Void)] {
+        return [
+            ("testAtomicFieldsFlag", testAtomicFieldsFlag),
+            ("testBoolDouble", testBoolDouble),
+            ("testEmptyEnum", testEmptyEnum),
+            ("testNamedEmptyEnum", testNamedEmptyEnum),
+            ("testEmptyObject", testEmptyObject),
+            ("testNamedEmptyObject", testNamedEmptyObject),
+            ("testEnumWithOneCase", testEnumWithOneCase),
+            ("testEnumWithOneCaseAndReverseMapping", testEnumWithOneCaseAndReverseMapping),
+            ("testEnumWithTwoCases", testEnumWithTwoCases),
+            ("testEnumWithTwoCasesAndReverseMapping", testEnumWithTwoCasesAndReverseMapping),
+            ("testNamedEnumWithTwoCasesAndReverseMapping", testNamedEnumWithTwoCasesAndReverseMapping),
+            ("testListOfEmptyObject", testListOfEmptyObject),
+            ("testMutableFieldsFlag", testMutableFieldsFlag),
+            ("testPrefixOption", testPrefixOption),
+            ("testObjectWithDifferentFields", testObjectWithDifferentFields),
+            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
+            ("testObjectWithFieldContainingListOfTextWithReverseMapper", testObjectWithFieldContainingListOfTextWithReverseMapper),
+            ("testObjectWithFieldContainingOptionalListOfText", testObjectWithFieldContainingOptionalListOfText),
+            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
+            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
+            ("testObjectWithSingleTextFieldAndReverseMapper", testObjectWithSingleTextFieldAndReverseMapper),
+            ("testObjectWithSingleReservedTextField", testObjectWithSingleReservedTextField),
+            ("testSimpleDouble", testSimpleDouble),
+            ("testSimpleFloat", testSimpleFloat),
+            ("testSimpleInt", testSimpleInt),
+            ("testSimpleString", testSimpleString),
+            ("testTextList", testTextList),
+            ("testUnknownType", testUnknownType),
+        ]
+    }
+}
+#endif

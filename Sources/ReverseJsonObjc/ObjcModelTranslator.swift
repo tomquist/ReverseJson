@@ -41,36 +41,75 @@ public struct ObjcModelCreator: ModelTranslator {
         }
     }
     
-    private func declarationsFor(_ type: FieldType, name: String, valueToParse: String, isOptional: Bool = false) -> (interfaces: Set<TranslatorOutput>, implementations: Set<TranslatorOutput>, parseExpression: String, fieldRequiredTypeNames: Set<String>, fullTypeName: String, toJson: (String) -> String) {
+    struct ObjectiveCDeclaration {
+        let interfaces: Set<TranslatorOutput>
+        let implementations: Set<TranslatorOutput>
+        let parseExpression: String
+        let fieldRequiredTypeNames: Set<String>
+        let fullTypeName: String
+        let toJson: (String) -> String
+    }
+    
+    struct ObjectFieldDeclaration {
+        let property: String
+        let initialization: String
+        let requiredTypeNames: Set<String>
+        let fieldTypeName: String
+        let interfaces: Set<TranslatorOutput>
+        let implementations: Set<TranslatorOutput>
+        let toJson: String
+    }
+    
+    private func fieldDeclarationFor(_ type: FieldType, variableNameBase: String? = nil, parentName: String, forceNullable: Bool, valueToParse: String) -> ObjectFieldDeclaration {
+        let typeIsNullable = isNullable(type)
+        let nullable = forceNullable || typeIsNullable
+        let type = forceNullable && !typeIsNullable ? .optional(type) : type
+        
+        let nonOptionalVariableNameBase = variableNameBase ?? type.objectTypeName
+        let variableName = nonOptionalVariableNameBase.pascalCased().asValidObjcIdentifier
+        let subDeclaration = declarationsFor(type, name:  "\(parentName)\(nonOptionalVariableNameBase.camelCasedString)", valueToParse: valueToParse)
+        
+        var modifiers = [atomicyModifier, memoryManagementModifier(type)]
+        if (readonly) {
+            modifiers.append("readonly")
+        }
+        if nullable {
+            modifiers.append("nullable")
+        }
+        let modifierList = String(joined: modifiers, separator: ", ")
+        let propertyName: String
+        if subDeclaration.fullTypeName.hasSuffix("*") {
+            propertyName = variableName
+        } else {
+            propertyName = " \(variableName)"
+        }
+        let property = "@property (\(modifierList)) \(subDeclaration.fullTypeName)\(propertyName);"
+        let initialization = "_\(variableName) = \(subDeclaration.parseExpression);"
+        let jsonReturnValue = subDeclaration.toJson("_\(variableName)")
+        let toJson: String
+        if let variableNameBase = variableNameBase {
+            toJson = "ret[@\"\(variableNameBase)\"] = \(jsonReturnValue);"
+        } else {
+            toJson = "if (_\(variableName)) {\n    return \(jsonReturnValue);\n}"
+        }
+        return ObjectFieldDeclaration(property: property,
+                                      initialization: initialization,
+                                      requiredTypeNames: subDeclaration.fieldRequiredTypeNames,
+                                      fieldTypeName: subDeclaration.fullTypeName,
+                                      interfaces: subDeclaration.interfaces,
+                                      implementations: subDeclaration.implementations,
+                                      toJson: toJson)
+    }
+    
+    private func declarationsFor(_ type: FieldType, name: String, valueToParse: String, isOptional: Bool = false) -> ObjectiveCDeclaration {
         switch type {
-        case let .enum(enumTypes):
-            let className = "\(typePrefix)\(name.camelCasedString)"
-            let fieldValues = enumTypes.sorted{$0.0.enumCaseName < $0.1.enumCaseName}.map { type -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<TranslatorOutput>, implementations: Set<TranslatorOutput>, toJson: String) in
-                let nullable = isNullable(type) || enumTypes.count > 1
-                let enumCaseType = nullable && !isNullable(type) ? .optional(type) : type
-                
-                let variableName = type.enumCaseName.pascalCased().asValidObjcIdentifier
-                let (subInterfaces, subImplementations, parseExpression, fieldRequiredTypeNames, fieldFullTypeName, toJsonValue) = declarationsFor(enumCaseType, name: "\(name.camelCasedString)\(type.enumCaseName.camelCasedString)", valueToParse: "jsonValue")
-                
-                var modifiers = [atomicyModifier, memoryManagementModifier(enumCaseType)]
-                if (readonly) {
-                    modifiers.append("readonly")
-                }
-                if nullable {
-                    modifiers.append("nullable")
-                }
-                let modifierList = String(joined: modifiers, separator: ", ")
-                let propertyName: String
-                if fieldFullTypeName.hasSuffix("*") {
-                    propertyName = variableName
-                } else {
-                    propertyName = " \(variableName)"
-                }
-                let property = "@property (\(modifierList)) \(fieldFullTypeName)\(propertyName);"
-                let initialization = "_\(variableName) = \(parseExpression);"
-                let jsonReturnValue = toJsonValue("_\(variableName)")
-                let toJson = "if (_\(variableName)) {\n    return \(jsonReturnValue);\n}"
-                return (property, initialization, fieldRequiredTypeNames, fieldFullTypeName, subInterfaces, subImplementations, toJson)
+        case let .enum(enumTypeName, enumTypes):
+            let className = "\(typePrefix)\(enumTypeName ?? name.camelCasedString)"
+            let fieldValues = enumTypes.sorted{$0.0.enumCaseName < $0.1.enumCaseName}.map {
+                fieldDeclarationFor($0,
+                                    parentName: (enumTypeName ?? name.camelCasedString),
+                                    forceNullable: enumTypes.count > 1,
+                                    valueToParse: "jsonValue")
             }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
             let forwardDeclarations = requiredTypeNames.sorted(by: <)
@@ -83,12 +122,11 @@ public struct ObjcModelCreator: ModelTranslator {
                 let forwardDeclarationList = String(joined: forwardDeclarations, separator: ", ")
                 interface += "@class \(forwardDeclarationList);\n"
             }
-            let toJsonNullability = isOptional ? "nullable " : ""
             interface += String(joined: [
                 "NS_ASSUME_NONNULL_BEGIN",
                 "@interface \(className) : NSObject",
                 "- (instancetype)initWithJsonValue:(nullable id<NSObject>)jsonValue;",
-                ] + (createToJson ? ["- (\(toJsonNullability)id<NSObject>)toJson;"] : []) + properties + [
+                ] + (createToJson ? ["- (id<NSObject>)toJson;"] : []) + properties + [
                 "@end",
                 "NS_ASSUME_NONNULL_END",
             ])
@@ -125,37 +163,20 @@ public struct ObjcModelCreator: ModelTranslator {
             let interfaces = fieldValues.lazy.map {$0.interfaces}.reduce(Set([TranslatorOutput(name: "\(className).h", content: interface)])) { $0.union($1) }
             let implementations = fieldValues.lazy.map{$0.implementations}.reduce(Set([TranslatorOutput(name: "\(className).m", content: implementation)])) { $0.union($1) }
             let parseExpression = "[[\(className) alloc] initWithJsonValue:\(valueToParse)]"
-            return (interfaces, implementations, parseExpression, [className], "\(className) *", { (name: String) in "[\(name) toJson]"})
-            
-        case let .object(fields):
-            let className = "\(typePrefix)\(name.camelCasedString)"
-            let fieldValues = fields.sorted{$0.0.name < $0.1.name}.map { field -> (property: String, initialization: String, requiredTypeNames: Set<String>, fieldTypeName: String, interfaces: Set<TranslatorOutput>, implementations: Set<TranslatorOutput>, toJson: String) in
-                let nullable = isNullable(field.type)
-                
-                let valueToParse = "dict[@\"\(field.name)\"]"
-                let variableName = field.name.pascalCased().asValidObjcIdentifier
-                let (subInterfaces, subImplementations, parseExpression, fieldRequiredTypeNames, fieldFullTypeName, toJsonValue) = declarationsFor(field.type, name: "\(name.camelCasedString)\(field.name.camelCasedString)", valueToParse: valueToParse)
-
-                var modifiers = [atomicyModifier, memoryManagementModifier(field.type)]
-                if (readonly) {
-                    modifiers.append("readonly")
-                }
-                if nullable {
-                    modifiers.append("nullable")
-                }
-                let modifierList = String(joined: modifiers, separator: ", ")
-                let propertyName: String
-                if fieldFullTypeName.hasSuffix("*") {
-                    propertyName = variableName
-                } else {
-                    propertyName = " \(variableName)"
-                }
-                let property = "@property (\(modifierList)) \(fieldFullTypeName)\(propertyName);"
-                let initialization = "_\(variableName) = \(parseExpression);"
-                let jsonValue = toJsonValue("_\(variableName)")
-                let toJson = "ret[@\"\(field.name)\"] = \(jsonValue);"
-                return (property, initialization, fieldRequiredTypeNames, fieldFullTypeName, subInterfaces, subImplementations, toJson)
-            }
+            return ObjectiveCDeclaration(interfaces: interfaces,
+                                         implementations: implementations,
+                                         parseExpression: parseExpression,
+                                         fieldRequiredTypeNames: [className],
+                                         fullTypeName: "\(className) *",
+                                         toJson: { (name: String) in "[\(name) toJson]"})
+        case let .object(objectTypeName, fields):
+            let className = "\(typePrefix)\(objectTypeName ?? name.camelCasedString)"
+            let fieldValues = fields.sorted{$0.0.name < $0.1.name}.map {
+                fieldDeclarationFor($0.type,
+                                    variableNameBase: $0.name,
+                                    parentName: objectTypeName ?? name.camelCasedString,
+                                    forceNullable: false,
+                                    valueToParse: "dict[@\"\($0.name)\"]") }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
             let forwardDeclarations = requiredTypeNames.sorted(by: <)
             let sortedFieldValues = fieldValues.sorted{$0.0.fieldTypeName < $0.1.fieldTypeName}
@@ -224,12 +245,27 @@ public struct ObjcModelCreator: ModelTranslator {
             if !isOptional {
                 parseExpression = "(\(parseExpression) ?: [[\(className) alloc] initWithJsonDictionary:@{}])"
             }
-            return (interfaces, implementations, parseExpression, [className], "\(className) *", { (name: String) in "[\(name) toJson]"})
+            return ObjectiveCDeclaration(interfaces: interfaces,
+                                         implementations: implementations,
+                                         parseExpression: parseExpression,
+                                         fieldRequiredTypeNames: [className],
+                                         fullTypeName: "\(className) *",
+                                         toJson: { (name: String) in "[\(name) toJson]"})
         case .text:
             let fallback = isOptional ? "nil" : "@\"\""
-            return ([], [], "[\(valueToParse) isKindOfClass:[NSString class]] ? \(valueToParse) : \(fallback)", [], "NSString *", { $0 })
+            return ObjectiveCDeclaration(interfaces: [],
+                                         implementations: [],
+                                         parseExpression: "[\(valueToParse) isKindOfClass:[NSString class]] ? \(valueToParse) : \(fallback)",
+                                         fieldRequiredTypeNames: [],
+                                         fullTypeName: "NSString *",
+                                         toJson: { $0 })
         case let .number(numberType):
-            return ([], [], "[\(valueToParse) isKindOfClass:[NSNumber class]] ? [\(valueToParse) \(numberType.objcNSNumberMethod)] : 0", [], numberType.objcNumberType, { (name: String) in "@(\(name))" })
+            return ObjectiveCDeclaration(interfaces: [],
+                                         implementations: [],
+                                         parseExpression: "[\(valueToParse) isKindOfClass:[NSNumber class]] ? [\(valueToParse) \(numberType.objcNSNumberMethod)] : 0",
+                                         fieldRequiredTypeNames: [],
+                                         fullTypeName: numberType.objcNumberType,
+                                         toJson: { (name: String) in "@(\(name))" })
         case let .list(origListType):
             var listType = origListType
             if case let .number(numberType) = listType {
@@ -301,13 +337,45 @@ public struct ObjcModelCreator: ModelTranslator {
                 "    [values copy]\(fallback);",
                 "})")
             }
-            return (listTypeValues.interfaces, listTypeValues.implementations, parseExpression, listTypeValues.fieldRequiredTypeNames, "NSArray<\(listTypeValues.fullTypeName)> *", toJson)
+            return ObjectiveCDeclaration(interfaces: listTypeValues.interfaces,
+                                         implementations: listTypeValues.implementations,
+                                         parseExpression: parseExpression,
+                                         fieldRequiredTypeNames: listTypeValues.fieldRequiredTypeNames,
+                                         fullTypeName: "NSArray<\(listTypeValues.fullTypeName)> *",
+                                         toJson: toJson)
         case let .optional(.number(numberType)):
-            return ([], [], "[\(valueToParse) isKindOfClass:[NSNumber class]] ? \(valueToParse) : nil", [], "NSNumber/*\(numberType.objcNumberType)*/ *", {$0})
+            return ObjectiveCDeclaration(interfaces: [],
+                                         implementations: [],
+                                         parseExpression: "[\(valueToParse) isKindOfClass:[NSNumber class]] ? \(valueToParse) : nil",
+                                         fieldRequiredTypeNames: [],
+                                         fullTypeName: "NSNumber/*\(numberType.objcNumberType)*/ *",
+                                         toJson: {$0})
         case .optional(let optionalType):
             return declarationsFor(optionalType, name: name, valueToParse: valueToParse, isOptional: true)
         case .unknown:
-            return ([], [], valueToParse, [], "id<NSObject>", {$0})
+            return ObjectiveCDeclaration(interfaces: [],
+                                         implementations: [],
+                                         parseExpression: valueToParse,
+                                         fieldRequiredTypeNames: [],
+                                         fullTypeName: "id<NSObject>",
+                                         toJson: {$0})
+        }
+    }
+    
+}
+
+extension FieldType {
+    
+    fileprivate var objectTypeName: String {
+        switch self {
+        case let .object(name?, _):
+            return name
+        case let .enum(name?, _):
+            return name
+        case let .optional(type):
+            return type.objectTypeName
+        default:
+            return enumCaseName
         }
     }
     

@@ -1,0 +1,99 @@
+{
+  "type": "object",
+  "$schema": "https://github.com/tomquist/ReverseJson/tree/1.2.0",
+  "properties": {
+    "locations": {
+      "type": "list",
+      "content": {
+        "type": "object",
+        "properties": {
+          "lon": {
+            "type": "any",
+            "isOptional": true,
+            "of": [
+              "double",
+              "text"
+            ]
+          },
+          "lat": "double",
+          "bla": {
+            "type": "list",
+            "isOptional": true,
+            "content": {
+              "type": "list",
+              "content": {
+                "type": "list",
+                "content": {
+                  "type": "list",
+                  "content": {
+                    "type": "object",
+                    "properties": {
+                      "test": {
+                        "type": "any",
+                        "of": [
+                          "int",
+                          "text"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "enum test": {
+            "type": "any",
+            "of": [
+              "object",
+              "text"
+            ]
+          }
+        }
+      }
+    },
+    "height": "int",
+    "numbers": {
+      "type": "list",
+      "content": "int"
+    },
+    "name": "any?",
+    "blup": {
+      "type": "list",
+      "content": {
+        "type": "object",
+        "properties": {
+          "obj1": {
+            "type": "any",
+            "of": [
+              "int",
+              "text"
+            ]
+          }
+        }
+      }
+    },
+    "let": "bool",
+    "internal": "bool",
+    "private": "bool",
+    "is_true": "bool",
+    "public": "bool",
+    "mixed": {
+      "type": "list",
+      "content": {
+        "type": "any",
+        "of": [
+          "bool",
+          "double",
+          {
+            "type": "object",
+            "properties": {
+              "signed": "int?",
+              "field": "text?"
+            }
+          },
+          "text"
+        ]
+      }
+    }
+  }
+}

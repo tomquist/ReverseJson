@@ -142,8 +142,8 @@ struct SwiftModelCreator: ModelTranslator {
         let fieldType: String
         let declaration: String?
         switch type {
-        case let .object(fields):
-            fieldType = subName.camelCasedString
+        case let .object(objectTypeName, fields):
+            fieldType = objectTypeName ?? subName.camelCasedString
             declaration = createStructDeclaration(fieldType, fields: fields, level: level)
         case let .number(numberType):
             fieldType = numberType.rawValue
@@ -164,15 +164,15 @@ struct SwiftModelCreator: ModelTranslator {
             case .array: fieldType = "[\(subTypeName)]"
             case .contiguousArray: fieldType = "\(listType.className)<\(subTypeName)>"
             }
-        case let .enum(enumTypes):
-            fieldType = subName.camelCasedString
+        case let .enum(enumTypeName, enumTypes):
+            fieldType = enumTypeName ?? subName.camelCasedString
             declaration = createEnumDeclaration(fieldType, cases: enumTypes, level: level)
         case let .optional(type):
             let (subTypeName, subDeclaration) = makeSubtype(type, name: name, subName: subName, level: level)
             declaration = subDeclaration
             fieldType = "\(subTypeName)?"
-        case .unknown:
-            fieldType = subName.camelCasedString
+        case let .unknown(unknownName):
+            fieldType = unknownName ?? subName.camelCasedString
             declaration = "\(typeVisibility.visibilityPrefix)typealias \(fieldType) = Void // TODO Specify type here. We couldn't infer it from json".indent(level)
         }
         return (fieldType, declaration)
@@ -471,9 +471,14 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
         case let .optional(optionalType):
             let (subDeclarations, instruction, typeName) = createParsers(optionalType, parentTypeNames: parentTypeNames, valueExpression: "$0")
             return (subDeclarations.union([.errorType, .optionalParser]), "try\(tryOptionalModifier) Optional(jsonValue: \(valueExpression)) { \(instruction) }", "\(typeName)?")
-        case let .object(fields):
+        case let .object(objectTypeName, fields):
             var declarations = Set<Declaration>()
-            let typeName = String(joined: parentTypeNames, separator: ".")
+            let typeName: String
+            if let objectTypeName = objectTypeName {
+                typeName = String(joined: parentTypeNames.dropLast() + [objectTypeName], separator: ".")
+            } else {
+                typeName = String(joined: parentTypeNames, separator: ".")
+            }
             var parser = String(lines:
                 "extension \(typeName) {",
                 "    init(jsonValue: Any?) throws {",
@@ -493,9 +498,14 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
             declarations.insert(.errorType)
             declarations.insert(.init(text: parser))
             return (declarations, "try\(tryOptionalModifier) \(typeName)(jsonValue: \(valueExpression))", typeName)
-        case let .enum(types):
+        case let .enum(enumTypeName, types):
             var declarations = Set<Declaration>()
-            let typeName = String(joined: parentTypeNames, separator: ".")
+            let typeName: String
+            if let enumTypeName = enumTypeName {
+                typeName = String(joined: parentTypeNames.dropLast() + [enumTypeName], separator: ".")
+            } else {
+                typeName = String(joined: parentTypeNames, separator: ".")
+            }
             var parser = String(lines:
                 "extension \(typeName) {",
                 "    init(jsonValue: Any?) throws {",

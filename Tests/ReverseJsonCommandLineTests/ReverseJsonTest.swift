@@ -15,29 +15,6 @@ struct DummyTranslator: ModelTranslator {
 
 class ReverseJsonTest: XCTestCase {
     
-    static var allTests: [(String, (ReverseJsonTest) -> () throws -> Void)] {
-        return [
-            ("testConsoleOutput", testConsoleOutput),
-            ("testNonExistingOutputDir", testNonExistingOutputDir),
-            ("testExistingOutputButNotADir", testExistingOutputButNotADir),
-            ("testFileOutput", testFileOutput),
-            ("testHasUsage", testHasUsage),
-            ("testNoArguments", testNoArguments),
-            ("testWrongArgumentCount", testWrongArgumentCount),
-            ("testUnknownLanguage", testUnknownLanguage),
-            ("testNonExistingFile", testNonExistingFile),
-            ("testInvalidJson", testInvalidJson),
-            ("testSwift", testSwift),
-            ("testObjc", testObjc),
-            ("testModelName", testModelName),
-            ("testPassArgumentsToTranslator", testPassArgumentsToTranslator),
-            ("testPassArgumentsToModelGenerator", testPassArgumentsToModelGenerator),
-            ("testParsedJson", testParsedJson),
-            ("testVerbose", testVerbose),
-            ("testOutDir", testOutDir)
-        ]
-    }
-    
     private func resourcePath(_ name: String) -> String {
         return URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("Inputs").appendingPathComponent(name).path
     }
@@ -255,3 +232,31 @@ class ReverseJsonTest: XCTestCase {
     }
     
 }
+
+#if os(Linux)
+extension ReverseJsonTest {
+    
+    static var allTests: [(String, (ReverseJsonTest) -> () throws -> Void)] {
+        return [
+            ("testConsoleOutput", testConsoleOutput),
+            ("testNonExistingOutputDir", testNonExistingOutputDir),
+            ("testExistingOutputButNotADir", testExistingOutputButNotADir),
+            ("testFileOutput", testFileOutput),
+            ("testHasUsage", testHasUsage),
+            ("testNoArguments", testNoArguments),
+            ("testWrongArgumentCount", testWrongArgumentCount),
+            ("testUnknownLanguage", testUnknownLanguage),
+            ("testNonExistingFile", testNonExistingFile),
+            ("testInvalidJson", testInvalidJson),
+            ("testSwift", testSwift),
+            ("testObjc", testObjc),
+            ("testModelName", testModelName),
+            ("testPassArgumentsToTranslator", testPassArgumentsToTranslator),
+            ("testPassArgumentsToModelGenerator", testPassArgumentsToModelGenerator),
+            ("testParsedJson", testParsedJson),
+            ("testVerbose", testVerbose),
+            ("testOutDir", testOutDir)
+        ]
+    }
+}
+#endif

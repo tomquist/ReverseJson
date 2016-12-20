@@ -6,16 +6,6 @@ import ReverseJsonSwift
 
 class SwiftTranslatorCommandLineTest: XCTestCase {
     
-    static var allTests: [(String, (SwiftTranslatorCommandLineTest) -> () throws -> Void)] {
-        return [
-            ("testClassFlag", testClassFlag),
-            ("testContiguousArrayFlag", testContiguousArrayFlag),
-            ("testMutableFieldsFlag", testMutableFieldsFlag),
-            ("testPublicFieldsFlag", testPublicFieldsFlag),
-            ("testPublicTypeFlagWithObject", testPublicTypeFlagWithObject),
-        ]
-    }
-    
     func testPublicTypeFlagWithObject() {
         let translator1 = try! SwiftTranslator(args: ["-pt"])
         let translator2 = try! SwiftTranslator(args: ["--publictypes"])
@@ -62,3 +52,17 @@ class SwiftTranslatorCommandLineTest: XCTestCase {
     }
     
 }
+
+#if os(Linux)
+extension SwiftTranslatorCommandLineTest {
+    static var allTests: [(String, (SwiftTranslatorCommandLineTest) -> () throws -> Void)] {
+        return [
+            ("testClassFlag", testClassFlag),
+            ("testContiguousArrayFlag", testContiguousArrayFlag),
+            ("testMutableFieldsFlag", testMutableFieldsFlag),
+            ("testPublicFieldsFlag", testPublicFieldsFlag),
+            ("testPublicTypeFlagWithObject", testPublicTypeFlagWithObject),
+        ]
+    }
+}
+#endif
