@@ -58,6 +58,10 @@ Options:
 
     ./ReverseJson objc User testModel.json
 
+### To export a ReverseJson schema:
+
+    ./ReverseJson export User testModel.json
+
 ## Demo
 Turns this:
 
@@ -575,7 +579,7 @@ is identical to
 ```
 
 ### Objects
-Object have an additional property "properties" which is a JSON-object containing all properties, where the key is the property name and the value is a schema. Optionally you can add the "name" property to override the auto-generated name when converting the model to code. E.g.
+Objects have an additional property "properties" which is a JSON-object containing all properties, where the key is the property name and the value is a schema. Optionally you can add the "name" property to override the auto-generated name when converting the model to code. E.g.
 ```json
 {
     "type": "object",
@@ -606,7 +610,7 @@ Lists describe their content-type using the "content" property. E.g.
 ```
 
 ### Any
-The type "any" allows to support multiple value types at the same place. To describe which types are allows, use the "of" property. Optionally you can add the "name" property to override the auto-generated name when converting the model to code. E.g.
+The type "any" allows to support multiple value types at the same place. To describe which types are allowed, use the "of" property. Optionally you can add the "name" property to override the auto-generated name when converting the model to code. E.g.
 ```json
 {
     "type": "any",
