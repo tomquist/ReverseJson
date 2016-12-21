@@ -11,7 +11,7 @@ function xcode_tests {
         XCPRETTY_INSTALLED=$?
         set -e;
         
-        
+        xcrun swift package generate-xcodeproj --enable-code-coverage
         XCB1='xcodebuild test -project ReverseJson.xcodeproj -scheme ReverseJson -destination "platform=OS X"'
 
         if [[ $TRAVIS || $XCPRETTY_INSTALLED == 0 ]]; then
