@@ -40,7 +40,7 @@ public struct ReverseJson: CommandLineArgumentsConvertible {
     }
     
     public static func usage(command: String = CommandLine.arguments[0]) -> String {
-        let pathComponents = command.characters.split(separator: "/")
+        let pathComponents = command.split(separator: "/")
         let exec = pathComponents.last.map(String.init)!
         return [
             "Usage: \(exec) (swift|objc|export) NAME FILE <options>",

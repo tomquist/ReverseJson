@@ -14,9 +14,93 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReverseJson::ReverseJsonCore"
+               BuildableName = "ReverseJsonCore.framework"
+               BlueprintName = "ReverseJsonCore"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReverseJson::ReverseJsonObjc"
+               BuildableName = "ReverseJsonObjc.framework"
+               BlueprintName = "ReverseJsonObjc"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReverseJson::ReverseJsonCommandLine"
+               BuildableName = "ReverseJsonCommandLine.framework"
+               BlueprintName = "ReverseJsonCommandLine"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReverseJson::ReverseJsonSwift"
+               BuildableName = "ReverseJsonSwift.framework"
+               BlueprintName = "ReverseJsonSwift"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "ReverseJson::ReverseJson"
                BuildableName = "ReverseJson"
                BlueprintName = "ReverseJson"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReverseJson::ReverseJsonSwagger"
+               BuildableName = "ReverseJsonSwagger.framework"
+               BlueprintName = "ReverseJsonSwagger"
+               ReferencedContainer = "container:ReverseJson.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "ReverseJson::ReverseJsonModelExport"
+               BuildableName = "ReverseJsonModelExport.framework"
+               BlueprintName = "ReverseJsonModelExport"
                ReferencedContainer = "container:ReverseJson.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -93,16 +177,15 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "ReverseJson::ReverseJson"
-            BuildableName = "ReverseJson"
-            BlueprintName = "ReverseJson"
+            BlueprintIdentifier = "ReverseJson::ReverseJsonCore"
+            BuildableName = "ReverseJsonCore.framework"
+            BlueprintName = "ReverseJsonCore"
             ReferencedContainer = "container:ReverseJson.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

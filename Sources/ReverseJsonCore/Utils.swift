@@ -34,7 +34,7 @@ extension String {
     
     public func indent(_ level: Int, spaces: Int = 4) -> String {
         let suffix = self.hasSuffix("\n") ? "\n" : ""
-        let indented = String(joined: self.characters.split(separator: "\n").lazy.map { " ".times(level * spaces) + String($0) })
+        let indented = String(joined: self.split(separator: "\n").lazy.map { " ".times(level * spaces) + String($0) })
         return indented + suffix
     }
     public func firstCapitalized() -> String {
@@ -51,7 +51,7 @@ extension String {
     }
     
     public func pascalCased() -> String {
-        let slices = self.characters.split { $0 == "_" || $0 == " " }
+        let slices = self.split { $0 == "_" || $0 == " " }
         if let first = slices.first {
             return slices.dropFirst().reduce(String(first)) { (string, subSequence) in
                 return string + String(subSequence[subSequence.startIndex]).uppercased() + String(subSequence.suffix(from: subSequence.index(subSequence.startIndex, offsetBy: 1)))
@@ -82,15 +82,14 @@ extension String {
     
     
     public var asValidSwiftIdentifier: String {
-        let chars = self.characters
-        if let identifierHead = chars.first {
+        if let identifierHead = first {
             let head: String
-            let identifierTail = chars.suffix(from: chars.index(after: chars.startIndex))
+            let identifierTail = suffix(from: index(after: startIndex))
             let tail = String(joined: identifierTail.split(whereSeparator: { !$0.isValidSwiftIdentifierTailCharacter}).map(String.init), separator: "_").pascalCased()
             if identifierHead.isValidSwiftIdentifierHeadCharacter {
                 head = String(identifierHead)
             } else {
-                head = tail.isEmpty || !tail.characters.first!.isValidSwiftIdentifierHeadCharacter ? "_" : ""
+                head = tail.isEmpty || !tail.first!.isValidSwiftIdentifierHeadCharacter ? "_" : ""
             }
             return "\(head)\(tail)"
         } else {
@@ -116,58 +115,58 @@ extension Character {
         0xFE20...0xFE2F,
     ]
     
-    private static let headCharRanges: [CountableClosedRange<UInt32>] = [
-        0x41...0x5A, // uppercase
-        0x61...0x7A, // lowercase
-        0xA8...0xA8,
-        0xAA...0xAA,
-        0xAD...0xAD,
-        0xAF...0xAF,
-        0xB2...0xB5,
-        0xB7...0xBA,
-        0xBC...0xBE,
-        0xC0...0xD6,
-        0xD8...0xF6,
-        0xF8...0xFF,
-        0x100...0x2FF,
-        0x370...0x167F,
-        0x1681...0x180D,
-        0x180F...0x1DBF,
-        0x1E00...0x1FFF,
-        0x200B...0x200D,
-        0x202A...0x202E,
-        0x203F...0x2040,
-        0x2054...0x2054,
-        0x2060...0x206F,
-        0x2070...0x20CF,
-        0x2100...0x218F,
-        0x2460...0x24FF,
-        0x2776...0x2793,
-        0x2C00...0x2DFF,
-        0x2E80...0x2FFF,
-        0x3004...0x3007,
-        0x3021...0x302F,
-        0x3031...0x303F,
-        0x3040...0xD7FF,
-        0xF900...0xFD3D,
-        0xFD40...0xFDCF,
-        0xFDF0...0xFE1F,
-        0xFE30...0xFE44,
-        0xFE47...0xFFFD,
-        0x10000...0x1FFFD,
-        0x20000...0x2FFFD,
-        0x30000...0x3FFFD,
-        0x40000...0x4FFFD,
-        0x50000...0x5FFFD,
-        0x60000...0x6FFFD,
-        0x70000...0x7FFFD,
-        0x80000...0x8FFFD,
-        0x90000...0x9FFFD,
-        0xA0000...0xAFFFD,
-        0xB0000...0xBFFFD,
-        0xC0000...0xCFFFD,
-        0xD0000...0xDFFFD,
-        0xE0000...0xEFFFD
+    private static let headCharRanges: [ClosedRange<UInt32>] = [
+        0x41...0x5A as ClosedRange<UInt32>, // uppercase
+        0x61...0x7A as ClosedRange<UInt32>, // lowercase
+        0xA8...0xA8 as ClosedRange<UInt32>,
+        0xAA...0xAA as ClosedRange<UInt32>,
+        0xAD...0xAD as ClosedRange<UInt32>,
+        0xAF...0xAF as ClosedRange<UInt32>,
+        0xB2...0xB5 as ClosedRange<UInt32>,
+        0xB7...0xBA as ClosedRange<UInt32>,
+        0xBC...0xBE as ClosedRange<UInt32>,
+        0xC0...0xD6 as ClosedRange<UInt32>,
+        0xD8...0xF6 as ClosedRange<UInt32>,
+        0xF8...0xFF as ClosedRange<UInt32>,
+        0x100...0x2FF as ClosedRange<UInt32>,
+        0x370...0x167F as ClosedRange<UInt32>,
+        0x1681...0x180D as ClosedRange<UInt32>,
+        0x180F...0x1DBF as ClosedRange<UInt32>,
+        0x1E00...0x1FFF as ClosedRange<UInt32>,
+        0x200B...0x200D as ClosedRange<UInt32>,
+        0x202A...0x202E as ClosedRange<UInt32>,
+        0x203F...0x2040 as ClosedRange<UInt32>,
+        0x2054...0x2054 as ClosedRange<UInt32>,
+        0x2060...0x206F as ClosedRange<UInt32>,
+        0x2070...0x20CF as ClosedRange<UInt32>,
+        0x2100...0x218F as ClosedRange<UInt32>,
+        0x2460...0x24FF as ClosedRange<UInt32>,
+        0x2776...0x2793 as ClosedRange<UInt32>,
+        0x2C00...0x2DFF as ClosedRange<UInt32>,
+        0x2E80...0x2FFF as ClosedRange<UInt32>,
+        0x3004...0x3007 as ClosedRange<UInt32>,
+        0x3021...0x302F as ClosedRange<UInt32>,
+        0x3031...0x303F as ClosedRange<UInt32>,
+        0x3040...0xD7FF as ClosedRange<UInt32>,
+        0xF900...0xFD3D as ClosedRange<UInt32>,
+        0xFD40...0xFDCF as ClosedRange<UInt32>,
+        0xFDF0...0xFE1F as ClosedRange<UInt32>,
+        0xFE30...0xFE44 as ClosedRange<UInt32>,
+        0xFE47...0xFFFD as ClosedRange<UInt32>,
+        0x10000...0x1FFFD as ClosedRange<UInt32>,
+        0x20000...0x2FFFD as ClosedRange<UInt32>,
+        0x30000...0x3FFFD as ClosedRange<UInt32>,
+        0x40000...0x4FFFD as ClosedRange<UInt32>,
+        0x50000...0x5FFFD as ClosedRange<UInt32>,
+        0x60000...0x6FFFD as ClosedRange<UInt32>,
+        0x70000...0x7FFFD as ClosedRange<UInt32>,
+        0x80000...0x8FFFD as ClosedRange<UInt32>,
+        0x90000...0x9FFFD as ClosedRange<UInt32>,
+        0xA0000...0xAFFFD as ClosedRange<UInt32>,
+        0xB0000...0xBFFFD as ClosedRange<UInt32>,
+        0xC0000...0xCFFFD as ClosedRange<UInt32>,
+        0xD0000...0xDFFFD as ClosedRange<UInt32>,
+        0xE0000...0xEFFFD as ClosedRange<UInt32>
     ]
     
     var isValidSwiftIdentifierHeadCharacter: Bool {
