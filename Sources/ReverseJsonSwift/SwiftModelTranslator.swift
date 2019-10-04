@@ -18,7 +18,7 @@ public struct SwiftTranslator: ModelTranslator {
         var models: [TranslatorOutput] = modelCreator.translate(type, name: name)
         var mappings: [TranslatorOutput] = mappingCreator.translate(type, name: name)
         mappings = mappings.filter { mapping in
-            if let sameNameIdx = models.index(where: { $0.name == mapping.name }) {
+            if let sameNameIdx = models.firstIndex(where: { $0.name == mapping.name }) {
                 models[sameNameIdx].content += "\n" + mapping.content
                 return false
             }
@@ -180,14 +180,14 @@ struct SwiftModelCreator: ModelTranslator {
     
     private func createStructDeclaration(_ name: String, fields: Set<ObjectField>, level: Int = 0) -> String {
         var ret = "\(typeVisibility.visibilityPrefix)\(objectType.name) \(name) {".indent(level)
-        let fieldsAndTypes = fields.sorted{$0.0.name < $0.1.name}.map { f -> (field: String, type: String?) in
+        let fieldsAndTypes = fields.sorted{$0.name < $1.name}.map { f -> (field: String, type: String?) in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(f.type, name: name, subName: f.name, level: level + 1)
             let varModifier = mutableFields ? "var" : "let"
             fieldDeclaration += ("\(fieldVisibility.visibilityPrefix)\(varModifier) \(f.name.pascalCased().asValidSwiftIdentifier.swiftKeywordEscaped): \(typeName)")
             return (fieldDeclaration, subTypeDeclaration)
         }
-        let typeDeclarations = fieldsAndTypes.lazy.flatMap {$0.type}
+        let typeDeclarations = fieldsAndTypes.lazy.compactMap {$0.type}
         ret += String(joined: Set(typeDeclarations.map({ "\n\($0)"})).sorted(by: <), separator: "")
         let fields = fieldsAndTypes.lazy.map { $0.field }.map { $0.indent(level + 1) }.map { "\n\($0)" }
         ret += String(joined: fields.sorted(by: <), separator: "")
@@ -196,7 +196,7 @@ struct SwiftModelCreator: ModelTranslator {
     
     private func createEnumDeclaration(_ name: String, cases: Set<FieldType>, level: Int = 0) -> String {
         var ret = "\(typeVisibility.visibilityPrefix)enum \(name) {".indent(level)
-        ret += String(joined: cases.sorted{$0.0.enumCaseName < $0.1.enumCaseName}.map { c -> String in
+        ret += String(joined: cases.sorted{$0.enumCaseName < $1.enumCaseName}.map { c -> String in
             var fieldDeclaration = ""
             let (typeName, subTypeDeclaration) = makeSubtype(c, name: name, subName: "\(name)\(c.enumCaseName.firstCapitalized())", level: level + 1)
             if let subTypeDeclaration = subTypeDeclaration {
@@ -217,8 +217,8 @@ private struct Declaration: Hashable {
         self.text = text
         self.priority = priority
     }
-    var hashValue: Int {
-        return text.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(text)
     }
 }
 private func ==(lhs: Declaration, rhs: Declaration) -> Bool {
@@ -397,10 +397,10 @@ struct SwiftJsonParsingTranslator: ModelTranslator {
         let (parsers, instructions, typeName) = createParsers(type, parentTypeNames: [name], valueExpression: "jsonValue")
         
         let declarations = parsers.sorted {
-            if $0.0.priority > $0.1.priority {
+            if $0.priority > $1.priority {
                 return true
-            } else if $0.0.priority == $0.1.priority {
-                return $0.0.text < $0.1.text
+            } else if $0.priority == $1.priority {
+                return $0.text < $1.text
             }
             return false
         }.lazy.map { $0.text }

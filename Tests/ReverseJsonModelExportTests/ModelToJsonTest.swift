@@ -249,35 +249,3 @@ class ModelToJsonTest: XCTestCase {
     }
     
 }
-
-#if os(Linux)
-extension ModelToJsonTest {
-    static var allTests: [(String, (ModelToJsonTest) -> () throws -> Void)] {
-        return [
-            ("testEmptyEnum", testEmptyEnum),
-            ("testSimpleString", testSimpleString),
-            ("testListOfEmptyObject", testListOfEmptyObject),
-            ("testNamedEmptyEnum", testNamedEmptyEnum),
-            ("testEnumWithOneCase", testEnumWithOneCase),
-            ("testObjectWithTwoSimpleFields", testObjectWithTwoSimpleFields),
-            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
-            ("testListOfTextList", testListOfTextList),
-            ("testEnumWithTwoCases", testEnumWithTwoCases),
-            ("testListOfUnknown", testListOfUnknown),
-            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
-            ("testNamedEmptyObject", testNamedEmptyObject),
-            ("testSimpleDouble", testSimpleDouble),
-            ("testSimpleBool", testSimpleBool),
-            ("testOptionalText", testOptionalText),
-            ("testTextList", testTextList),
-            ("testEnumWithOneSubDeclarationCase", testEnumWithOneSubDeclarationCase),
-            ("testSimpleInt", testSimpleInt),
-            ("testOptionalUnknown", testOptionalUnknown),
-            ("testSimpleFloat", testSimpleFloat),
-            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
-            ("testEmptyObject", testEmptyObject),
-            ("testUnknownType", testUnknownType),
-        ]
-    }
-}
-#endif

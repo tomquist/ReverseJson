@@ -1,6 +1,6 @@
 import CoreJSON
 
-public struct ObjectField {
+public struct ObjectField: Hashable, Equatable {
     public let name: String
     public let type: FieldType
     
@@ -9,14 +9,14 @@ public struct ObjectField {
         self.type = type
     }
 }
-public enum NumberType: String {
+public enum NumberType: String, Hashable, Equatable {
     case bool = "Bool"
     case int = "Int"
     case float = "Float"
     case double = "Double"
 }
 
-public indirect enum FieldType {
+public indirect enum FieldType: Hashable, Equatable {
     case object(name: String?, Set<ObjectField>)
     case list(FieldType)
     case text
@@ -103,7 +103,7 @@ public struct ModelGenerator {
     }
     
     private func decode(_ list: [JSON]) -> FieldType? {
-        let types = list.flatMap(internalDecode)
+        let types = list.compactMap(internalDecode)
         return types.reduce(nil) { (type1, type2) -> FieldType? in
             if let type1 = type1 {
                 return type1.mergeWith(type2)
@@ -154,58 +154,6 @@ public struct ModelGenerator {
         }
     }
     
-}
-
-extension ObjectField: Hashable {
-    public var hashValue: Int {
-        return (31 &* name.hashValue) &+ type.hashValue
-    }
-    
-    public static func ==(lhs: ObjectField, rhs: ObjectField) -> Bool {
-        return lhs.name == rhs.name && lhs.type == rhs.type
-    }
-}
-
-extension FieldType: Hashable {
-    public var hashValue: Int {
-        switch self {
-        case .unknown:
-            return 0
-        case .text:
-            return 31
-        case let .optional(type):
-            return 31 &+ type.hashValue
-        case let .object(name, fields):
-            return 31 &* 2 &+ (name?.hashValue ?? 0) &+ fields.hashValue
-        case let .list(type):
-            return 31 &* 3 &+ type.hashValue
-        case let .enum(name, types):
-            return 31 &* 4 &+ (name?.hashValue ?? 0) &+ types.hashValue
-        case let .number(numberType):
-            return 31 &* 5 &+ numberType.hashValue
-        }
-    }
-    
-    public static func ==(lhs: FieldType, rhs: FieldType) -> Bool {
-        switch (lhs, rhs) {
-        case let (.object(name1, fields1), .object(name2, fields2)):
-            return fields1 == fields2 && name1 == name2
-        case let (.list(type1), .list(type2)):
-            return type1 == type2
-        case (.text, .text):
-            return true
-        case let (.number(numberType1), .number(numberType2)):
-            return numberType1 == numberType2
-        case let (.unknown(name1), .unknown(name2)):
-            return name1 == name2
-        case let (.optional(type1), .optional(type2)):
-            return type1 == type2
-        case let (.enum(name1, types1), .enum(name2, types2)):
-            return types1 == types2 && name1 == name2
-        default:
-            return false
-        }
-    }
 }
 
 extension NumberType {
@@ -270,7 +218,7 @@ extension FieldType {
             var resultFields: Set<ObjectField> = []
             var remainingFields = fields2
             for f1 in fields1 {
-                let foundItemIndex = remainingFields.index { f -> Bool in
+                let foundItemIndex = remainingFields.firstIndex { f -> Bool in
                     return f1.name == f.name
                 }
                 let field: ObjectField

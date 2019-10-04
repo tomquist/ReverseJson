@@ -170,7 +170,7 @@ extension Character {
     ]
     
     var isValidSwiftIdentifierHeadCharacter: Bool {
-        return !String(self).utf16.flatMap(UnicodeScalar.init).map { scalar -> Bool in
+        return !String(self).utf16.compactMap(UnicodeScalar.init).map { scalar -> Bool in
             return Character.headCharRanges.contains { range in
                 range.contains(scalar.value)
             }
@@ -178,7 +178,7 @@ extension Character {
     }
     
     var isValidSwiftIdentifierTailCharacter: Bool {
-        return !String(self).utf16.flatMap(UnicodeScalar.init).map { scalar -> Bool in
+        return !String(self).utf16.compactMap(UnicodeScalar.init).map { scalar -> Bool in
             return Character.tailCharRanges.contains { range in
                 range.contains(scalar.value)
             }

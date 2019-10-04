@@ -309,39 +309,3 @@ class JsonToModelTest: XCTestCase {
     }
     
 }
-
-#if os(Linux)
-extension JsonToModelTest {
-    static var allTests: [(String, (JsonToModelTest) -> () throws -> Void)] {
-        return [
-            ("testEnumWithTwoCases", testEnumWithTwoCases),
-            ("testListOfTextList", testListOfTextList),
-            ("testOptionalUnknown", testOptionalUnknown),
-            ("testNamedEmptyUnknown", testNamedEmptyUnknown),
-            ("testTextList", testTextList),
-            ("testObjectWithSingleTextField", testObjectWithSingleTextField),
-            ("testEmptyObject", testEmptyObject),
-            ("testListOfUnknown", testListOfUnknown),
-            ("testMissingType", testMissingType),
-            ("testUnknown", testUnknown),
-            ("testSimpleDouble", testSimpleDouble),
-            ("testEnumWithOneSubDeclarationCase", testEnumWithOneSubDeclarationCase),
-            ("testSimpleString", testSimpleString),
-            ("testListWithoutContent", testListWithoutContent),
-            ("testOptionalInt", testOptionalInt),
-            ("testObjectWithFieldContainingListOfText", testObjectWithFieldContainingListOfText),
-            ("testNamedEmptyObject", testNamedEmptyObject),
-            ("testUnexpectedJSON", testUnexpectedJSON),
-            ("testSimpleFloat", testSimpleFloat),
-            ("testEnumWithOneCase", testEnumWithOneCase),
-            ("testInvalidType", testInvalidType),
-            ("testListOfEmptyObject", testListOfEmptyObject),
-            ("testOptionalText", testOptionalText),
-            ("testSimpleInt", testSimpleInt),
-            ("testObjectWithOneFieldWithSubDeclaration", testObjectWithOneFieldWithSubDeclaration),
-            ("testSimpleBool", testSimpleBool),
-            ("testObjectWithTwoSimpleFields", testObjectWithTwoSimpleFields),
-        ]
-    }
-}
-#endif

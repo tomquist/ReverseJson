@@ -27,7 +27,7 @@ public struct SwaggerReader {
     }
     
     private func resolve(_ json: JSON) -> (JSON, String?) {
-        var json = json
+        let json = json
         if case let .string(ref)? = json.objectValue?["$ref"],
             let refUrl = URL(string: ref),
             let fragment = refUrl.fragment,
@@ -42,7 +42,7 @@ public struct SwaggerReader {
         guard let properties = json.objectValue else {
             return []
         }
-        return properties.flatMap { statusCode, object in
+        return properties.compactMap { statusCode, object in
             let (object, refName) = resolve(object)
             let name: String
             if let refName = refName {
@@ -80,7 +80,7 @@ public struct SwaggerReader {
         guard let properties = json.objectValue else {
             return []
         }
-        return try ["get", "put", "post", "delete", "options", "head", "patch"].flatMap { method in
+        return try ["get", "put", "post", "delete", "options", "head", "patch"].compactMap { method in
             properties[method].map { (method, $0) }
         }.flatMap { method, operation in
             try from(operation: operation, path: path, method: method)
@@ -125,7 +125,7 @@ extension FieldType {
                 }
                 let required: Set<String>
                 if case let .array(jsonRequired)? = props["required"] {
-                    required = Set(jsonRequired.flatMap { $0.stringValue })
+                    required = Set(jsonRequired.compactMap { $0.stringValue })
                 } else {
                     required = []
                 }

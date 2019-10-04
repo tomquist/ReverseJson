@@ -1,19 +1,11 @@
 
-public struct TranslatorOutput {
+public struct TranslatorOutput: Hashable, Equatable {
     public var name: String
     public var content: String
     
     public init(name: String, content: String) {
         self.name = name
         self.content = content
-    }
-}
-extension TranslatorOutput: Hashable {
-    public var hashValue: Int {
-        return 17 &+ content.hashValue &* 37 &+ name.hashValue
-    }
-    public static func ==(lhs: TranslatorOutput, rhs: TranslatorOutput) -> Bool {
-        return lhs.name == rhs.name && lhs.content == rhs.content
     }
 }
 

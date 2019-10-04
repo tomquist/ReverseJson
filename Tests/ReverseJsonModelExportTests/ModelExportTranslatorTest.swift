@@ -44,17 +44,3 @@ class ModelExportTranslatorTest: XCTestCase {
     }
 
 }
-
-#if os(Linux)
-extension ModelExportTranslatorTest {
-    static var allTests: [(String, (ModelExportTranslatorTest) -> () throws -> Void)] {
-        return [
-            ("testSuccessfullSchemaCheck", testSuccessfullSchemaCheck),
-            ("testFailedSchemaCheck1", testFailedSchemaCheck1),
-            ("testFailedSchemaCheck2", testFailedSchemaCheck2),
-            ("testPrettyTranslation", testPrettyTranslation),
-            ("testNonPrettyTranslation", testNonPrettyTranslation),
-        ]
-    }
-}
-#endif
