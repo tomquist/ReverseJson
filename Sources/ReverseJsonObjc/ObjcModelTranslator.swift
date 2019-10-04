@@ -105,7 +105,7 @@ public struct ObjcModelCreator: ModelTranslator {
         switch type {
         case let .enum(enumTypeName, enumTypes):
             let className = "\(typePrefix)\(enumTypeName ?? name.camelCasedString)"
-            let fieldValues = enumTypes.sorted{$0.0.enumCaseName < $0.1.enumCaseName}.map {
+            let fieldValues = enumTypes.sorted{$0.enumCaseName < $1.enumCaseName}.map {
                 fieldDeclarationFor($0,
                                     parentName: (enumTypeName ?? name.camelCasedString),
                                     forceNullable: enumTypes.count > 1,
@@ -113,7 +113,7 @@ public struct ObjcModelCreator: ModelTranslator {
             }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
             let forwardDeclarations = requiredTypeNames.sorted(by: <)
-            let sortedFieldValues = fieldValues.sorted{$0.0.fieldTypeName < $0.1.fieldTypeName}
+            let sortedFieldValues = fieldValues.sorted{$0.fieldTypeName < $1.fieldTypeName}
             let properties = sortedFieldValues.map {$0.property}
             let initializations = sortedFieldValues.map {$0.initialization.indent(2)}
             
@@ -171,7 +171,7 @@ public struct ObjcModelCreator: ModelTranslator {
                                          toJson: { (name: String) in "[\(name) toJson]"})
         case let .object(objectTypeName, fields):
             let className = "\(typePrefix)\(objectTypeName ?? name.camelCasedString)"
-            let fieldValues = fields.sorted{$0.0.name < $0.1.name}.map {
+            let fieldValues = fields.sorted{$0.name < $1.name}.map {
                 fieldDeclarationFor($0.type,
                                     variableNameBase: $0.name,
                                     parentName: objectTypeName ?? name.camelCasedString,
@@ -179,7 +179,7 @@ public struct ObjcModelCreator: ModelTranslator {
                                     valueToParse: "dict[@\"\($0.name)\"]") }
             let requiredTypeNames = Set(fieldValues.flatMap{$0.requiredTypeNames})
             let forwardDeclarations = requiredTypeNames.sorted(by: <)
-            let sortedFieldValues = fieldValues.sorted{$0.0.fieldTypeName < $0.1.fieldTypeName}
+            let sortedFieldValues = fieldValues.sorted{$0.fieldTypeName < $1.fieldTypeName}
             let properties = sortedFieldValues.map {$0.property}
             let initializations = sortedFieldValues.map {$0.initialization.indent(2)}
             
@@ -280,8 +280,8 @@ public struct ObjcModelCreator: ModelTranslator {
             let listTypeValues = declarationsFor(listType, name: subName, valueToParse: "item")
             let subParseExpression: String
             if let lineBreakRange = listTypeValues.parseExpression.range(of: "\n") {
-                let firstLine = listTypeValues.parseExpression.substring(to: lineBreakRange.lowerBound)
-                let remainingLines = listTypeValues.parseExpression.substring(from: lineBreakRange.lowerBound).indent(3)
+                let firstLine = listTypeValues.parseExpression[..<lineBreakRange.lowerBound]
+                let remainingLines = String(listTypeValues.parseExpression[lineBreakRange.lowerBound...]).indent(3)
                 subParseExpression = "\(firstLine)\n\(remainingLines)"
             } else {
                 subParseExpression = listTypeValues.parseExpression;
@@ -311,8 +311,8 @@ public struct ObjcModelCreator: ModelTranslator {
             let valueToJson = listTypeValues.toJson("item")
             let subValueToJson: String
             if let lineBreakRange = valueToJson.range(of: "\n") {
-                let firstLine = valueToJson.substring(to: lineBreakRange.lowerBound)
-                let remainingLines = valueToJson.substring(from: lineBreakRange.lowerBound).indent(3)
+                let firstLine = valueToJson[..<lineBreakRange.lowerBound]
+                let remainingLines = String(valueToJson[lineBreakRange.lowerBound...]).indent(3)
                 subValueToJson = "\(firstLine)\n\(remainingLines)"
             } else {
                 subValueToJson = valueToJson;

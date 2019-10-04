@@ -17,8 +17,8 @@ Generate data model code and JSON-parser code from JSON-files. Currently you can
 
 ### Prerequisites
 
-* Swift 3.0
-* Any Swift 3.0 compatible platform (e.g. macOS or Linux)
+* Swift 5.0
+* Any Swift 5.0 compatible platform (e.g. macOS or Linux)
 
 ### Build
 

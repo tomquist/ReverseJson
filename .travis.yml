@@ -1,4 +1,4 @@
-osx_image: xcode8.2
+osx_image: xcode11
 language: generic
 matrix:
   include:
@@ -9,12 +9,12 @@ matrix:
     - os: osx
       env:
         - TYPE=spm
-        - SWIFT_VERSION=3.0
+        - SWIFT_VERSION=5.1
     - os: linux
       dist: trusty
       sudo: required
       env:
         - TYPE=spm
-        - SWIFT_VERSION=3.0
+        - SWIFT_VERSION=5.1
       install: if [[ "$TYPE" == "spm" ]]; then eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"; fi
 script: ./test $TYPE

@@ -1,19 +1,16 @@
 import XCTest
-@testable import ReverseJsonCommandLineTests
-@testable import ReverseJsonCoreTests
-@testable import ReverseJsonObjcTests
-@testable import ReverseJsonSwiftTests
-@testable import ReverseJsonModelExportTests
 
-XCTMain([
-    testCase(ModelGeneratorCommandLineTest.allTests),
-    testCase(ObjcModelCreatorCommandLineTest.allTests),
-    testCase(ReverseJsonTest.allTests),
-    testCase(SwiftTranslatorCommandLineTest.allTests),
-    testCase(ModelGeneratorTest.allTests),
-    testCase(ObjcModelTranslatorTest.allTests),
-    testCase(SwiftTranslatorTest.allTests),
-    testCase(JsonToModelTest.allTests),
-    testCase(ModelExportTranslatorTest.allTests),
-    testCase(ModelToJsonTest.allTests),
-])
+import ReverseJsonCommandLineTests
+import ReverseJsonCoreTests
+import ReverseJsonModelExportTests
+import ReverseJsonObjcTests
+import ReverseJsonSwiftTests
+
+var tests = [XCTestCaseEntry]()
+tests += ReverseJsonCommandLineTests.__allTests()
+tests += ReverseJsonCoreTests.__allTests()
+tests += ReverseJsonModelExportTests.__allTests()
+tests += ReverseJsonObjcTests.__allTests()
+tests += ReverseJsonSwiftTests.__allTests()
+
+XCTMain(tests)

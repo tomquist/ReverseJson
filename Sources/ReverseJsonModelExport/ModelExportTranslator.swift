@@ -173,7 +173,7 @@ extension FieldType {
         func from(typeString: String, props: [String: JSON]) throws -> FieldType {
             var typeString = typeString
             if typeString.hasSuffix("?") {
-                typeString = typeString.substring(to: typeString.index(before: typeString.endIndex))
+                typeString = String(typeString[..<typeString.index(before: typeString.endIndex)])
             }
             switch typeString {
             case "string": return .text

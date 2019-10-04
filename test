@@ -28,7 +28,7 @@ function spm_tests {
     (
         set -e;
         set -x; # print commands executed; use subshell to avoid having to print 'set +x' to disable it
-        swift build --clean &&
+        swift package clean &&
         swift build &&
         swift test
     )

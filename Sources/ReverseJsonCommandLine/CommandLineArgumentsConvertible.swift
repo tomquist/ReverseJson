@@ -18,7 +18,7 @@ extension CommandLineArgumentsConvertible {
 
 extension Array where Element: Equatable {
     mutating func consume(flag: Element) -> Bool {
-        if let idx = index(of: flag) {
+        if let idx = firstIndex(of: flag) {
             remove(at: idx)
             return true
         }
@@ -26,7 +26,7 @@ extension Array where Element: Equatable {
     }
     
     mutating func consume(value: Element) -> Element? {
-        if let idx = self.index(of: value) , count > idx + 1 {
+        if let idx = firstIndex(of: value) , count > idx + 1 {
             remove(at: idx)
             return remove(at: idx)
         }

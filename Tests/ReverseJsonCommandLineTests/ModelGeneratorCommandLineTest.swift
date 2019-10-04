@@ -15,13 +15,3 @@ class ModelGeneratorCommandLineTest: XCTestCase {
     }
 
 }
-
-#if os(Linux)
-extension ModelGeneratorCommandLineTest {
-    static var allTests: [(String, (ModelGeneratorCommandLineTest) -> () throws -> Void)] {
-        return [
-            ("testAllFieldsOptionalFlag", testAllFieldsOptionalFlag),
-        ]
-    }
-}
-#endif

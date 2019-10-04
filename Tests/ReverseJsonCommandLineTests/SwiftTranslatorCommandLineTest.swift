@@ -52,17 +52,3 @@ class SwiftTranslatorCommandLineTest: XCTestCase {
     }
     
 }
-
-#if os(Linux)
-extension SwiftTranslatorCommandLineTest {
-    static var allTests: [(String, (SwiftTranslatorCommandLineTest) -> () throws -> Void)] {
-        return [
-            ("testClassFlag", testClassFlag),
-            ("testContiguousArrayFlag", testContiguousArrayFlag),
-            ("testMutableFieldsFlag", testMutableFieldsFlag),
-            ("testPublicFieldsFlag", testPublicFieldsFlag),
-            ("testPublicTypeFlagWithObject", testPublicTypeFlagWithObject),
-        ]
-    }
-}
-#endif

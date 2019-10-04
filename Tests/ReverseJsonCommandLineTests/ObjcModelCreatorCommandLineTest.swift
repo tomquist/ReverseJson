@@ -43,16 +43,3 @@ class ObjcModelCreatorCommandLineTest: XCTestCase {
     }
     
 }
-
-
-#if os(Linux)
-extension ObjcModelCreatorCommandLineTest {
-    static var allTests: [(String, (ObjcModelCreatorCommandLineTest) -> () throws -> Void)] {
-        return [
-            ("testAtomicFieldsFlag", testAtomicFieldsFlag),
-            ("testMutableFieldsFlag", testMutableFieldsFlag),
-            ("testPrefixOption", testPrefixOption),
-        ]
-    }
-}
-#endif
